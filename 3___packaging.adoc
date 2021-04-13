@@ -1,0 +1,77 @@
+== Packaging and Code Generation/Loading
+
+=== ZIP Archive Structure
+
+==== FMU Importing Implementations
+
+Importing implementations should be prepared to support the extraction of FMU ZIP archives with leading “./” prefixes on entries in the archive (e.g. “./modelDescription.xml” instead of “modelDescription.xml”): Even though the FMI standards do not provide any indication that such leading prefixes should be supported, a number of implementations do interpret the standard in this way and generate FMU ZIP archives with such prefixes.
+
+When possible implementations should unpack the complete ZIP archive content in one location, since some FMUs depend on this even if the standard only specified access to the resources folder.
+
+==== FMU Exporting Implementations
+
+Exporting implementations should ensure that the generated FMU ZIP archives only contain entries with no leading prefix, i.e. the entries should be “modelDescription.xml” “binaries/win32/myfmu.dll”, etc., and not “./modelDescription.xml”, “./binaries/win32/myfmu.dll”. While the FMI standards 1.0 and 2.0 can be interpreted to be ambiguous in this area, upcoming bug fix releases will likely clarify this to recommend canonical pathnames, i.e. no leading “./” prefixes.
+
+The exporting implementation should not, where possible, rely on the importing implementation completely unpacking the FMU in one location, since only access to the resources folder is actually specified in the standard. Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated, but those fallbacks are by their nature non-portable fallback mechanisms which only come into play when other, standard conforming mechanisms are not available.
+
+=== XML Character Set
+
+==== FMU Importing Implementations
+
+For FMI 1.0 implementations should try to support more than UTF-8 encodings of modelDescription.xml, supporting at least ASCII and ISO-8859-1/ISO-8859-15 encodings might be reasonable. For FMI 2.0 the specification remedied this oversight and specifies that modelDescription.xml must be in UTF-8 encoding, so this problem does not occur.
+
+==== FMU Exporting Implementations
+
+For FMI 1.0 implementations should generate the modelDescription.xml file only in UTF-8 encoding even though the standard leaves the list of permissible encodings open, since only UTF-8 encoding is likely to be universally supported. For FMI 2.0 UTF-8 is the only permissible choice.
+
+=== Documentation and Additional Resources
+
+==== FMU Importing Implementations
+
+Implementations should support using supplied icon information in the FMU (i.e. a model.png file in PNG format in the root of the ZIP archive) when displaying the FMU in a graphical notation or user interface. Implementations should allow easy access to any documentation being supplied in the FMU in the FMI-specified ways.
+
+==== FMU Exporting Implementations
+
+Implementations should generate a useful icon for the FMU and package this in the ZIP archive in the way documented in the FMI standards (i.e. as a model.png file in PNG format in the root of the ZIP archive). Implementations should allow the user to easily author/add documentation for the FMU and package this in the FMI-specified way in the ZIP archive.
+
+=== Support for 32&64bit Variants of Platforms (Issues 300_100_200, 300_200_3/400, 400_100_100)
+
+==== FMU Importing Implementations
+
+Implementations that run on target platforms which provide 32bit and 64bit Application Binary Interfaces that are mutually incompatible in one process image (like e.g. Windows or Linux on Intel/AMD 64bit processors) should provide the ability to run simulations as either 32bit or 64bit processes in order to be able to import 32bit or 64bit binary FMUs into that process. Ideally providing the ability to automatically bridge FMUs that are not available in the simulation process ABI (e.g. 32bit-only FMUs when running a 64bit simulation process or for 64bit-only FMUs when running a 32bit simulation process on a 64bit-capable platform) through a separate process and inter-process communication (IPC) mechanisms (or via system provided mechanisms) should be strongly considered.
+
+==== FMU Exporting Implementations
+
+Implementations that support target platforms which provide 32bit and 64bit ABIs that are mutually incompatible in one process image (like e.g. Windows or Linux on Intel/AMD 64bit processors) should optionally support generating binary FMUs for both variants, ideally in one go from one process and incorporated into one FMU.
+
+=== Support for Multiple Platforms (Issue 300_100_300)
+
+FMU exporting implementations should strive to support common platforms out of the box, and should provide support for generating FMUs that contain multiple binary implementations, and where feasible a source code implementation, in one go.
+
+=== Compiler Dependencies (Issue 300_100_500)
+
+==== FMU Exporting Implementations
+
+Exporting implementations should document supported compilers, their versions, and required compiler flags and settings in order to compile generated source FMUs for common platforms. When generating binary FMUs directly, the supported/used compilers, compiler flags and settings should also be documented, in order to allow users to troubleshoot integration issues when integrating binary FMUs into other environments. Where possible the use of user supplied compilers and compiler flags and settings should be supported in order to automate generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.
+
+=== Handling of FMU namespaces (Issues 300_200_600, 300_300_200)
+
+==== FMU Importing Implementations
+
+Importing implementations should correctly handle the import of multiple 1.0 FMUs with identical model identifiers. In the case of FMUs with dynamic library implementations this is supported by most platforms since symbol lookup can be performed scoped to one dynamic library namespace (see e.g. dlsym/GetProcAddr functions for Linux/Windows). Starting with 2.0 FMUs with dynamic library implementations will always use identical symbols for the entry points in any case, so that this has to be supported correctly.
+
+For source code or static library implementations the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.
+
+=== Handling of Code Dependencies (Issue 300_300_100)
+
+==== FMU Importing Implementations
+
+Importing implementations should consider changing the working directory of the process to the relevant binary subdirectory of the unpacked FMU when loading the FMU DLL/SO to allow unsophisticated exporting implementations to load dependent DLLs/SOs relative to this directory. It is of course the responsibility of the FMU DLL/SO to implement proper dependent DLL/SO loading regardless of the current working directory of the process, however in practice a number of current or former implementations did not correctly implement this and can thus fail to load when the current directory is not the directory that contains the FMU DLL/SO.
+
+==== FMU Exporting Implementations
+
+Exporting implementations should ideally avoid reliance on additional dynamic libraries, i.e. generated dynamic libraries should ideally be stand-alone. Where that is not feasible, implementations should prefer to use manual dynamic loading of dependent libraries at runtime (e.g. using dlopen/LoadLibrary), where the load path of the libraries is based on the resources URI provided, or should use DLL-relative path derivation either of the DLL folder or of the resources folder when the resources URI is not available (FMI 1.0 ME) or not valid.
+
+Relying on pre-linking, where the dynamic loading of the dependent libraries is automatically handled by the platform dynamic linker/loader is not likely to work in all cases (e.g. on Windows the searched paths will be based on the simulator executable, not the FMU DLL), and is unlikely to provide user-understandable error messages in case of failure.
+
+Note that simple calls to LoadLibrary/LoadLibraryEx on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons: The search path is going to be based on the location of the simulator executable and not the FMU DLL.
