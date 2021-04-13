@@ -1,0 +1,12 @@
+The FMI Implementers' Guide is a free resource intended to give non-normative recommendations and guidance to implementers of the Functional Mock-up Interface.
+This is a development version of the guide, that has not been reviewed or finalized in any way.
+https://github.com/PMSFIT/fmi-guide/releases[Releases] and https://github.com/PMSFIT/fmi-guide/issues[issues] can be found on https://github.com/PMSFIT/fmi-guide[github.com/PMSFIT/fmi-guide].
+
+{empty} +
+{empty}
+
+////
+Copyright notice and license information will go here.
+////
+
+{empty}
