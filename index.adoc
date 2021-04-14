@@ -1,4 +1,4 @@
-= FMI Implementers' Guide
+= FMI 3.0 Implementers' Guide
 :doctype: book
 :imagesdir: images
 :sectnums:
@@ -12,8 +12,6 @@
 :stem: latexmath
 :source-highlighter: highlightjs
 :nofooter:
-:revdate: unreleased
-:revnumber: 0.3.0
 :icons: font
 
 include::0___preamble.adoc[]

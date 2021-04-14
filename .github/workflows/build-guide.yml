@@ -20,7 +20,7 @@ jobs:
     - name: build
       uses: avattathil/asciidoctor-action@master
       with:
-        program: "asciidoctor -D build --backend=html5 -o index.html index.adoc"
+        program: "asciidoctor -D build --backend=html5 -o index.html --attribute=revnumber=${GITHUB_REF#refs/heads/}-$GITHUB_SHA --attribute=revdate=$(date +%F) index.adoc"
     - name: copy images
       run: tar cf - images | tar xfC - build
     - name: archive
