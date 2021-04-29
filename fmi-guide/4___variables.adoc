@@ -10,7 +10,7 @@ Importing implementations should support the processing of physical unit informa
 
 Exporting implementations should generate physical unit information on all exported variables, when such information is available in the model (or can be automatically derived). Especially on FMI 2.0 and later the support for full SI-based units should be used.
 
-=== Support for Min/Max Range Information (Issue 100_200_100)
+=== Support for Min/Max Range Information
 
 ==== FMU Importing Implementations
 
@@ -20,7 +20,7 @@ Importing implementations should support the processing of min/max limit informa
 
 Exporting implementations should generate min/max limit information on all exported variables that support this information in FMI, when such limit information is available in the model (or can be automatically derived). Ideally it should be possible to optionally generate FMUs that check the limits (especially user-supplied limits) at runtime and produce suitable errors and diagnostic logging information when limits are breached. Implementations are well-advised to heed the explanations in section 2.2.3 of the FMI 2.0 standard when implementing min/max checking/handling routines.
 
-=== Support for Structured Naming Convention (Issue 200_100_100)
+=== Support for Structured Naming Convention
 
 ==== FMU Importing Implementations
 

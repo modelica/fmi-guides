@@ -37,7 +37,7 @@ The FMI standards specify that default values for parameters or initial values f
 
 For FMI 1.0 Co-Simulation FMUs importing implementations should honor the canHandleEvents capability of the FMU: If this capability attribute is false, then the implementation cannot call the doStep function with zero communicationStepSize, even at time 0 (used e.g. for generating valid initial values). In those cases the integration environment must start simulation with the first simulation step, without any event iteration. With FMI 2.0 Co-Simulation FMUs do not support 0-size time steps in any case.
 
-=== Support for Solvers (Issue 300_100_400)
+=== Support for Solvers
 
 ==== FMU Importing Implementations
 
@@ -49,7 +49,7 @@ In any case the proper documentation of the employed solver algorithms and their
 
 Exporting implementations should offer all of their built-in solver algorithms (including solver settings like step-size, tolerance, etc.) for export when generating Co-Simulation FMUs, so that the same solvers can be used inside the environment as in exported FMUs. This should ideally also include the ability to export Co-Simulation FMUs using user-supplied solvers, where appropriate (e.g. where the environment supports the integration of external solvers for model evaluation).
 
-=== Support for Mixing FMUs Types (Issues 300_200_1/200)
+=== Support for Mixing FMUs Types
 
 ==== FMU Importing Implementations
 
@@ -57,7 +57,7 @@ Importing implementations should support mixing FMUs of different types (and dif
 
 As a side issue, importing implementations should try to use as much of the fine-grained direct dependency information potentially present in FMI 1.0 (and even more so in FMI 2.0) as possible, in order to avoid algorithmic loops being detected where they are not really present.
 
-=== Logging Support (Issue 400_500_100)
+=== Logging Support
 
 ==== FMU Importing Implementations
 

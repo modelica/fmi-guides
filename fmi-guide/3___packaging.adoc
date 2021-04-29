@@ -34,7 +34,7 @@ Implementations should support using supplied icon information in the FMU (i.e. 
 
 Implementations should generate a useful icon for the FMU and package this in the ZIP archive in the way documented in the FMI standards (i.e. as a model.png file in PNG format in the root of the ZIP archive). Implementations should allow the user to easily author/add documentation for the FMU and package this in the FMI-specified way in the ZIP archive.
 
-=== Support for 32&64bit Variants of Platforms (Issues 300_100_200, 300_200_3/400, 400_100_100)
+=== Support for 32&64bit Variants of Platforms
 
 ==== FMU Importing Implementations
 
@@ -44,17 +44,17 @@ Implementations that run on target platforms which provide 32bit and 64bit Appli
 
 Implementations that support target platforms which provide 32bit and 64bit ABIs that are mutually incompatible in one process image (like e.g. Windows or Linux on Intel/AMD 64bit processors) should optionally support generating binary FMUs for both variants, ideally in one go from one process and incorporated into one FMU.
 
-=== Support for Multiple Platforms (Issue 300_100_300)
+=== Support for Multiple Platforms
 
 FMU exporting implementations should strive to support common platforms out of the box, and should provide support for generating FMUs that contain multiple binary implementations, and where feasible a source code implementation, in one go.
 
-=== Compiler Dependencies (Issue 300_100_500)
+=== Compiler Dependencies
 
 ==== FMU Exporting Implementations
 
 Exporting implementations should document supported compilers, their versions, and required compiler flags and settings in order to compile generated source FMUs for common platforms. When generating binary FMUs directly, the supported/used compilers, compiler flags and settings should also be documented, in order to allow users to troubleshoot integration issues when integrating binary FMUs into other environments. Where possible the use of user supplied compilers and compiler flags and settings should be supported in order to automate generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.
 
-=== Handling of FMU namespaces (Issues 300_200_600, 300_300_200)
+=== Handling of FMU namespaces
 
 ==== FMU Importing Implementations
 
@@ -62,7 +62,7 @@ Importing implementations should correctly handle the import of multiple 1.0 FMU
 
 For source code or static library implementations the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.
 
-=== Handling of Code Dependencies (Issue 300_300_100)
+=== Handling of Code Dependencies
 
 ==== FMU Importing Implementations
 

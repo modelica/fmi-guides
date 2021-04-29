@@ -1,10 +1,10 @@
 == General Considerations
 
-=== Versions of FMI to support (Issue 400_700_100)
+=== Versions of FMI to support
 
 When planning on which versions of FMI to support in your implementation, support for the newest FMI version (currently FMI 2.0) is of course recommended. However support for older versions of FMI, i.e. at the current point in time FMI 1.0, is recommended as well, since there is no cross-version compatibility between major versions of FMI, and only limited compatibility between minor versions of the same major version (i.e. FMUs generated for newer minor versions are not required to be supported by importing implementations for older minor versions). The life cycles of both simulation environments and generated FMUs can wildly differ and span many years in development projects. Therefore support for both legacy FMU integration and generation of legacy FMUs is crucial for flexible interoperation in development projects.
 
-=== Support for Model Exchange and Co-Simulation (Issue 300_100_100)
+=== Support for Model Exchange and Co-Simulation
 
 Where possible and sensible implementations should support both Model Exchange and Co-Simulation FMUs since there exist different simulation scenarios where usage of Model Exchange or Co-Simulation is better in terms of numerical accuracy, performance or ease-of-use and reproducibility of results. There are of course cases where only generation of one kind of FMU makes sense, e.g. for FMUs generated from ECU software only Co-Simulation is likely to be sensible or possible. For importing implementations both kinds of FMU should normally be supported and there should be proper support for mixing both kinds of FMUs in one model/project unless technical considerations make this impossible/not useful.
 
