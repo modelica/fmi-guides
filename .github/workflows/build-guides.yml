@@ -1,4 +1,4 @@
-name: Build Guide
+name: Build Guides
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build-guide:
-    name: Build Guide
+  build-guides:
+    name: Build FMI Guides
 
     runs-on: ubuntu-18.04
 
@@ -16,18 +16,18 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
     - name: prepare
-      run: mkdir build
+      run: mkdir build && mkdir build/fmi-guide
     - name: build
       uses: avattathil/asciidoctor-action@master
       with:
-        program: "asciidoctor -D build --backend=html5 -o index.html --attribute=revnumber=${GITHUB_REF#refs/heads/}-$GITHUB_SHA --attribute=revdate=$(date +%F) index.adoc"
+        program: "asciidoctor -D build/fmi-guide --backend=html5 --attribute=revnumber=${GITHUB_REF#refs/heads/}-$GITHUB_SHA --attribute=revdate=$(date +%F) fmi-guide/index.adoc"
     - name: copy images
-      run: tar cf - images | tar xfC - build
+      run: tar cf - fmi-guide/images | tar xfC - build
     - name: archive
       uses: actions/upload-artifact@v2
       with:
         name: FMI-Guide
-        path: build/*
+        path: build/fmi-guide/*
         if-no-files-found: error
     - name: extract branch name
       id: extract_branch
