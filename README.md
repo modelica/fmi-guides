@@ -1,6 +1,6 @@
 # FMI Guides
 
-[![Build Specification](https://github.com/PMSFIT/fmi-guide/actions/workflows/build-guides.yml/badge.svg)](https://github.com/PMSFIT/fmi-guide/actions/workflows/build-guides.yml)
+[![Build Specification](https://github.com/modelica/fmi-guides/actions/workflows/build-guides.yml/badge.svg)](https://github.com/modelica/fmi-guides/actions/workflows/build-guides.yml)
 
 This repository contains the current prototype draft Implementers'
 Guide for the upcoming [Functional Mock-up Interface][FMI] 3.0
@@ -16,4 +16,4 @@ In future additional guides might be integrated into this repository.
 
 [FMI]: https://fmi-standard.org/
 [github]: fmi-guide/index.adoc
-[guide]: https://pmsfit.github.io/fmi-guide/master/fmi-guide/
+[guide]: https://modelica.github.io/fmi-guides/master/fmi-guide/

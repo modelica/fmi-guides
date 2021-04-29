@@ -2,7 +2,7 @@ The FMI 3.0 Implementers' Guide is a free resource intended to give non-normativ
 All guidance is based on FMI 3.0, unless otherwise noted or applicable.
 This is a development version of the guide, that has not been reviewed or finalized in any way.
 All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI 3.0 standard.
-https://github.com/PMSFIT/fmi-guide/releases[Releases] and https://github.com/PMSFIT/fmi-guide/issues[issues] can be found on https://github.com/PMSFIT/fmi-guide[github.com/PMSFIT/fmi-guide].
+https://github.com/modelica/fmi-guides/releases[Releases] and https://github.com/modelica/fmi-guides/issues[issues] can be found on https://github.com/modelica/fmi-guides[github.com/modelica/fmi-guides].
 
 {empty} +
 {empty}
