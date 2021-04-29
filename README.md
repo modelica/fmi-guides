@@ -16,4 +16,4 @@ In future additional guides might be integrated into this repository.
 
 [FMI]: https://fmi-standard.org/
 [github]: fmi-guide/index.adoc
-[guide]: https://modelica.github.io/fmi-guides/master/fmi-guide/
+[guide]: https://modelica.github.io/fmi-guides/main/fmi-guide/

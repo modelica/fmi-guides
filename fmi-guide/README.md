@@ -14,4 +14,4 @@ published [here][guide]. It is based on the [FMI][] standard.
 
 [FMI]: https://fmi-standard.org/
 [github]: index.adoc
-[guide]: https://modelica.github.io/fmi-guides/master/fmi-guide/
+[guide]: https://modelica.github.io/fmi-guides/main/fmi-guide/
