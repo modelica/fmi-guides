@@ -1,0 +1,156 @@
+== Features
+
+The following individualized features form the basis of the feature profiles introduced in section XXX.
+It should be noted that the features are not only drawn from areas of the FMI standards that are explicitly marked as optional, but also include certain features which though non-optional are nevertheless not universally used or supported.
+
+None of the information contained in here shall be construed to speak to the normative aspects of the standard and towards compliance with it.
+
+The features are split into feature areas to give thematic context to the individual features.  These feature areas provide the subsections of this chapter.
+
+
+=== Parameter Handling
+
+Tunable Parameters (FMI 2.0)::
+  Tunable parameters allow the changing of parameters values at discrete steps during the simulation run, not only prior to simulation start-up.
+
+=== State Handling
+
+Store/Restore FMU State (FMI 2.0)::
+FMUs that support fmi2GetFMUState and fmi2SetFMUState allow the implementation to store the current state and reset to that state during a simulation run.
+This allows for more capable co-simulation master algorithms, for example a master can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
+Note that this flexibility usually incurs some performance hit if used.
++
+This sub-feature does not entail the ability to store that saved state in an external persistent format and restore from that in a seperate simulation run (this requires serialization support).
+
+Serialize/Deserialize FMU State (FMI 2.0)::
+The ability to serialize a saved FMU state into a format that can be stored on external persistent storage, and used in this or a seperate simulation run to restore the FMU state to the current one.
++
+This ability allows for example to freeze FMU states after long initialization and stabilization phases, and start new simulations directly from that state.
+
+=== Data Types
+
+String Inputs/Outputs (FMI 2.0)::
+The string data type has been part of FMI since 1.0, and is not optional. And like all data types, it can be used for all kinds of variables, i.e. parameters as well as constants, inputs, outputs, etc.
++
+However some simulation systems have no concept of string inputs/outputs at runtime, so this feature is not fully supported by all systems, nor required for many use cases.
+Selection of this sub-feature indicates that the ability to pass strings at simulation time as inputs and outputs is important for the use case/profile.
+
+Binary Data Type Input/Output (FMI 3.0)::
+FMI 3.0 adds a new binary data type, that allows FMUs to transfer complete blocks of binary data into or out of the FMU.
+The binary data is opaque from the point of view of the simulator by default, however FMUs can specify a MIME type for the data, allowing interpretation of the data by simulators if that is wanted/required.
++
+Some use cases for this type of data are for example sensor simulation, where ground truth data, full camera feeds, or sensor detection data are transfered as binary data.
+Other use cases can be simulation of communication bus behavior, by exchanging e.g. full CAN or SOME-IP frames via binary data.
++
+This sub-feature only deals with use of the binary data type for inputs and outputs.
+
+Binary Data Type Parameters (FMI 3.0)::
+This sub-feature is the ability to use the new binary data type of FMI 3.0 for parameters and constants, not just for inputs and outputs.
+
+New Integer Types (FMI 3.0)::
+FMI 3.0 will offer a full complement of 8, 16, 32 and 64-bit signed and unsigned integer data types, not just the de-facto 32-bit signed integer data type that FMI 2.0 offers.
+
+=== Array Input/Output Handling
+
+Fixed-size Arrays (FMI 3.0)::
+FMI 3.0 offers variables that are native multi-dimensional arrays of the basic data types FMI 3.0 supports.
+This sub-feature contains only the use of arrays of fixed (i.e. at design time) size.
++
+This sub-feature is only concerned with the use of arrays for inputs and outputs.
+
+Dynamically resizable Arrays (FMI 3.0)::
+This sub-feature comprises the use of dynamically resizable arrays (i.e. resizing of arrays either prior to simulation start at configuration time, or during simulation using re-configuration mode).
++
+This sub-feature is only concerned with the use of arrays for inputs and outputs.
+
+Resizable Arrays with Size-Dependencies (FMI 3.0)::
+FMI 3.0 performs array resizing through the use of special structural parameters that contain the sizes of array dimensions.
+Through the use of the same structural parameter in multiple array definitions, dependency information of sizes between multiple arrays can be expressed (e.g. to define matching matrixes for linear equation systems).
++
+This sub-feature is only concerned with the use of arrays for inputs and outputs.
+
+=== Array Parameter Handling
+
+Fixed-size Arrays (FMI 3.0)::
+FMI 3.0 offers variables that are native multi-dimensional arrays of the basic data types FMI 3.0 supports.
+This sub-feature contains only the use of arrays of fixed (i.e. at design time) size.
++
+This sub-feature is only concerned with the use of arrays for parameters and constants.
+
+Dynamically resizable Arrays (FMI 3.0)::
+This sub-feature comprises the use of dynamically resizable arrays (i.e. resizing of arrays either prior to simulation start at configuration time, or during simulation using re-configuration mode).
++
+This sub-feature is only concerned with the use of arrays for parameters and constants.
+
+Resizable Arrays with Size-Dependencies (FMI 3.0)::
+FMI 3.0 performs array resizing through the use of special structural parameters that contain the sizes of array dimensions.
+Through the use of the same structural parameter in multiple array definitions, dependency information of sizes between multiple arrays can be expressed (e.g. to define matching matrixes for linear equation systems).
++
+This sub-feature is only concerned with the use of arrays for parameters and constants.
+
+=== Calculation Model
+
+Variable Co-Simulation Communication Step Size (FMI 1.0)::
+FMI since 1.0 offers the ability of Co-Simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step base by the Co-Simulation master.
+This option indicates whether support for variable step sizes by FMUs is deemed important for numerical performance.
+
+State and Output Dependencies (FMI 2.0)::
+FMI 2.0 supports the ability of FMUs to provide information on the dependencies of state derivatives and of output variables from inputs and states, in other words the sparsity pattern for Jacobians can be defined.
+This allows simulating stiff FMUs with many states (> 1000 states) since sparse matrix methods can be utilized in the numerical integration method.
+Furthermore, it can be stated whether this
+dependency is linear (this allows to transform nonlinear algebraic equation systems into linear
+equation systems when connecting FMUs).
+
+Output Derivatives in Co-Simulation (FMI 2.0)::
+FMI since 2.0 offers the ability of Co-Simulation FMUs to give access to nth-order output derivatives to enable Co-Simulation masters to interpolate output values between communication steps with higher accuracy.
+
+Directional Derivatives (FMI 2.0)::
+FMI 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g. in order to construct a partial derivative matrix:
+Directional derivatives can be computed for derivatives of continuous-time states and for
+outputs.
+This is useful when connecting FMUs and the partial derivatives of the connected FMU
+shall be computed.
+If the exported FMU performs this computation analytically, then all numerical algorithms based on these partial derivatives (for example the numerical integration method or nonlinear algebraic solvers) are more efficient and more reliable.
+
+Restartable Early Return in Hybrid Co-Simulation (FMI 3.0)::
+FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine prior to completing the full indicated time step, e.g. to signal an internal event or discontinuity, with the ability for the master to continue the step after this early return.
++
+This feature allows for more efficient co-simulation master algorithms due to the more precise detection of event times, if e.g. used in combination with resettable FMUs.
+
+Intermediate Output Values in Co-Simulation (FMI 3.0)::
+FMI 3.0 will support the option for FMUs to give access to intermediate output values, which are generated due to internal integration/calculation steps, but would previously not have been visible unless the co-simulation master reduces the communication step size.
+These additional values can be used e.g. for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.
+
+Co-Simulation with Clock Information (FMI 3.0)::
+FMI 3.0 will offer support for clock annotations on variables that can be used in co-simulation mode to allow a master algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU, in order to more precisely transfer information between FMUs.
+
+Time Partition Activation Co-Simulation (FMI 3.0)::
+FMI 3.0 will offer support for FMUs to allow direct activation of seperate time partititons from the co-simulation master.
+This mode makes it possible for co-simulation masters to interleave calculations of different time partitions of different FMUs in efficient ways to support e.g. real-time simulation of multiple FMUs in hardware resource constrained systems (e.g. HiL systems).
+
+Clocked Model-Exchange (FMI 3.0)::
+FMI 3.0 will offer support for clocked model-exchange, where signals are only considered active when their related clocks tick.
+This allows for more precise support for discrete/continuous hybrid systems, or systems with multiple non-least-common-denominator clocks/rates.
+
+=== Execution Targets
+
+Source Code FMUs (FMI 1.0)::
+FMI offers the ability to distribute FMUs that contain C source code as one of its target implementations, which then relies on the portability of the code and the ability of the receiving implementation to compile that code to its target architecture.
++
+The use of source code implies the usual trade offs (e.g. potential portability problems in the code, availability of compilers on the target platform, need for code obfuscation to add IP protection). On the other hand this makes the FMU usable on platforms for which the generating party has no available compiler toolchain or cross-compilation support.
+
+Binary FMUs for Desktop Platforms (FMI 1.0)::
+This sub-feature describes the usual ability to generate FMUs with binary implementations (either dynamically or statically linked libraries) for the usual desktop computing platforms (e.g. Windows/x64, Linux/x64).
+
+Binary FMUs for non-Desktop Platforms (e.g. HiL) (FMI 1.0)::
+FMI supports the inclusion of multiple binary implementations of an FMU.
+This sub-feature deals with the requirement to generate FMUs that include binary implementations for non-Desktop platforms, e.g. for common HiL platforms or other, potentially embedded, target architectures.
+This is a catch-all feature indication, since of course the actual requirement will have to be specific towards the architectures actually needed.
+
+=== Execution Mode
+
+Asynchronous FMUs (FMI 2.0)::
+FMI has since FMI 1.0 supported the ability to create asynchronous FMUs for co-simulation, that allow the actual fmi2DoStep calculations to run in the background, with the co-simulation master either being called-back or polling to determine when the actual calculations have finished.
+This feature has found very infrequent support and use, since it places the burden on the FMU implementation to use internal multi-threading or co-processing mechanisms to handle the necessary parallelism, whereas a master can attain the same effect under its own control through the use of multiple threads on which to call normal, blocking FMUs.
++
+This sub-feature polls for interest in this mode of operation.
