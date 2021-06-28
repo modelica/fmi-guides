@@ -586,8 +586,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 2.0/3.0 Profiles</h1>
 <div class="details">
-<span id="revnumber">version main-44bb0e9da47ff2b674461607832b81d4b855ce42,</span>
-<span id="revdate">2021-06-27</span>
+<span id="revnumber">version main-533f18a85b28156945d10bfb8a01449ad0edbdcf,</span>
+<span id="revdate">2021-06-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -615,6 +615,7 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_feature_overview">3.6. Feature Overview</a></li>
 </ul>
 </li>
+<li><a href="#_references">References</a></li>
 </ul>
 </div>
 </div>
@@ -911,398 +912,660 @@ This feature has found very infrequent support and use, since it places the burd
 <h2 id="_feature_profiles">3. Feature Profiles</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The initial set of use-case based feature profiles includes the following profiles, which can be seen in overview in table XXX:</p>
+<p>The initial set of use-case based feature profiles includes a set of five feature profiles, which can be seen in overview in table <a href="#feature-matrix">Feature Overview</a>.
+They are described in detail in the following sections.</p>
 </div>
 <div class="sect2">
 <h3 id="_basic_cs_profile">3.1. Basic CS Profile</h3>
 <div class="paragraph">
-<p>Basic profile for Co-Simulation, intended mainly for desktop simulation uses, which have no additional specific requirements and can perform well with fixed communication step sizes.</p>
+<p>This is a basic profile for Co-Simulation, intended mainly for desktop simulation uses, which have no additional specific requirements and can perform well with fixed communication step sizes.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Required Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Tunable Parameters</p>
+</li>
+<li>
+<p>Fixed-size Input/Output Arrays</p>
+</li>
+<li>
+<p>Resizable Input/Output Arrays</p>
+</li>
+<li>
+<p>Fixed-size Parameter Arrays</p>
+</li>
+<li>
+<p>Resizable Parameter Arrays</p>
+</li>
+<li>
+<p>Binary FMUs for Desktop Platforms</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Recommended Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Source Code FMUs</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_sensor_profile">3.2. Sensor Profile</h3>
 <div class="paragraph">
-<p>Basic sensor simulation profile, supporting complex input and output using e.g. OSI-encoded sensor data via binary variables and dynamic timing. Also suitable for non-sensor simulations with those characterstics.</p>
+<p>This is a basic sensor simulation profile, supporting complex input and output using e.g. OSI-encoded sensor data via binary variables and dynamic timing. Also suitable for non-sensor simulations with those characterstics.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Required Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Tunable Parameters</p>
+</li>
+<li>
+<p>Binary Data Type Input/Output</p>
+</li>
+<li>
+<p>Binary Data Type Parameters</p>
+</li>
+<li>
+<p>Variable Co-Simulation Communication Step Size</p>
+</li>
+<li>
+<p>Binary FMUs for Desktop Platforms</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Recommended Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Source Code FMUs</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_basic_hil_sensor_hil_profile">3.3. Basic HiL &amp; Sensor HiL Profile</h3>
 <div class="paragraph">
-<p>Basic Profile supporting HiL use, including mechatronic and sensor simulation usage. This assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.</p>
+<p>This is a basic profile supporting HiL use, including mechatronic and sensor simulation usage. This assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Required Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Tunable Parameters</p>
+</li>
+<li>
+<p>Binary Data Type Input/Output</p>
+</li>
+<li>
+<p>Binary Data Type Parameters</p>
+</li>
+<li>
+<p>New Integer Types</p>
+</li>
+<li>
+<p>Fixed-size Input/Output Arrays</p>
+</li>
+<li>
+<p>Fixed-size Parameter Arrays</p>
+</li>
+<li>
+<p>Time Partition Activation Co-Simulation</p>
+</li>
+<li>
+<p>Source Code FMUs</p>
+</li>
+<li>
+<p>Binary FMUs for Desktop Platforms</p>
+</li>
+<li>
+<p>Binary FMUs for non-Desktop Platforms (e.g. HiL)</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_sil_ecu_profile">3.4. SIL ECU Profile</h3>
 <div class="paragraph">
-<p>Profile supporting advanced SiL simulation of ECU and other clocked models, allowing for more efficient integration of multi-ECU networks.</p>
+<p>This is a profile supporting advanced SiL simulation of ECU and other clocked models, allowing for more efficient integration of multi-ECU networks.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Required Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Tunable Parameters</p>
+</li>
+<li>
+<p>Store/Restore FMU State</p>
+</li>
+<li>
+<p>Binary Data Type Input/Output</p>
+</li>
+<li>
+<p>Binary Data Type Parameters</p>
+</li>
+<li>
+<p>New Integer Types</p>
+</li>
+<li>
+<p>Fixed-size Input/Output Arrays</p>
+</li>
+<li>
+<p>Resizable Input/Output Arrays</p>
+</li>
+<li>
+<p>Fixed-size Parameter Arrays</p>
+</li>
+<li>
+<p>Resizable Parameter Arrays</p>
+</li>
+<li>
+<p>Variable Co-Simulation Communication Step Size</p>
+</li>
+<li>
+<p>Co-Simulation with Clock Information</p>
+</li>
+<li>
+<p>Time Partition Activation Co-Simulation</p>
+</li>
+<li>
+<p>Source Code FMUs</p>
+</li>
+<li>
+<p>Binary FMUs for Desktop Platforms</p>
+</li>
+<li>
+<p>Binary FMUs for non-Desktop Platforms (e.g. HiL)</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_dynamics_profile">3.5. Dynamics Profile</h3>
 <div class="paragraph">
-<p>Profile for high dynamics mechatronic simulation, including variable  cycle times, model-exchange to allow for efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.</p>
+<p>This is a profile for high dynamics mechatronic simulation, including variable cycle times, model-exchange to allow for efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Required Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Tunable Parameters</p>
+</li>
+<li>
+<p>Store/Restore FMU State</p>
+</li>
+<li>
+<p>Serialize/Deserialize FMU State</p>
+</li>
+<li>
+<p>String Inputs/Outputs</p>
+</li>
+<li>
+<p>Binary Data Type Input/Output</p>
+</li>
+<li>
+<p>New Integer Types</p>
+</li>
+<li>
+<p>Fixed-size Input/Output Arrays</p>
+</li>
+<li>
+<p>Resizable Input/Output Arrays</p>
+</li>
+<li>
+<p>Resizable Input/Output Arrays with Size-Dependencies</p>
+</li>
+<li>
+<p>Fixed-size Parameter Arrays</p>
+</li>
+<li>
+<p>Resizable Parameter Arrays</p>
+</li>
+<li>
+<p>Resizable Parameter Arrays with Size-Dependencies</p>
+</li>
+<li>
+<p>Variable Co-Simulation Communication Step Size</p>
+</li>
+<li>
+<p>State and Output Dependencies</p>
+</li>
+<li>
+<p>Output Derivatives in Co-Simulation</p>
+</li>
+<li>
+<p>Restartable Early Return in Hybrid Co-Simulation</p>
+</li>
+<li>
+<p>Intermediate Output Values in Co-Simulation</p>
+</li>
+<li>
+<p>Co-Simulation with Clock Information</p>
+</li>
+<li>
+<p>Binary FMUs for Desktop Platforms</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_feature_overview">3.6. Feature Overview</h3>
-<table class="tableblock frame-all grid-all stretch">
+<table id="feature-matrix" class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
+<col style="width: 10%;">
+<col style="width: 30%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Area</th>
 <th class="tableblock halign-left valign-top">Feature</th>
-<th class="tableblock halign-left valign-top">FMI Version</th>
-<th class="tableblock halign-left valign-top">Basic CS Profile</th>
-<th class="tableblock halign-left valign-top">Sensor Profile</th>
-<th class="tableblock halign-left valign-top">Basic HiL &amp; Sensor HiL Profile</th>
-<th class="tableblock halign-left valign-top">SIL ECU Profile</th>
-<th class="tableblock halign-left valign-top">Dynamics Profile</th>
+<th class="tableblock halign-center valign-top">FMI Version</th>
+<th class="tableblock halign-center valign-top">Basic CS Profile</th>
+<th class="tableblock halign-center valign-top">Sensor Profile</th>
+<th class="tableblock halign-center valign-top">Basic HiL &amp; Sensor HiL Profile</th>
+<th class="tableblock halign-center valign-top">SIL ECU Profile</th>
+<th class="tableblock halign-center valign-top">Dynamics Profile</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Parameter Handling</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Tunable Parameters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">State Handling</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Store/Restore FMU State</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Serialize/Deserialize FMU State</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Data Types</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String Inputs/Outputs</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Binary Data Type Input/Output</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Binary Data Type Parameters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">New Integer Types</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Array Input/Output Handling</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Fixed-size Arrays</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Dynamically resizable Arrays</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Resizable Arrays with Size-Dependencies</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Array Parameter Handling</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Fixed-size Arrays</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Dynamically resizable Arrays</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Resizable Arrays with Size-Dependencies</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Calculation Model</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Variable Co-Simulation Communication Step Size</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">State and Output Dependencies</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Output Derivatives in Co-Simulation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Directional Derivatives</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Restartable Early Return in Hybrid Co-Simulation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Intermediate Output Values in Co-Simulation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Co-Simulation with Clock Information</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Time Partition Activation Co-Simulation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Clocked Model-Exchange</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Execution Targets</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Source Code FMUs</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Binary FMUs for Desktop Platforms</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Binary FMUs for non-Desktop Platforms (e.g. HiL)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Execution Mode</p></th>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Asynchronous FMUs</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>The support for source code FMUs is not strictly necessary for the Basic CS and Sensor Profiles, but is highly recommended to support portability of FMUs to new platforms.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a id="RFC2119"></a>[RFC2119] Bradner, S.: <strong>Key words for use in RFCs to Indicate Requirement Levels</strong>. RFC 2119, March 1997. <a href="https://www.ietf.org/rfc/rfc2119.txt" class="bare">https://www.ietf.org/rfc/rfc2119.txt</a></p>
+</li>
+<li>
+<p><a id="SEMVER200"></a>[SEMVER200] Preston-Werner, T.: <strong>Semantic Versioning 2.0.0</strong>. <a href="https://semver.org/spec/v2.0.0.html" class="bare">https://semver.org/spec/v2.0.0.html</a></p>
+</li>
+<li>
+<p><a id="SSP10"></a>[SSP10] Modelica Association: <strong>System Structure and Parameterization 1.0</strong>. March 2019. <a href="https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf" class="bare">https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
