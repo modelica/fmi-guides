@@ -1,65 +1,145 @@
 == Feature Profiles
 
-The initial set of use-case based feature profiles includes the following profiles, which can be seen in overview in table XXX:
+The initial set of use-case based feature profiles includes a set of five feature profiles, which can be seen in overview in table <<feature-matrix,Feature Overview>>.
+They are described in detail in the following sections.
 
 === Basic CS Profile
 
-Basic profile for Co-Simulation, intended mainly for desktop simulation uses, which have no additional specific requirements and can perform well with fixed communication step sizes.
+This is a basic profile for Co-Simulation, intended mainly for desktop simulation uses, which have no additional specific requirements and can perform well with fixed communication step sizes.
+
+Required Features::
+  - Tunable Parameters
+  - Fixed-size Input/Output Arrays
+  - Resizable Input/Output Arrays
+  - Fixed-size Parameter Arrays
+  - Resizable Parameter Arrays
+  - Binary FMUs for Desktop Platforms
+
+Recommended Features::
+  - Source Code FMUs
+
 
 === Sensor Profile
 
-Basic sensor simulation profile, supporting complex input and output using e.g. OSI-encoded sensor data via binary variables and dynamic timing. Also suitable for non-sensor simulations with those characterstics.
+This is a basic sensor simulation profile, supporting complex input and output using e.g. OSI-encoded sensor data via binary variables and dynamic timing. Also suitable for non-sensor simulations with those characterstics.
+
+Required Features::
+  - Tunable Parameters
+  - Binary Data Type Input/Output
+  - Binary Data Type Parameters
+  - Variable Co-Simulation Communication Step Size
+  - Binary FMUs for Desktop Platforms
+
+Recommended Features::
+  - Source Code FMUs
+
 
 === Basic HiL & Sensor HiL Profile
 
-Basic Profile supporting HiL use, including mechatronic and sensor simulation usage. This assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.
+This is a basic profile supporting HiL use, including mechatronic and sensor simulation usage. This assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.
+
+Required Features::
+  - Tunable Parameters
+  - Binary Data Type Input/Output
+  - Binary Data Type Parameters
+  - New Integer Types
+  - Fixed-size Input/Output Arrays
+  - Fixed-size Parameter Arrays
+  - Time Partition Activation Co-Simulation
+  - Source Code FMUs
+  - Binary FMUs for Desktop Platforms
+  - Binary FMUs for non-Desktop Platforms (e.g. HiL)
+
 
 === SIL ECU Profile
 
-Profile supporting advanced SiL simulation of ECU and other clocked models, allowing for more efficient integration of multi-ECU networks.
+This is a profile supporting advanced SiL simulation of ECU and other clocked models, allowing for more efficient integration of multi-ECU networks.
+
+Required Features::
+  - Tunable Parameters
+  - Store/Restore FMU State
+  - Binary Data Type Input/Output
+  - Binary Data Type Parameters
+  - New Integer Types
+  - Fixed-size Input/Output Arrays
+  - Resizable Input/Output Arrays
+  - Fixed-size Parameter Arrays
+  - Resizable Parameter Arrays
+  - Variable Co-Simulation Communication Step Size
+  - Co-Simulation with Clock Information
+  - Time Partition Activation Co-Simulation
+  - Source Code FMUs
+  - Binary FMUs for Desktop Platforms
+  - Binary FMUs for non-Desktop Platforms (e.g. HiL)
+
 
 === Dynamics Profile
 
-Profile for high dynamics mechatronic simulation, including variable  cycle times, model-exchange to allow for efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
+This is a profile for high dynamics mechatronic simulation, including variable cycle times, model-exchange to allow for efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
+
+Required Features::
+  - Tunable Parameters
+  - Store/Restore FMU State
+  - Serialize/Deserialize FMU State
+  - String Inputs/Outputs
+  - Binary Data Type Input/Output
+  - New Integer Types
+  - Fixed-size Input/Output Arrays
+  - Resizable Input/Output Arrays
+  - Resizable Input/Output Arrays with Size-Dependencies
+  - Fixed-size Parameter Arrays
+  - Resizable Parameter Arrays
+  - Resizable Parameter Arrays with Size-Dependencies
+  - Variable Co-Simulation Communication Step Size
+  - State and Output Dependencies
+  - Output Derivatives in Co-Simulation
+  - Restartable Early Return in Hybrid Co-Simulation
+  - Intermediate Output Values in Co-Simulation
+  - Co-Simulation with Clock Information
+  - Binary FMUs for Desktop Platforms
+
 
 === Feature Overview
 
-[cols="1*h,7*"]
+[[feature-matrix]]
+[cols="1h,<3,6*^1"]
 |========
 |Area|Feature|FMI Version|Basic CS Profile|Sensor Profile|Basic HiL & Sensor HiL Profile|SIL ECU Profile|Dynamics Profile
 
 2+|Parameter Handling||||||
-| |Tunable Parameters|2.0|1|1|1|1|1
+| |Tunable Parameters|2.0|X|X|X|X|X
 2+|State Handling||||||
-| |Store/Restore FMU State|2.0||||1|1
-| |Serialize/Deserialize FMU State|2.0|||||1
+| |Store/Restore FMU State|2.0||||X|X
+| |Serialize/Deserialize FMU State|2.0|||||X
 2+|Data Types||||||
-| |String Inputs/Outputs|2.0|||||1
-| |Binary Data Type Input/Output|3.0||1|1|1|1
-| |Binary Data Type Parameters|3.0||1|1|1|
-| |New Integer Types|3.0|||1|1|1
+| |String Inputs/Outputs|2.0|||||X
+| |Binary Data Type Input/Output|3.0||X|X|X|X
+| |Binary Data Type Parameters|3.0||X|X|X|
+| |New Integer Types|3.0|||X|X|X
 2+|Array Input/Output Handling||||||
-| |Fixed-size Arrays|3.0|1||1|1|1
-| |Dynamically resizable Arrays|3.0|1|||1|1
-| |Resizable Arrays with Size-Dependencies|3.0|||||1
+| |Fixed-size Arrays|3.0|X||X|X|X
+| |Dynamically resizable Arrays|3.0|X|||X|X
+| |Resizable Arrays with Size-Dependencies|3.0|||||X
 2+|Array Parameter Handling||||||
-| |Fixed-size Arrays|3.0|1||1|1|1
-| |Dynamically resizable Arrays|3.0|1|||1|1
-| |Resizable Arrays with Size-Dependencies|3.0|||||1
+| |Fixed-size Arrays|3.0|X||X|X|X
+| |Dynamically resizable Arrays|3.0|X|||X|X
+| |Resizable Arrays with Size-Dependencies|3.0|||||X
 2+|Calculation Model||||||
-| |Variable Co-Simulation Communication Step Size|1.0||1||1|1
-| |State and Output Dependencies|2.0|||||1
-| |Output Derivatives in Co-Simulation|2.0|||||1
+| |Variable Co-Simulation Communication Step Size|1.0||X||X|X
+| |State and Output Dependencies|2.0|||||X
+| |Output Derivatives in Co-Simulation|2.0|||||X
 | |Directional Derivatives|2.0|||||
-| |Restartable Early Return in Hybrid Co-Simulation|3.0|||||1
-| |Intermediate Output Values in Co-Simulation|3.0|||||1
-| |Co-Simulation with Clock Information|3.0||||1|1
-| |Time Partition Activation Co-Simulation|3.0|||1|1|
+| |Restartable Early Return in Hybrid Co-Simulation|3.0|||||X
+| |Intermediate Output Values in Co-Simulation|3.0|||||X
+| |Co-Simulation with Clock Information|3.0||||X|X
+| |Time Partition Activation Co-Simulation|3.0|||X|X|
 | |Clocked Model-Exchange|3.0|||||
 2+|Execution Targets||||||
-| |Source Code FMUs|1.0|*|*|1|1|
-| |Binary FMUs for Desktop Platforms|1.0|1|1|1|1|1
-| |Binary FMUs for non-Desktop Platforms (e.g. HiL)|1.0|||1|1|
+| |Source Code FMUs|1.0|*|*|X|X|
+| |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X
+| |Binary FMUs for non-Desktop Platforms (e.g. HiL)|1.0|||X|X|
 2+|Execution Mode||||||
 | |Asynchronous FMUs|2.0|||||
-|======
+|========
+
+The support for source code FMUs is not strictly necessary for the Basic CS and Sensor Profiles, but is highly recommended to support portability of FMUs to new platforms.
