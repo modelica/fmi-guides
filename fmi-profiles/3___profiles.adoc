@@ -45,7 +45,7 @@ Required Features::
   - New Integer Types
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
-  - Time Partition Activation Co-Simulation
+  - Scheduled Execution Interface
   - Source Code FMUs
   - Binary FMUs for Desktop Platforms
   - Binary FMUs for non-Desktop Platforms (e.g. HiL)
@@ -67,7 +67,7 @@ Required Features::
   - Resizable Parameter Arrays
   - Variable Co-Simulation Communication Step Size
   - Co-Simulation with Clock Information
-  - Time Partition Activation Co-Simulation
+  - Scheduled Execution Interface
   - Source Code FMUs
   - Binary FMUs for Desktop Platforms
   - Binary FMUs for non-Desktop Platforms (e.g. HiL)
@@ -101,6 +101,8 @@ Required Features::
 
 === Feature Overview
 
+In the table below, the placement of an `X` indicates a required feature, a `*` indicates a recommended feature, and a `-` indicates a discouraged feature.
+
 [[feature-matrix]]
 [cols="1h,<3,6*^1"]
 |========
@@ -132,14 +134,14 @@ Required Features::
 | |Restartable Early Return in Hybrid Co-Simulation|3.0|||||X
 | |Intermediate Output Values in Co-Simulation|3.0|||||X
 | |Co-Simulation with Clock Information|3.0||||X|X
-| |Time Partition Activation Co-Simulation|3.0|||X|X|
+| |Scheduled Execution Interface|3.0|||X|X|
 | |Clocked Model-Exchange|3.0|||||
 2+|Execution Targets||||||
 | |Source Code FMUs|1.0|*|*|X|X|
 | |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X
 | |Binary FMUs for non-Desktop Platforms (e.g. HiL)|1.0|||X|X|
 2+|Execution Mode||||||
-| |Asynchronous FMUs|2.0|||||
+| |Asynchronous FMUs|1.0|-|-|-|-|-
 |========
 
 The support for source code FMUs is not strictly necessary for the Basic CS and Sensor Profiles, but is highly recommended to support portability of FMUs to new platforms.

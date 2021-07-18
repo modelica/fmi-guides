@@ -17,7 +17,7 @@ Tunable Parameters (FMI 2.0)::
 
 Store/Restore FMU State (FMI 2.0)::
 FMUs that support fmi2GetFMUState and fmi2SetFMUState allow the implementation to store the current state and reset to that state during a simulation run.
-This allows for more capable co-simulation master algorithms, for example a master can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
+This allows for more capable co-simulation algorithms, for example an importer can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
 Note that this flexibility usually incurs some performance hit if used.
 +
 This sub-feature does not entail the ability to store that saved state in an external persistent format and restore from that in a seperate simulation run (this requires serialization support).
@@ -91,7 +91,7 @@ This sub-feature is only concerned with the use of arrays for parameters and con
 === Calculation Model
 
 Variable Co-Simulation Communication Step Size (FMI 1.0)::
-FMI since 1.0 offers the ability of Co-Simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step base by the Co-Simulation master.
+FMI since 1.0 offers the ability of co-simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step base by the co-simulation algorithm of the importer.
 This option indicates whether support for variable step sizes by FMUs is deemed important for numerical performance.
 
 State and Output Dependencies (FMI 2.0)::
@@ -102,7 +102,7 @@ dependency is linear (this allows to transform nonlinear algebraic equation syst
 equation systems when connecting FMUs).
 
 Output Derivatives in Co-Simulation (FMI 2.0)::
-FMI since 2.0 offers the ability of Co-Simulation FMUs to give access to nth-order output derivatives to enable Co-Simulation masters to interpolate output values between communication steps with higher accuracy.
+FMI since 2.0 offers the ability of co-simulation FMUs to give access to nth-order output derivatives to enable co-simulation algorithms to interpolate output values between communication steps with higher accuracy.
 
 Directional Derivatives (FMI 2.0)::
 FMI 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g. in order to construct a partial derivative matrix:
@@ -113,20 +113,23 @@ shall be computed.
 If the exported FMU performs this computation analytically, then all numerical algorithms based on these partial derivatives (for example the numerical integration method or nonlinear algebraic solvers) are more efficient and more reliable.
 
 Restartable Early Return in Hybrid Co-Simulation (FMI 3.0)::
-FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine prior to completing the full indicated time step, e.g. to signal an internal event or discontinuity, with the ability for the master to continue the step after this early return.
+FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine prior to completing the full indicated time step, e.g. to signal an internal event or discontinuity, with the ability for the importer to continue the step after this early return.
 +
-This feature allows for more efficient co-simulation master algorithms due to the more precise detection of event times, if e.g. used in combination with resettable FMUs.
+This feature allows for more efficient co-simulation algorithms due to the more precise detection of event times, if e.g. used in combination with resettable FMUs.
 
 Intermediate Output Values in Co-Simulation (FMI 3.0)::
-FMI 3.0 will support the option for FMUs to give access to intermediate output values, which are generated due to internal integration/calculation steps, but would previously not have been visible unless the co-simulation master reduces the communication step size.
-These additional values can be used e.g. for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.
+FMI 3.0 will support the option for FMUs to give access to intermediate output values (through a mechanism called intermediate update mode), which are generated due to internal integration/calculation steps, but would previously not have been visible unless the co-simulation algorithm reduces the communication step size.
++
+These additional values can be used for example for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.
 
 Co-Simulation with Clock Information (FMI 3.0)::
-FMI 3.0 will offer support for clock annotations on variables that can be used in co-simulation mode to allow a master algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU, in order to more precisely transfer information between FMUs.
+FMI 3.0 will offer support for clock annotations on variables that can be used in co-simulation mode to allow a co-simulation algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU, in order to more precisely transfer information between FMUs.
 
-Time Partition Activation Co-Simulation (FMI 3.0)::
-FMI 3.0 will offer support for FMUs to allow direct activation of seperate time partititons from the co-simulation master.
-This mode makes it possible for co-simulation masters to interleave calculations of different time partitions of different FMUs in efficient ways to support e.g. real-time simulation of multiple FMUs in hardware resource constrained systems (e.g. HiL systems).
+Scheduled Execution Interface (FMI 3.0)::
+FMI 3.0 will offer support for FMUs to allow direct activation of seperate time partititons from the importer.
+This mode makes it possible for importers to interleave calculations of different time partitions of different FMUs in efficient ways to support for example real-time simulation of multiple FMUs in hardware resource constrained systems (e.g. HiL systems).
++
+Note that since this interface is different from the co-simulation interface, it is recommended that FMUs providing a Scheduled Exection interface also provide a Co-Simulation interface as well, for use in systems that do not require the execution control of Scheduled Exection. 
 
 Clocked Model-Exchange (FMI 3.0)::
 FMI 3.0 will offer support for clocked model-exchange, where signals are only considered active when their related clocks tick.
@@ -150,7 +153,8 @@ This is a catch-all feature indication, since of course the actual requirement w
 === Execution Mode
 
 Asynchronous FMUs (FMI 2.0)::
-FMI has since FMI 1.0 supported the ability to create asynchronous FMUs for co-simulation, that allow the actual fmi2DoStep calculations to run in the background, with the co-simulation master either being called-back or polling to determine when the actual calculations have finished.
-This feature has found very infrequent support and use, since it places the burden on the FMU implementation to use internal multi-threading or co-processing mechanisms to handle the necessary parallelism, whereas a master can attain the same effect under its own control through the use of multiple threads on which to call normal, blocking FMUs.
+FMI has since FMI 1.0 supported the ability to create asynchronous FMUs for co-simulation, that allow the actual fmi2DoStep calculations to run in the background, with the importer either being called-back or polling to determine when the actual calculations have finished.
+This feature has found very infrequent support and use, since it places the burden on the FMU implementation to use internal multi-threading or co-processing mechanisms to handle the necessary parallelism, whereas an importer can attain the same effect under its own control through the use of multiple threads on which to call normal, blocking FMUs.
 +
-This sub-feature polls for interest in this mode of operation.
+Starting with FMI 3.0 this feature has been dropped for the given reasons.
+The guidance given in this document is to always avoid use of this feature for reasons of portability, future proofing and robustness.
