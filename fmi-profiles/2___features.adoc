@@ -1,6 +1,7 @@
+[#top-features]
 == Features
 
-The following individualized features form the basis of the feature profiles introduced in section XXX.
+The following individualized features form the basis of the feature profiles introduced in the chapter <<top-profiles,Feature Profiles>>.
 It should be noted that the features are not only drawn from areas of the FMI standards that are explicitly marked as optional, but also include certain features which though non-optional are nevertheless not universally used or supported.
 
 None of the information contained in here shall be construed to speak to the normative aspects of the standard and towards compliance with it.

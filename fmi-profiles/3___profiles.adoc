@@ -1,3 +1,4 @@
+[#top-profiles]
 == Feature Profiles
 
 The initial set of use-case based feature profiles includes a set of five feature profiles, which can be seen in overview in table <<feature-matrix,Feature Overview>>.

@@ -1,3 +1,4 @@
+[#top-introduction]
 == Introduction
 
 The Functional Mock-up Interface (FMI) has gained widespread acceptance in industrial usage both at the level of users and simulation tool vendors as a mechanism for the interchange of models for integration into other environments.
@@ -12,8 +13,11 @@ If vendors start advertising their profile support, this also makes it much easi
 Additionally, these profiles can be used to display feature support in a concise manner in comparison tables, like e.g. those present on the FMI standard website.
 
 In order to establish such profiles, a questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features. Based on the industry participants, a consolidated set of initial FMI feature profiles was derived and diseminated internally.
-The FMI Feature Profiles of this document provide the initial set of consolidated FMI feature profiles along with short descriptions of the corresponding use cases.
+After internal discussion within the SmartSE project, and wider discussion inside the Modelica Association Project FMI, the set of FMI Feature Profiles of this document was adopted for joint publication.
+
+The FMI Feature Profiles provide an initial set of consolidated FMI feature profiles along with short descriptions of the corresponding use cases.
 
 Please be aware that this is only a subset of the initially proposed or elicited profiles, concentrating on the simpler use cases where more comprehensive overlap of required features was identified.
-It is expected that further more higher-end profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.
+It is expected that further more higher-end or more specific profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.
+
 Based on this initial document we are actively soliciting feedback and comments from further industrial users of FMI in order to validate and enhance this initial set of profiles as well as the overall approach.
