@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.15">
-<title>FMI 2.0/3.0 Profiles</title>
+<meta name="generator" content="Asciidoctor 2.0.16">
+<title>FMI 2.0/3.0 Feature Profiles</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Uncomment @import statement below to use as custom stylesheet */
@@ -580,20 +580,23 @@ document.addEventListener('keydown', (event) => {
     });
 </script>
 
-<img style="display: block; margin: 2em auto; width: 30em;" src="images/FMI_logo_horizontal.svg" alt="FMI logo">
+<div style="display: grid; grid-template-columns: 1fr 1fr; align-items: center;">
+    <img style="display: block; margin: 2em auto; width: 30em;" src="images/FMI_logo_horizontal.svg" alt="FMI logo">
+    <img style="display: block; margin: 2em auto; width: 30em;" src="images/prostep_logo.svg" alt="prostep ivip logo">
+</div>
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>FMI 2.0/3.0 Profiles</h1>
+<h1>FMI 2.0/3.0 Feature Profiles</h1>
 <div class="details">
-<span id="revnumber">version main-533f18a85b28156945d10bfb8a01449ad0edbdcf,</span>
-<span id="revdate">2021-06-28</span>
+<span id="revnumber">version main-5160d916956d2de14a5e7e8e0f2d9dca9cfffc12,</span>
+<span id="revdate">2021-08-05</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_introduction">1. Introduction</a></li>
-<li><a href="#_features">2. Features</a>
+<li><a href="#top-introduction">1. Introduction</a></li>
+<li><a href="#top-features">2. Features</a>
 <ul class="sectlevel2">
 <li><a href="#_parameter_handling">2.1. Parameter Handling</a></li>
 <li><a href="#_state_handling">2.2. State Handling</a></li>
@@ -605,14 +608,15 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_execution_mode">2.8. Execution Mode</a></li>
 </ul>
 </li>
-<li><a href="#_feature_profiles">3. Feature Profiles</a>
+<li><a href="#top-profiles">3. Feature Profiles</a>
 <ul class="sectlevel2">
 <li><a href="#_basic_cs_profile">3.1. Basic CS Profile</a></li>
 <li><a href="#_sensor_profile">3.2. Sensor Profile</a></li>
 <li><a href="#_basic_hil_sensor_hil_profile">3.3. Basic HiL &amp; Sensor HiL Profile</a></li>
 <li><a href="#_sil_ecu_profile">3.4. SIL ECU Profile</a></li>
 <li><a href="#_dynamics_profile">3.5. Dynamics Profile</a></li>
-<li><a href="#_feature_overview">3.6. Feature Overview</a></li>
+<li><a href="#_dynamics_controller_profile">3.6. Dynamics Controller Profile</a></li>
+<li><a href="#_feature_overview">3.7. Feature Overview</a></li>
 </ul>
 </li>
 <li><a href="#_references">References</a></li>
@@ -639,7 +643,7 @@ All of the content is to be considered non-normative and shall not be considered
 </div>
 </div>
 <div class="sect1">
-<h2 id="_introduction">1. Introduction</h2>
+<h2 id="top-introduction">1. Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The Functional Mock-up Interface (FMI) has gained widespread acceptance in industrial usage both at the level of users and simulation tool vendors as a mechanism for the interchange of models for integration into other environments.</p>
@@ -657,20 +661,25 @@ Additionally, these profiles can be used to display feature support in a concise
 </div>
 <div class="paragraph">
 <p>In order to establish such profiles, a questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features. Based on the industry participants, a consolidated set of initial FMI feature profiles was derived and diseminated internally.
-The FMI Feature Profiles of this document provide the initial set of consolidated FMI feature profiles along with short descriptions of the corresponding use cases.</p>
+After internal discussion within the SmartSE project, and wider discussion inside the Modelica Association Project FMI, the set of FMI Feature Profiles of this document was adopted for joint publication.</p>
+</div>
+<div class="paragraph">
+<p>The FMI Feature Profiles provide an initial set of consolidated FMI feature profiles along with short descriptions of the corresponding use cases.</p>
 </div>
 <div class="paragraph">
 <p>Please be aware that this is only a subset of the initially proposed or elicited profiles, concentrating on the simpler use cases where more comprehensive overlap of required features was identified.
-It is expected that further more higher-end profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.
-Based on this initial document we are actively soliciting feedback and comments from further industrial users of FMI in order to validate and enhance this initial set of profiles as well as the overall approach.</p>
+It is expected that further more higher-end or more specific profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.</p>
+</div>
+<div class="paragraph">
+<p>Based on this initial document we are actively soliciting feedback and comments from further industrial users of FMI in order to validate and enhance this initial set of profiles as well as the overall approach.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_features">2. Features</h2>
+<h2 id="top-features">2. Features</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following individualized features form the basis of the feature profiles introduced in section XXX.
+<p>The following individualized features form the basis of the feature profiles introduced in the chapter <a href="#top-profiles">Feature Profiles</a>.
 It should be noted that the features are not only drawn from areas of the FMI standards that are explicitly marked as optional, but also include certain features which though non-optional are nevertheless not universally used or supported.</p>
 </div>
 <div class="paragraph">
@@ -697,7 +706,7 @@ It should be noted that the features are not only drawn from areas of the FMI st
 <dt class="hdlist1">Store/Restore FMU State (FMI 2.0)</dt>
 <dd>
 <p>FMUs that support fmi2GetFMUState and fmi2SetFMUState allow the implementation to store the current state and reset to that state during a simulation run.
-This allows for more capable co-simulation master algorithms, for example a master can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
+This allows for more capable co-simulation algorithms, for example an importer can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
 Note that this flexibility usually incurs some performance hit if used.</p>
 <div class="paragraph">
 <p>This sub-feature does not entail the ability to store that saved state in an external persistent format and restore from that in a seperate simulation run (this requires serialization support).</p>
@@ -814,7 +823,7 @@ Through the use of the same structural parameter in multiple array definitions, 
 <dl>
 <dt class="hdlist1">Variable Co-Simulation Communication Step Size (FMI 1.0)</dt>
 <dd>
-<p>FMI since 1.0 offers the ability of Co-Simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step base by the Co-Simulation master.
+<p>FMI since 1.0 offers the ability of co-simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step base by the co-simulation algorithm of the importer.
 This option indicates whether support for variable step sizes by FMUs is deemed important for numerical performance.</p>
 </dd>
 <dt class="hdlist1">State and Output Dependencies (FMI 2.0)</dt>
@@ -827,7 +836,7 @@ equation systems when connecting FMUs).</p>
 </dd>
 <dt class="hdlist1">Output Derivatives in Co-Simulation (FMI 2.0)</dt>
 <dd>
-<p>FMI since 2.0 offers the ability of Co-Simulation FMUs to give access to nth-order output derivatives to enable Co-Simulation masters to interpolate output values between communication steps with higher accuracy.</p>
+<p>FMI since 2.0 offers the ability of co-simulation FMUs to give access to nth-order output derivatives to enable co-simulation algorithms to interpolate output values between communication steps with higher accuracy.</p>
 </dd>
 <dt class="hdlist1">Directional Derivatives (FMI 2.0)</dt>
 <dd>
@@ -840,24 +849,29 @@ If the exported FMU performs this computation analytically, then all numerical a
 </dd>
 <dt class="hdlist1">Restartable Early Return in Hybrid Co-Simulation (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine prior to completing the full indicated time step, e.g. to signal an internal event or discontinuity, with the ability for the master to continue the step after this early return.</p>
+<p>FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine prior to completing the full indicated time step, e.g. to signal an internal event or discontinuity, with the ability for the importer to continue the step after this early return.</p>
 <div class="paragraph">
-<p>This feature allows for more efficient co-simulation master algorithms due to the more precise detection of event times, if e.g. used in combination with resettable FMUs.</p>
+<p>This feature allows for more efficient co-simulation algorithms due to the more precise detection of event times, if e.g. used in combination with resettable FMUs.</p>
 </div>
 </dd>
 <dt class="hdlist1">Intermediate Output Values in Co-Simulation (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will support the option for FMUs to give access to intermediate output values, which are generated due to internal integration/calculation steps, but would previously not have been visible unless the co-simulation master reduces the communication step size.
-These additional values can be used e.g. for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.</p>
+<p>FMI 3.0 will support the option for FMUs to give access to intermediate output values (through a mechanism called intermediate update mode), which are generated due to internal integration/calculation steps, but would previously not have been visible unless the co-simulation algorithm reduces the communication step size.</p>
+<div class="paragraph">
+<p>These additional values can be used for example for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.</p>
+</div>
 </dd>
 <dt class="hdlist1">Co-Simulation with Clock Information (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer support for clock annotations on variables that can be used in co-simulation mode to allow a master algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU, in order to more precisely transfer information between FMUs.</p>
+<p>FMI 3.0 will offer support for clock annotations on variables that can be used in co-simulation mode to allow a co-simulation algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU, in order to more precisely transfer information between FMUs.</p>
 </dd>
-<dt class="hdlist1">Time Partition Activation Co-Simulation (FMI 3.0)</dt>
+<dt class="hdlist1">Scheduled Execution Interface (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer support for FMUs to allow direct activation of seperate time partititons from the co-simulation master.
-This mode makes it possible for co-simulation masters to interleave calculations of different time partitions of different FMUs in efficient ways to support e.g. real-time simulation of multiple FMUs in hardware resource constrained systems (e.g. HiL systems).</p>
+<p>FMI 3.0 will offer support for FMUs to allow direct activation of seperate time partititons from the importer.
+This mode makes it possible for importers to interleave calculations of different time partitions of different FMUs in efficient ways to support for example real-time simulation of multiple FMUs in hardware resource constrained systems (e.g. HiL systems).</p>
+<div class="paragraph">
+<p>Note that since this interface is different from the co-simulation interface, it is recommended that FMUs providing a Scheduled Exection interface also provide a Co-Simulation interface as well, for use in systems that do not require the execution control of Scheduled Exection.</p>
+</div>
 </dd>
 <dt class="hdlist1">Clocked Model-Exchange (FMI 3.0)</dt>
 <dd>
@@ -897,10 +911,11 @@ This is a catch-all feature indication, since of course the actual requirement w
 <dl>
 <dt class="hdlist1">Asynchronous FMUs (FMI 2.0)</dt>
 <dd>
-<p>FMI has since FMI 1.0 supported the ability to create asynchronous FMUs for co-simulation, that allow the actual fmi2DoStep calculations to run in the background, with the co-simulation master either being called-back or polling to determine when the actual calculations have finished.
-This feature has found very infrequent support and use, since it places the burden on the FMU implementation to use internal multi-threading or co-processing mechanisms to handle the necessary parallelism, whereas a master can attain the same effect under its own control through the use of multiple threads on which to call normal, blocking FMUs.</p>
+<p>FMI has since FMI 1.0 supported the ability to create asynchronous FMUs for co-simulation, that allow the actual fmi2DoStep calculations to run in the background, with the importer either being called-back or polling to determine when the actual calculations have finished.
+This feature has found very infrequent support and use, since it places the burden on the FMU implementation to use internal multi-threading or co-processing mechanisms to handle the necessary parallelism, whereas an importer can attain the same effect under its own control through the use of multiple threads on which to call normal, blocking FMUs.</p>
 <div class="paragraph">
-<p>This sub-feature polls for interest in this mode of operation.</p>
+<p>Starting with FMI 3.0 this feature has been dropped for the given reasons.
+The guidance given in this document is to always avoid use of this feature for reasons of portability, future proofing and robustness.</p>
 </div>
 </dd>
 </dl>
@@ -909,7 +924,7 @@ This feature has found very infrequent support and use, since it places the burd
 </div>
 </div>
 <div class="sect1">
-<h2 id="_feature_profiles">3. Feature Profiles</h2>
+<h2 id="top-profiles">3. Feature Profiles</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The initial set of use-case based feature profiles includes a set of five feature profiles, which can be seen in overview in table <a href="#feature-matrix">Feature Overview</a>.
@@ -1032,7 +1047,7 @@ They are described in detail in the following sections.</p>
 <p>Fixed-size Parameter Arrays</p>
 </li>
 <li>
-<p>Time Partition Activation Co-Simulation</p>
+<p>Scheduled Execution Interface</p>
 </li>
 <li>
 <p>Source Code FMUs</p>
@@ -1094,7 +1109,7 @@ They are described in detail in the following sections.</p>
 <p>Co-Simulation with Clock Information</p>
 </li>
 <li>
-<p>Time Partition Activation Co-Simulation</p>
+<p>Scheduled Execution Interface</p>
 </li>
 <li>
 <p>Source Code FMUs</p>
@@ -1182,21 +1197,122 @@ They are described in detail in the following sections.</p>
 </ul>
 </div>
 </dd>
+<dt class="hdlist1">Recommended Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Directional Derivatives</p>
+</li>
+</ul>
+</div>
+</dd>
 </dl>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_feature_overview">3.6. Feature Overview</h3>
+<h3 id="_dynamics_controller_profile">3.6. Dynamics Controller Profile</h3>
+<div class="paragraph">
+<p>This is a profile for high dynamics mechatronic simulation that include discrete controller implementations.  This extends the dynamics profile to include model-exchange with clocks, to allow for efficient handling of tightly coupled sub-systems with reliable support for the coupling of discrete controller time partitions across FMUs.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Required Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Tunable Parameters</p>
+</li>
+<li>
+<p>Store/Restore FMU State</p>
+</li>
+<li>
+<p>Serialize/Deserialize FMU State</p>
+</li>
+<li>
+<p>String Inputs/Outputs</p>
+</li>
+<li>
+<p>Binary Data Type Input/Output</p>
+</li>
+<li>
+<p>New Integer Types</p>
+</li>
+<li>
+<p>Fixed-size Input/Output Arrays</p>
+</li>
+<li>
+<p>Resizable Input/Output Arrays</p>
+</li>
+<li>
+<p>Resizable Input/Output Arrays with Size-Dependencies</p>
+</li>
+<li>
+<p>Fixed-size Parameter Arrays</p>
+</li>
+<li>
+<p>Resizable Parameter Arrays</p>
+</li>
+<li>
+<p>Resizable Parameter Arrays with Size-Dependencies</p>
+</li>
+<li>
+<p>Variable Co-Simulation Communication Step Size</p>
+</li>
+<li>
+<p>State and Output Dependencies</p>
+</li>
+<li>
+<p>Output Derivatives in Co-Simulation</p>
+</li>
+<li>
+<p>Restartable Early Return in Hybrid Co-Simulation</p>
+</li>
+<li>
+<p>Intermediate Output Values in Co-Simulation</p>
+</li>
+<li>
+<p>Co-Simulation with Clock Information</p>
+</li>
+<li>
+<p>Clocked Model-Exchange</p>
+</li>
+<li>
+<p>Binary FMUs for Desktop Platforms</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Recommended Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Directional Derivatives</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feature_overview">3.7. Feature Overview</h3>
+<div class="paragraph">
+<p>In the table below, the placement of an <code>X</code> indicates a required feature, a <code>*</code> indicates a recommended feature, and a <code>-</code> indicates a discouraged feature.</p>
+</div>
 <table id="feature-matrix" class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 10%;">
-<col style="width: 30%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
+<col style="width: 9.0909%;">
+<col style="width: 27.2727%;">
+<col style="width: 9.0909%;">
+<col style="width: 9.0909%;">
+<col style="width: 9.0909%;">
+<col style="width: 9.0909%;">
+<col style="width: 9.0909%;">
+<col style="width: 9.0909%;">
+<col style="width: 9.091%;">
 </colgroup>
 <thead>
 <tr>
@@ -1208,12 +1324,14 @@ They are described in detail in the following sections.</p>
 <th class="tableblock halign-center valign-top">Basic HiL &amp; Sensor HiL Profile</th>
 <th class="tableblock halign-center valign-top">SIL ECU Profile</th>
 <th class="tableblock halign-center valign-top">Dynamics Profile</th>
+<th class="tableblock halign-center valign-top">Dynamics Controller Profile</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Parameter Handling</p></th>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
@@ -1229,10 +1347,12 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">State Handling</p></th>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
@@ -1248,6 +1368,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1258,10 +1379,12 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Data Types</p></th>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
@@ -1277,12 +1400,14 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Binary Data Type Input/Output</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
@@ -1297,6 +1422,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1304,6 +1430,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
@@ -1316,6 +1443,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1323,6 +1451,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
@@ -1336,6 +1465,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1345,6 +1475,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
@@ -1355,6 +1486,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1362,6 +1494,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
@@ -1375,6 +1508,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1385,10 +1519,12 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Calculation Model</p></th>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
@@ -1404,6 +1540,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1413,6 +1550,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
@@ -1424,6 +1562,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1433,7 +1572,8 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1443,6 +1583,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
@@ -1454,6 +1595,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1464,15 +1606,17 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Time Partition Activation Co-Simulation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scheduled Execution Interface</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
@@ -1484,10 +1628,12 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Execution Targets</p></th>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
@@ -1503,11 +1649,13 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Binary FMUs for Desktop Platforms</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
@@ -1523,6 +1671,7 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Execution Mode</p></th>
@@ -1532,21 +1681,26 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Asynchronous FMUs</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
 <p>The support for source code FMUs is not strictly necessary for the Basic CS and Sensor Profiles, but is highly recommended to support portability of FMUs to new platforms.</p>
+</div>
+<div class="paragraph">
+<p>More generally, support for source code FMUs and binary FMUs for desktop and non-desktop platforms, is recommended wherever feasible, to aid portability and interoperability.</p>
 </div>
 </div>
 </div>
