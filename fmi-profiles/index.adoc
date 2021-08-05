@@ -1,4 +1,4 @@
-= FMI 2.0/3.0 Profiles
+= FMI 2.0/3.0 Feature Profiles
 :doctype: book
 :imagesdir: images
 :sectnums:
