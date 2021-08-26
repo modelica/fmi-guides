@@ -1,7 +1,7 @@
 [#top-profiles]
 == Feature Profiles
 
-The initial set of use-case based feature profiles includes a set of five feature profiles, which can be seen in overview in table <<feature-matrix,Feature Overview>>.
+The initial set of use-case-based feature profiles includes a set of five feature profiles, which can be seen in the overview in table <<feature-matrix,Feature Overview>>.
 They are described in detail in the following sections.
 
 === Basic CS Profile
@@ -22,7 +22,8 @@ Recommended Features::
 
 === Sensor Profile
 
-This is a basic sensor simulation profile, supporting complex input and output using e.g. OSI-encoded sensor data via binary variables and dynamic timing. Also suitable for non-sensor simulations with those characterstics.
+This is a basic sensor simulation profile, supporting complex input and output using, for example, OSI-encoded sensor data via binary variables and dynamic timing.
+Also suitable for non-sensor simulations with those characteristics.
 
 Required Features::
   - Tunable Parameters
@@ -37,7 +38,8 @@ Recommended Features::
 
 === Basic HiL & Sensor HiL Profile
 
-This is a basic profile supporting HiL use, including mechatronic and sensor simulation usage. This assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.
+This is a basic profile supporting HiL use, including mechatronics and sensor simulation usage.
+This profile assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.
 
 Required Features::
   - Tunable Parameters
@@ -76,7 +78,7 @@ Required Features::
 
 === Dynamics Profile
 
-This is a profile for high dynamics mechatronic simulation, including variable cycle times, model-exchange to allow for efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
+This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
 
 Required Features::
   - Tunable Parameters
@@ -105,7 +107,8 @@ Recommended Features::
 
 === Dynamics Controller Profile
 
-This is a profile for high dynamics mechatronic simulation that include discrete controller implementations.  This extends the dynamics profile to include model-exchange with clocks, to allow for efficient handling of tightly coupled sub-systems with reliable support for the coupling of discrete controller time partitions across FMUs.
+This is a profile for high dynamics mechatronic simulation that includes discrete controller implementations.
+This profile extends the dynamics profile to include model exchange with clocks to allow for efficient handling of tightly coupled sub-systems with reliable support for coupling discrete controller time partitions across FMUs.
 
 Required Features::
   - Tunable Parameters
@@ -178,6 +181,6 @@ In the table below, the placement of an `X` indicates a required feature, a `*` 
 | |Asynchronous FMUs|1.0|-|-|-|-|-|-
 |========
 
-The support for source code FMUs is not strictly necessary for the Basic CS and Sensor Profiles, but is highly recommended to support portability of FMUs to new platforms.
+The support for source code FMUs is not strictly necessary for the Basic CS and Sensor profiles but is highly recommended to support the portability of FMUs to new platforms.
 
-More generally, support for source code FMUs and binary FMUs for desktop and non-desktop platforms, is recommended wherever feasible, to aid portability and interoperability.
+More generally, support for source code FMUs and binary FMUs for desktop and non-desktop platforms is recommended wherever feasible to aid portability and interoperability.

@@ -4,20 +4,21 @@
 The Functional Mock-up Interface (FMI) has gained widespread acceptance in industrial usage both at the level of users and simulation tool vendors as a mechanism for the interchange of models for integration into other environments.
 
 FMI has, since version 1.0, but increasingly with newer and upcoming versions, included optional features.
-This is done to support the large set of use cases for FMI, without requiring the implementation of features in tools that cannot or do not need to support them for their respective use cases.
-However this optionality proves to be a certain burden to users of tools, since uneven implementation of options in tools make it necessary to check all required tools for a usage scenario for individual option support, which is not always easy to do.
+This is done to support the large set of use cases for FMI without requiring the implementation of features in tools that cannot or do not need to support them for their specific use cases.
+However, this optionality proves to be a burden to tool users since the uneven implementation of options in tools makes it necessary to check all tools required for a usage scenario for individual option support, which is not always easy to do.
 
-A way out of this dilemma lies in the formulation of use case centered FMI feature profiles that include all optional features neccessary for a certain use case.
-If harmonization of these profiles across a sufficiently large class of users can be achieved, this makes it much easier for vendors to support these use cases in a unified way by supporting various profiles directly, including all required options of those features.
+A way out of this dilemma lies in formulating use-case-centered FMI feature profiles that include all optional features necessary for a particular use case.
+Where harmonization of feature profiles can be achieved across a sufficiently large class of users, it is much easier for vendors to support these use cases in a unified way by supporting various profiles directly, including all required options of those features.
 If vendors start advertising their profile support, this also makes it much easier to ascertain support of required options by users.
-Additionally, these profiles can be used to display feature support in a concise manner in comparison tables, like e.g. those present on the FMI standard website.
+Additionally, these profiles can be used to display feature support concisely in comparison tables, like those present on the FMI standard website.
 
-In order to establish such profiles, a questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features. Based on the industry participants, a consolidated set of initial FMI feature profiles was derived and diseminated internally.
-After internal discussion within the SmartSE project, and wider discussion inside the Modelica Association Project FMI, the set of FMI Feature Profiles of this document was adopted for joint publication.
+A questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features.
+Based on the feedback from industry participants, a consolidated set of initial FMI feature profiles was derived and disseminated internally.
+After discussion within the SmartSE project and more comprehensive discussion inside the Modelica Association Project FMI, the projects adopted this document's set of FMI Feature Profiles for joint publication.
 
-The FMI Feature Profiles provide an initial set of consolidated FMI feature profiles along with short descriptions of the corresponding use cases.
+The FMI Feature Profiles provide an initial set of consolidated FMI feature profiles and short descriptions of the corresponding use cases.
 
-Please be aware that this is only a subset of the initially proposed or elicited profiles, concentrating on the simpler use cases where more comprehensive overlap of required features was identified.
-It is expected that further more higher-end or more specific profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.
+Please be aware that this is only a subset of the initially proposed or elicited profiles, concentrating on the simpler use cases where a more comprehensive overlap of required features was identified.
+It is expected that further, more higher-end or more specific profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.
 
-Based on this initial document we are actively soliciting feedback and comments from further industrial users of FMI in order to validate and enhance this initial set of profiles as well as the overall approach.
+Based on this initial document, we are actively soliciting feedback and comments from further industrial users of FMI in order to validate and enhance this initial set of profiles as well as the overall approach.
