@@ -138,7 +138,7 @@ Recommended Features::
 
 === Feature Overview
 
-In the table below, the placement of an `X` indicates a required feature, a `*` indicates a recommended feature, and a `-` indicates a discouraged feature.
+In the table below, the placement of an `X` indicates a required feature, and a `*` indicates a recommended feature.
 
 [[feature-matrix]]
 [cols="1h,<3,7*^1"]
@@ -177,8 +177,6 @@ In the table below, the placement of an `X` indicates a required feature, a `*` 
 | |Source Code FMUs|1.0|*|*|X|X||
 | |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X|X
 | |Binary FMUs for non-Desktop Platforms (e.g. HiL)|1.0|||X|X||
-2+|Execution Mode|||||||
-| |Asynchronous FMUs|1.0|-|-|-|-|-|-
 |========
 
 The support for source code FMUs is not strictly necessary for the Basic CS and Sensor profiles but is highly recommended to support the portability of FMUs to new platforms.

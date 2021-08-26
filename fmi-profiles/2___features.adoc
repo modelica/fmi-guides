@@ -24,7 +24,7 @@ Note that this flexibility usually incurs some performance hit if used.
 This sub-feature does not entail the ability to store that saved state in a persistent external format and restore from that in a separate simulation run (this requires serialization support).
 
 Serialize/Deserialize FMU State (FMI 2.0)::
-This feature provides the ability to serialize a saved FMU state into a format that can be stored on persistent external storage, and used in this or a separate simulation run to restore the FMU state to the current one.
+This feature provides the ability to serialize a saved FMU state into a format that can be stored on persistent external storage and used in this or a separate simulation run to restore the FMU state to the current one.
 +
 This ability allows, for example, to freeze FMU states after lengthy initialization and stabilization phases and start new simulations directly from that state.
 
@@ -95,7 +95,7 @@ This sub-feature is only concerned with the use of arrays for parameters and con
 === Calculation Model
 
 Variable Co-Simulation Communication Step Size (FMI 1.0)::
-FMI since 1.0 offers the ability of co-simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step base by the co-simulation algorithm of the importer.
+FMI since 1.0 offers the ability of co-simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step case by the co-simulation algorithm of the importer.
 This option indicates whether support for variable step sizes by FMUs is deemed important for numerical performance.
 
 State and Output Dependencies (FMI 2.0)::
@@ -156,12 +156,3 @@ Binary FMUs for non-Desktop Platforms (e.g. HiL) (FMI 1.0)::
 FMI supports the inclusion of multiple binary implementations of an FMU.
 This sub-feature deals with the requirement to generate FMUs that include binary implementations for non-Desktop platforms, like common HiL platforms or other potentially embedded target architectures.
 This is a catch-all feature since the actual requirement will have to be specific for the architectures actually needed.
-
-=== Execution Mode
-
-Asynchronous FMUs (FMI 2.0)::
-FMI has since FMI 1.0 supported the ability to create asynchronous FMUs for co-simulation, that allow the actual fmi2DoStep calculations to run in the background, with the importer either being called-back or polling to determine when the actual calculations have finished.
-This feature has found very infrequent support and use, since it places the burden on the FMU implementation to use internal multi-threading or co-processing mechanisms to handle the necessary parallelism, whereas an importer can attain the same effect under its own control through the use of multiple threads on which to call normal, blocking FMUs.
-+
-Starting with FMI 3.0 this feature has been dropped for the given reasons.
-The guidance given in this document is to always avoid use of this feature for reasons of portability, future proofing and robustness.
