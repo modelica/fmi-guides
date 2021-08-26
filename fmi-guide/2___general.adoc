@@ -2,24 +2,69 @@
 
 === Versions of FMI to support
 
-When planning on which versions of FMI to support in your implementation, support for the newest FMI version (currently FMI 2.0) is of course recommended. However support for older versions of FMI, i.e. at the current point in time FMI 1.0, is recommended as well, since there is no cross-version compatibility between major versions of FMI, and only limited compatibility between minor versions of the same major version (i.e. FMUs generated for newer minor versions are not required to be supported by importing implementations for older minor versions). The life cycles of both simulation environments and generated FMUs can wildly differ and span many years in development projects. Therefore support for both legacy FMU integration and generation of legacy FMUs is crucial for flexible interoperation in development projects.
+When planning on which versions of FMI to support in your implementation, support for the newest FMI version (currently FMI 3.0) is, of course, strongly recommended.
 
-=== Support for Model Exchange and Co-Simulation
+It should be noted that there is no cross-version compatibility between major versions of FMI.
 
-Where possible and sensible implementations should support both Model Exchange and Co-Simulation FMUs since there exist different simulation scenarios where usage of Model Exchange or Co-Simulation is better in terms of numerical accuracy, performance or ease-of-use and reproducibility of results. There are of course cases where only generation of one kind of FMU makes sense, e.g. for FMUs generated from ECU software only Co-Simulation is likely to be sensible or possible. For importing implementations both kinds of FMU should normally be supported and there should be proper support for mixing both kinds of FMUs in one model/project unless technical considerations make this impossible/not useful.
+The life cycles of both simulation environments and generated FMUs can wildly differ and span many years in development projects. Therefore support for both legacy FMU integration and generation of legacy FMUs is crucial for flexible interoperation in development projects.
 
-=== Relevant Standards Documents
+Currently, this means that support for the very widely supported FMI version 2.0 should be considered strongly.
 
-When implementing FMI 1.0, note that the Co-Simulation standard document for FMI 1.0 is based on the Model Exchange standard document for FMI 1.0, so both documents are relevant when implementing Co-Simulation FMI 1.0. In FMI 2.0 the two kinds of FMUs are specified in one integrated standard document.
+When bugfix releases of the FMI standard become available, implementations should take these into account in a timely fashion to react to detected clarifications in the standard.
+
+=== Support for Interface Types
+
+Generally, implementations should support all applicable FMI interface types:
+For FMI 3.0, this includes the Model Exchange, Co-Simulation, and Scheduled Execution interface types.
+
+There are inherent trade-offs in the properties of interface types in terms of complexity, numerical accuracy, performance, ease-of-use, and reproducibility of results.
+For this reason, often not just one interface type is appropriate for the export of a given FMU.
+
+FMI provides the ability to package multiple interface types in one FMU, allowing importers and users to select an appropriate interface type at the point of use.
+This also enables importers to fall back to a different interface type if an interface type is not supported or is not beneficial for the current use case.
+
+Especially for a more specialized or complex interface type, like Scheduled Execution, which is only relevant in some use cases, implementing other interface types as a fallback is recommended.
+
+There are, of course, cases where the generation of only certain interface types makes sense:
+For example, for FMUs generated from ECU software, the model exchange interface type is likely not sensible or possible to generate.
+
+Importing implementations should usually support all interface types.
+Mixing FMUs with different interface types in one model or project should also be supported unless technical considerations make this impossible or not useful.
+
+=== Support for Optional Features
+
+The FMI standard provides many optional features.
+These features are optional since support is not uniformly required for all use cases.
+However, for certain use cases, some optional features are often critically important.
+Therefore broad support for optional features is required to achieve acceptable simulation performance for a broad range of use cases.
+
+The Modelica Association Project FMI and the prostep ivip SmartSE project provide a joint publication on FMI Feature Profiles, which gives use-case-based guidance on required and recommended optional features.
+The goal of this document is a more straightforward agreement between tool vendors and users on the required features for specific use cases.
+
+This document can be found on the FMI standard homepage at https://fmi-standard.org/ and should be taken into account, among other considerations, when defining feature support for implementations.
 
 === Testing
 
-All implementers are advised to participate widely in the FMI Cross-Checking Initiative in order to test compatibility with current implementations of other tools. Robust participation, including the testing with a relevant selection of available releases is recommended. Where necessary priority should be given in testing and improving FMI 2.0 support. FMU exporting implementations should also use the FMU Compliance Checker [1] to do basic validation of generated FMUs. Implementers should test FMU integration with complex test-cases, including the behavior of multiple connected FMUs with actual and pseudo algebraic loops, iteration during initialization, handling of structured naming, handling of Unicode characters inside and outside the basic multilingual plane, license handling, etc.
+All implementers are advised to participate widely in the FMI Cross-Checking Initiative to test compatibility with current implementations of other tools.
+Robust participation, including testing with a relevant selection of available releases, is recommended.
+
+FMU exporting implementations should also use the FMU Compliance Checker [1] to do basic validation of generated FMUs.
+
+FMU importing implementations should make use of the Reference FMUs [2] to do basic validation of FMU import.
+
+Implementers should test FMU integration with complex test cases, including the behavior of multiple connected FMUs with actual and pseudo algebraic loops, iteration during initialization, handling of structured naming, handling of Unicode characters inside and outside the basic multilingual plane, license handling, etc.
 
 Referenced Literature:
 
 [1] Modelica Association: FMU Compliance Checker. https://www.fmi-standard.org/downloads
+[2] Reference FMUs
 
 === Licensing and License Handling
 
-If generated FMUs require licenses to run (i.e. FMU runtime licenses), the mechanism that needs to be used to supply these licenses to the FMU needs to be documented, ideally included in the FMU documentation. The license handling should be tested widely as part of cross-implementation checks in order to ensure that the license handling works correctly in varied circumstances. If an error or problem occurs in the license handling, e.g. missing license, etc., an informative message should be provided to the user through the FMU logging callback mechanism so that importing implementations can give proper feedback to the user. Technically interchange of FMUs can be eased tremendously if an option exists to generate FMUs that do not require license mechanisms at the receiving party.
+If generated FMUs require licenses to run (FMU runtime licenses), the mechanism needed to supply these licenses to the FMU needs to be documented, ideally included in the FMU documentation.
+
+The license handling should be tested widely as part of cross-implementation checks to ensure that the license handling works correctly in varied circumstances.
+
+If an error or problem occurs in the license handling, e.g., a missing license, an informative message should be provided to the user through the FMU logging callback mechanism. This allows importing implementations to provide proper feedback to the user.
+
+Exchange of FMUs can be eased tremendously if an option exists to generate FMUs that do not require license mechanisms at the receiving party.

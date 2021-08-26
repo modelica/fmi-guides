@@ -1,16 +1,24 @@
 == Introduction
 
 The Functional Mock-up Interface (FMI) has gained widespread acceptance in industrial usage both at the level of users and simulation tool vendors as a mechanism for the interchange of models for integration into other environments.
-During the initial adoption of FMI a number of problems and omissions that have hindered the realization of the full potential of FMI adoption have been identified.
-This document provides best practice recommendations to implementers of FMI derived from the industrial experience of the Smart SE project members in employing FMI.
-The overarching goal of the recommendations is to aid interoperability of FMI implementations and ensure sufficient ease-of-use for the user in employing FMI.
+During the initial adoption of FMI, several problems and omissions that have hindered the realization of the full potential of FMI adoption have been identified.
+Many of these issues have resulted in clarifications and enhancements in the FMI 3.0 standard.
+However, other considerations are less normative or require more deliberated guidance, so inclusion in the standard itself was deemed unwise.
 
-This document is intended for simulation tool vendors that are planning to support FMI in their products, either for importing FMUs or for exporting FMUs, or both.
-It assumes a technical audience and tries to give further information and hints in areas where either the relevant specification documents have been found sometimes to be less clear than expected, or where user expectations are relevant to implementation choices.
-It also takes into account errors and bugs that have been encountered in practical use of existing FMI implementations and provides guidance in order to avoid common pitfalls.
+This document provides best practice recommendations to implementers of FMI, focusing on FMI 3.0, derived from the industrial experience of the Smart SE project members and the MAP FMI community in employing FMI.
+The overarching goal of the recommendations is to aid interoperability of FMI implementations and ensure good ease-of-use for the user in employing FMI.
 
-Since interoperability of implementations is of key concern for FMI users, guidance is, where applicable, based on the general robustness principle (also often termed Postel’s law):
+This document is intended for simulation tool vendors planning to support FMI in their products, either for importing FMUs or for exporting FMUs, or both.
+It assumes a technical audience and tries to give further information and hints in areas where either the relevant specification documents have been found sometimes to be less clear than expected or where user expectations are relevant to implementation choices.
+It also considers errors and bugs encountered in the practical use of existing FMI implementations and guides to avoid common pitfalls.
+
+Since interoperability of implementations is of crucial concern for FMI users, guidance is, where applicable, based on the general robustness principle (also often termed Postel’s law):
+
+[quote]
 Be conservative in what you do, be liberal in what you accept from others.
+
 Note that the guidance in this document does in no way supplant the standards themselves:
-What is standard compliant or not is the sole domain of the official standard documents.
-This guidance only expands on the content of the standards and gives advice in how to best deal with not fully standard compliant implementations, which even if they are fixed at a later date, will affect users in the meantime (and with generated FMUs probably a long time after the exporting implementation is fixed, if the FMUs are not regenerated regularly).
+What is standard-compliant or not is the sole domain of the official standard documents.
+
+This guidance only expands on the content of the standards by giving advice on how to best deal with design decisions and the realities of diverging or not fully standard-compliant implementations:
+Even if erroneous implementations are fixed at a later date, they will affect users in the meantime, and with generated FMUs, probably a long time after the exporters are fixed if the FMUs are not regenerated regularly.

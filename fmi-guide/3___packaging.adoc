@@ -4,25 +4,21 @@
 
 ==== FMU Importing Implementations
 
-Importing implementations should be prepared to support the extraction of FMU ZIP archives with leading “./” prefixes on entries in the archive (e.g. “./modelDescription.xml” instead of “modelDescription.xml”): Even though the FMI standards do not provide any indication that such leading prefixes should be supported, a number of implementations do interpret the standard in this way and generate FMU ZIP archives with such prefixes.
+Importing implementations should be prepared to support the extraction of FMU ZIP archives with leading “./” prefixes on entries in the archive (e.g. “./modelDescription.xml” instead of “modelDescription.xml”).
+Similarly, implementations should be prepared to support extraction of FMU ZIP archives that use "\" as the path separator.
 
-When possible implementations should unpack the complete ZIP archive content in one location, since some FMUs depend on this even if the standard only specified access to the resources folder.
+Even though the FMI standards do not provide any indication that such leading prefixes or path separators are valid, a number of implementations have historically generated FMU ZIP archives with such prefixes or path separators.
 
-==== FMU Exporting Implementations
-
-Exporting implementations should ensure that the generated FMU ZIP archives only contain entries with no leading prefix, i.e. the entries should be “modelDescription.xml” “binaries/win32/myfmu.dll”, etc., and not “./modelDescription.xml”, “./binaries/win32/myfmu.dll”. While the FMI standards 1.0 and 2.0 can be interpreted to be ambiguous in this area, upcoming bug fix releases will likely clarify this to recommend canonical pathnames, i.e. no leading “./” prefixes.
-
-The exporting implementation should not, where possible, rely on the importing implementation completely unpacking the FMU in one location, since only access to the resources folder is actually specified in the standard. Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated, but those fallbacks are by their nature non-portable fallback mechanisms which only come into play when other, standard conforming mechanisms are not available.
-
-=== XML Character Set
-
-==== FMU Importing Implementations
-
-For FMI 1.0 implementations should try to support more than UTF-8 encodings of modelDescription.xml, supporting at least ASCII and ISO-8859-1/ISO-8859-15 encodings might be reasonable. For FMI 2.0 the specification remedied this oversight and specifies that modelDescription.xml must be in UTF-8 encoding, so this problem does not occur.
+When possible, implementations should unpack the complete ZIP archive content in one location since some FMUs depend on this even if the standard only specifies access to the resources folder.
 
 ==== FMU Exporting Implementations
 
-For FMI 1.0 implementations should generate the modelDescription.xml file only in UTF-8 encoding even though the standard leaves the list of permissible encodings open, since only UTF-8 encoding is likely to be universally supported. For FMI 2.0 UTF-8 is the only permissible choice.
+Exporting implementations should ensure that the generated FMU ZIP archives only contain entries with no leading prefix, i.e. the entries should be “modelDescription.xml” “binaries/win32/myfmu.dll”, etc., and not “./modelDescription.xml”, “./binaries/win32/myfmu.dll”.
+While the FMI standards 1.0 and 2.0 can be interpreted to be ambiguous in this area, upcoming bug fix releases will likely clarify this to recommend canonical pathnames, i.e. no leading “./” prefixes.
+
+The exporting implementation should not rely on the importing implementation completely unpacking the FMU in one location, since only access to the resources folder is actually specified in the standard.
+
+Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated, but those fallbacks are by their nature non-portable fallback mechanisms which only come into play when other, standard conforming mechanisms are not available.
 
 === Documentation and Additional Resources
 

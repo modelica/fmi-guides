@@ -1,1 +1,7 @@
 == Scheduled-Execution Specific Issues
+
+=== Use-cases for Scheduled Execution
+
+The scheduled execution interface type is intended for use cases, where the ability to directly control the scheduling of internal time partitions of multiple FMUs from the outside is considered necessary.
+
+Note that in cases where the actual direct control of the runtime of internal time partitions is not required, the use of clocked co-simulation or model exchange interface types may be more appropriate.
