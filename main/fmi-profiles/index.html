@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 2.0/3.0 Feature Profiles</h1>
 <div class="details">
-<span id="revnumber">version main-5160d916956d2de14a5e7e8e0f2d9dca9cfffc12,</span>
-<span id="revdate">2021-08-05</span>
+<span id="revnumber">version main-ad478c80447d464c7c3ea416e12c50cefa51b2f9,</span>
+<span id="revdate">2021-08-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -605,7 +605,6 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_array_parameter_handling">2.5. Array Parameter Handling</a></li>
 <li><a href="#_calculation_model">2.6. Calculation Model</a></li>
 <li><a href="#_execution_targets">2.7. Execution Targets</a></li>
-<li><a href="#_execution_mode">2.8. Execution Mode</a></li>
 </ul>
 </li>
 <li><a href="#top-profiles">3. Feature Profiles</a>
@@ -627,9 +626,9 @@ document.addEventListener('keydown', (event) => {
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The FMI 2.0/3.0 Profiles are a free resource intended to give non-normative recommendations and guidance to implementers und users of the Functional Mock-up Interface standard versions 2.0 and 3.0.
-All guidance is based on FMI 2.0 and FMI 3.0, unless otherwise noted or applicable.
-This is a development version of the FMI Profiles, that has not been reviewed or finalized in any way.
+<p>The FMI 2.0/3.0 Profiles are a free resource intended to give non-normative recommendations and guidance to implementers and users of the Functional Mock-up Interface standard versions 2.0 and 3.0.
+All guidance is based on FMI 2.0 and FMI 3.0 unless otherwise noted or applicable.
+This is a development version of the FMI Profiles that has not been reviewed or finalized in any way.
 All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI 2.0 or 3.0 standards.
 <a href="https://github.com/modelica/fmi-guides/releases">Releases</a> and <a href="https://github.com/modelica/fmi-guides/issues">issues</a> can be found on <a href="https://github.com/modelica/fmi-guides">github.com/modelica/fmi-guides</a>.</p>
 </div>
@@ -650,28 +649,29 @@ All of the content is to be considered non-normative and shall not be considered
 </div>
 <div class="paragraph">
 <p>FMI has, since version 1.0, but increasingly with newer and upcoming versions, included optional features.
-This is done to support the large set of use cases for FMI, without requiring the implementation of features in tools that cannot or do not need to support them for their respective use cases.
-However this optionality proves to be a certain burden to users of tools, since uneven implementation of options in tools make it necessary to check all required tools for a usage scenario for individual option support, which is not always easy to do.</p>
+This is done to support the large set of use cases for FMI without requiring the implementation of features in tools that cannot or do not need to support them for their specific use cases.
+However, this optionality proves to be a burden to tool users since the uneven implementation of options in tools makes it necessary to check all tools required for a usage scenario for individual option support, which is not always easy to do.</p>
 </div>
 <div class="paragraph">
-<p>A way out of this dilemma lies in the formulation of use case centered FMI feature profiles that include all optional features neccessary for a certain use case.
-If harmonization of these profiles across a sufficiently large class of users can be achieved, this makes it much easier for vendors to support these use cases in a unified way by supporting various profiles directly, including all required options of those features.
+<p>A way out of this dilemma lies in formulating use-case-centered FMI feature profiles that include all optional features necessary for a particular use case.
+Where harmonization of feature profiles can be achieved across a sufficiently large class of users, it is much easier for vendors to support these use cases in a unified way by supporting various profiles directly, including all required options of those features.
 If vendors start advertising their profile support, this also makes it much easier to ascertain support of required options by users.
-Additionally, these profiles can be used to display feature support in a concise manner in comparison tables, like e.g. those present on the FMI standard website.</p>
+Additionally, these profiles can be used to display feature support concisely in comparison tables, like those present on the FMI standard website.</p>
 </div>
 <div class="paragraph">
-<p>In order to establish such profiles, a questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features. Based on the industry participants, a consolidated set of initial FMI feature profiles was derived and diseminated internally.
-After internal discussion within the SmartSE project, and wider discussion inside the Modelica Association Project FMI, the set of FMI Feature Profiles of this document was adopted for joint publication.</p>
+<p>A questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features.
+Based on the feedback from industry participants, a consolidated set of initial FMI feature profiles was derived and disseminated internally.
+After discussion within the SmartSE project and more comprehensive discussion inside the Modelica Association Project FMI, the projects adopted this document&#8217;s set of FMI Feature Profiles for joint publication.</p>
 </div>
 <div class="paragraph">
-<p>The FMI Feature Profiles provide an initial set of consolidated FMI feature profiles along with short descriptions of the corresponding use cases.</p>
+<p>The FMI Feature Profiles provide an initial set of consolidated FMI feature profiles and short descriptions of the corresponding use cases.</p>
 </div>
 <div class="paragraph">
-<p>Please be aware that this is only a subset of the initially proposed or elicited profiles, concentrating on the simpler use cases where more comprehensive overlap of required features was identified.
-It is expected that further more higher-end or more specific profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.</p>
+<p>Please be aware that this is only a subset of the initially proposed or elicited profiles, concentrating on the simpler use cases where a more comprehensive overlap of required features was identified.
+It is expected that further, more higher-end or more specific profiles could be defined going forward, based on further exploration of the use case space and industrial user feedback.</p>
 </div>
 <div class="paragraph">
-<p>Based on this initial document we are actively soliciting feedback and comments from further industrial users of FMI in order to validate and enhance this initial set of profiles as well as the overall approach.</p>
+<p>Based on this initial document, we are actively soliciting feedback and comments from further industrial users of FMI in order to validate and enhance this initial set of profiles as well as the overall approach.</p>
 </div>
 </div>
 </div>
@@ -680,10 +680,10 @@ It is expected that further more higher-end or more specific profiles could be d
 <div class="sectionbody">
 <div class="paragraph">
 <p>The following individualized features form the basis of the feature profiles introduced in the chapter <a href="#top-profiles">Feature Profiles</a>.
-It should be noted that the features are not only drawn from areas of the FMI standards that are explicitly marked as optional, but also include certain features which though non-optional are nevertheless not universally used or supported.</p>
+It should be noted that the features are not only drawn from areas of the FMI standards that are explicitly marked as optional but also include certain features which though non-optional, are nevertheless not universally used or supported.</p>
 </div>
 <div class="paragraph">
-<p>None of the information contained in here shall be construed to speak to the normative aspects of the standard and towards compliance with it.</p>
+<p>None of the information presented here shall be construed to speak to the normative aspects of the standard and towards compliance with it.</p>
 </div>
 <div class="paragraph">
 <p>The features are split into feature areas to give thematic context to the individual features.  These feature areas provide the subsections of this chapter.</p>
@@ -706,17 +706,17 @@ It should be noted that the features are not only drawn from areas of the FMI st
 <dt class="hdlist1">Store/Restore FMU State (FMI 2.0)</dt>
 <dd>
 <p>FMUs that support fmi2GetFMUState and fmi2SetFMUState allow the implementation to store the current state and reset to that state during a simulation run.
-This allows for more capable co-simulation algorithms, for example an importer can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
+This allows for more capable co-simulation algorithms: For example, an importer can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
 Note that this flexibility usually incurs some performance hit if used.</p>
 <div class="paragraph">
-<p>This sub-feature does not entail the ability to store that saved state in an external persistent format and restore from that in a seperate simulation run (this requires serialization support).</p>
+<p>This sub-feature does not entail the ability to store that saved state in a persistent external format and restore from that in a separate simulation run (this requires serialization support).</p>
 </div>
 </dd>
 <dt class="hdlist1">Serialize/Deserialize FMU State (FMI 2.0)</dt>
 <dd>
-<p>The ability to serialize a saved FMU state into a format that can be stored on external persistent storage, and used in this or a seperate simulation run to restore the FMU state to the current one.</p>
+<p>This feature provides the ability to serialize a saved FMU state into a format that can be stored on persistent external storage and used in this or a separate simulation run to restore the FMU state to the current one.</p>
 <div class="paragraph">
-<p>This ability allows for example to freeze FMU states after long initialization and stabilization phases, and start new simulations directly from that state.</p>
+<p>This ability allows, for example, to freeze FMU states after lengthy initialization and stabilization phases and start new simulations directly from that state.</p>
 </div>
 </dd>
 </dl>
@@ -728,31 +728,33 @@ Note that this flexibility usually incurs some performance hit if used.</p>
 <dl>
 <dt class="hdlist1">String Inputs/Outputs (FMI 2.0)</dt>
 <dd>
-<p>The string data type has been part of FMI since 1.0, and is not optional. And like all data types, it can be used for all kinds of variables, i.e. parameters as well as constants, inputs, outputs, etc.</p>
+<p>The string data type has been part of FMI since 1.0 and is not optional.
+And like all data types, it can be used for all kinds of variables, i.e., parameters and constants, inputs, outputs, etc.</p>
 <div class="paragraph">
-<p>However some simulation systems have no concept of string inputs/outputs at runtime, so this feature is not fully supported by all systems, nor required for many use cases.
-Selection of this sub-feature indicates that the ability to pass strings at simulation time as inputs and outputs is important for the use case/profile.</p>
+<p>However, some simulation systems have no concept of string inputs/outputs at runtime, so this feature is not fully supported by all systems nor required for many use cases.
+The presence of this sub-feature indicates that the ability to pass strings at simulation time as inputs and outputs is important for the use case/profile.</p>
 </div>
 </dd>
 <dt class="hdlist1">Binary Data Type Input/Output (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 adds a new binary data type, that allows FMUs to transfer complete blocks of binary data into or out of the FMU.
-The binary data is opaque from the point of view of the simulator by default, however FMUs can specify a MIME type for the data, allowing interpretation of the data by simulators if that is wanted/required.</p>
+<p>FMI 3.0 adds a new binary data type that allows FMUs to transfer complete blocks of binary data into or out of the FMU.
+The binary data is opaque from the point of view of the simulator by default.
+However, FMUs can specify a MIME type for the data, allowing interpretation of the data by simulators if that is wanted/required.</p>
 <div class="paragraph">
-<p>Some use cases for this type of data are for example sensor simulation, where ground truth data, full camera feeds, or sensor detection data are transfered as binary data.
-Other use cases can be simulation of communication bus behavior, by exchanging e.g. full CAN or SOME-IP frames via binary data.</p>
+<p>One use cases for this type of data are sensor simulations, where ground truth data, full camera feeds, or sensor detection data are transferred as binary data.
+Other use cases can be simulations of communication bus behavior by exchanging whole CAN or SOME-IP frames via binary data.</p>
 </div>
 <div class="paragraph">
-<p>This sub-feature only deals with use of the binary data type for inputs and outputs.</p>
+<p>This sub-feature only deals with the use of the binary data type for inputs and outputs.</p>
 </div>
 </dd>
 <dt class="hdlist1">Binary Data Type Parameters (FMI 3.0)</dt>
 <dd>
-<p>This sub-feature is the ability to use the new binary data type of FMI 3.0 for parameters and constants, not just for inputs and outputs.</p>
+<p>This sub-feature represents the ability to use the new binary data type of FMI 3.0 for parameters and constants, not just for inputs and outputs.</p>
 </dd>
 <dt class="hdlist1">New Integer Types (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer a full complement of 8, 16, 32 and 64-bit signed and unsigned integer data types, not just the de-facto 32-bit signed integer data type that FMI 2.0 offers.</p>
+<p>FMI 3.0 will offer a full complement of 8, 16, 32, and 64-bit signed and unsigned integer data types, not just the de-facto 32-bit signed integer data type that FMI 2.0 offers.</p>
 </dd>
 </dl>
 </div>
@@ -764,22 +766,23 @@ Other use cases can be simulation of communication bus behavior, by exchanging e
 <dt class="hdlist1">Fixed-size Arrays (FMI 3.0)</dt>
 <dd>
 <p>FMI 3.0 offers variables that are native multi-dimensional arrays of the basic data types FMI 3.0 supports.
-This sub-feature contains only the use of arrays of fixed (i.e. at design time) size.</p>
+This sub-feature contains only the use of arrays of fixed (i.e., at design time) size.</p>
 <div class="paragraph">
 <p>This sub-feature is only concerned with the use of arrays for inputs and outputs.</p>
 </div>
 </dd>
 <dt class="hdlist1">Dynamically resizable Arrays (FMI 3.0)</dt>
 <dd>
-<p>This sub-feature comprises the use of dynamically resizable arrays (i.e. resizing of arrays either prior to simulation start at configuration time, or during simulation using re-configuration mode).</p>
+<p>This sub-feature comprises the use of dynamically resizable arrays:
+This comprises the resizing of arrays either prior to simulation start at configuration time or during simulation using re-configuration mode.</p>
 <div class="paragraph">
 <p>This sub-feature is only concerned with the use of arrays for inputs and outputs.</p>
 </div>
 </dd>
 <dt class="hdlist1">Resizable Arrays with Size-Dependencies (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 performs array resizing through the use of special structural parameters that contain the sizes of array dimensions.
-Through the use of the same structural parameter in multiple array definitions, dependency information of sizes between multiple arrays can be expressed (e.g. to define matching matrixes for linear equation systems).</p>
+<p>FMI 3.0 performs array resizing by using special structural parameters that contain the sizes of array dimensions.
+Dependencies of sizes between multiple arrays can be expressed by using the same structural parameter in multiple array definitions, for example, to define matching matrixes for linear equation systems.</p>
 <div class="paragraph">
 <p>This sub-feature is only concerned with the use of arrays for inputs and outputs.</p>
 </div>
@@ -794,22 +797,22 @@ Through the use of the same structural parameter in multiple array definitions, 
 <dt class="hdlist1">Fixed-size Arrays (FMI 3.0)</dt>
 <dd>
 <p>FMI 3.0 offers variables that are native multi-dimensional arrays of the basic data types FMI 3.0 supports.
-This sub-feature contains only the use of arrays of fixed (i.e. at design time) size.</p>
+This sub-feature contains only the use of arrays of fixed (i.e., at design time) size.</p>
 <div class="paragraph">
 <p>This sub-feature is only concerned with the use of arrays for parameters and constants.</p>
 </div>
 </dd>
 <dt class="hdlist1">Dynamically resizable Arrays (FMI 3.0)</dt>
 <dd>
-<p>This sub-feature comprises the use of dynamically resizable arrays (i.e. resizing of arrays either prior to simulation start at configuration time, or during simulation using re-configuration mode).</p>
+<p>This sub-feature comprises the use of dynamically resizable arrays (i.e., resizing of arrays either prior to simulation start at configuration time or during simulation using re-configuration mode).</p>
 <div class="paragraph">
 <p>This sub-feature is only concerned with the use of arrays for parameters and constants.</p>
 </div>
 </dd>
 <dt class="hdlist1">Resizable Arrays with Size-Dependencies (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 performs array resizing through the use of special structural parameters that contain the sizes of array dimensions.
-Through the use of the same structural parameter in multiple array definitions, dependency information of sizes between multiple arrays can be expressed (e.g. to define matching matrixes for linear equation systems).</p>
+<p>FMI 3.0 performs array resizing by using special structural parameters that contain the sizes of array dimensions.
+Dependencies of sizes between multiple arrays can be expressed by using the same structural parameter in multiple array definitions, for example, to define matching matrixes for linear equation systems.</p>
 <div class="paragraph">
 <p>This sub-feature is only concerned with the use of arrays for parameters and constants.</p>
 </div>
@@ -823,16 +826,15 @@ Through the use of the same structural parameter in multiple array definitions, 
 <dl>
 <dt class="hdlist1">Variable Co-Simulation Communication Step Size (FMI 1.0)</dt>
 <dd>
-<p>FMI since 1.0 offers the ability of co-simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step base by the co-simulation algorithm of the importer.
+<p>FMI since 1.0 offers the ability of co-simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step case by the co-simulation algorithm of the importer.
 This option indicates whether support for variable step sizes by FMUs is deemed important for numerical performance.</p>
 </dd>
 <dt class="hdlist1">State and Output Dependencies (FMI 2.0)</dt>
 <dd>
-<p>FMI 2.0 supports the ability of FMUs to provide information on the dependencies of state derivatives and of output variables from inputs and states, in other words the sparsity pattern for Jacobians can be defined.
+<p>FMI 2.0 supports the ability of FMUs to provide information on the dependencies of state derivatives and output variables from inputs and states.
+In other words, the sparsity pattern for Jacobians can be defined.
 This allows simulating stiff FMUs with many states (&gt; 1000 states) since sparse matrix methods can be utilized in the numerical integration method.
-Furthermore, it can be stated whether this
-dependency is linear (this allows to transform nonlinear algebraic equation systems into linear
-equation systems when connecting FMUs).</p>
+Furthermore, it can be stated whether this dependency is linear (this allows to transform nonlinear algebraic equation systems into linear equation systems when connecting FMUs).</p>
 </dd>
 <dt class="hdlist1">Output Derivatives in Co-Simulation (FMI 2.0)</dt>
 <dd>
@@ -840,43 +842,45 @@ equation systems when connecting FMUs).</p>
 </dd>
 <dt class="hdlist1">Directional Derivatives (FMI 2.0)</dt>
 <dd>
-<p>FMI 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g. in order to construct a partial derivative matrix:
-Directional derivatives can be computed for derivatives of continuous-time states and for
-outputs.
-This is useful when connecting FMUs and the partial derivatives of the connected FMU
-shall be computed.
-If the exported FMU performs this computation analytically, then all numerical algorithms based on these partial derivatives (for example the numerical integration method or nonlinear algebraic solvers) are more efficient and more reliable.</p>
+<p>FMI 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
+Directional derivatives can be computed for continuous-time states and outputs.
+This is useful when connecting FMUs, and the partial derivatives of the connected FMU shall be computed.
+Suppose the exported FMU performs this computation analytically. In that case, all numerical algorithms based on these partial derivatives (for example, the numerical integration method or nonlinear algebraic solvers) are more efficient and reliable.</p>
 </dd>
 <dt class="hdlist1">Restartable Early Return in Hybrid Co-Simulation (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine prior to completing the full indicated time step, e.g. to signal an internal event or discontinuity, with the ability for the importer to continue the step after this early return.</p>
+<p>FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine before completing the whole indicated time step.
+This can be used to signal an internal event or discontinuity, allowing the importer to continue the step after this early return.</p>
 <div class="paragraph">
-<p>This feature allows for more efficient co-simulation algorithms due to the more precise detection of event times, if e.g. used in combination with resettable FMUs.</p>
+<p>This feature allows for more efficient co-simulation algorithms due to the more precise detection of event times, if, e.g., used in combination with resettable FMUs.</p>
 </div>
 </dd>
 <dt class="hdlist1">Intermediate Output Values in Co-Simulation (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will support the option for FMUs to give access to intermediate output values (through a mechanism called intermediate update mode), which are generated due to internal integration/calculation steps, but would previously not have been visible unless the co-simulation algorithm reduces the communication step size.</p>
+<p>FMI 3.0 will support the option for FMUs to give access to intermediate output values through a mechanism called intermediate update mode.
+This feature provides access to values that are generated due to internal integration/calculation steps but would previously not have been visible unless the co-simulation algorithm reduces the communication step size.</p>
 <div class="paragraph">
-<p>These additional values can be used for example for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.</p>
+<p>These additional values can be used, for example, for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.</p>
 </div>
 </dd>
 <dt class="hdlist1">Co-Simulation with Clock Information (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer support for clock annotations on variables that can be used in co-simulation mode to allow a co-simulation algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU, in order to more precisely transfer information between FMUs.</p>
+<p>FMI 3.0 will offer support for clock annotations on variables.
+This feature can be used in co-simulation mode to allow a co-simulation algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU to transfer information between FMUs more precisely.</p>
 </dd>
 <dt class="hdlist1">Scheduled Execution Interface (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer support for FMUs to allow direct activation of seperate time partititons from the importer.
-This mode makes it possible for importers to interleave calculations of different time partitions of different FMUs in efficient ways to support for example real-time simulation of multiple FMUs in hardware resource constrained systems (e.g. HiL systems).</p>
+<p>FMI 3.0 will offer support for FMUs to allow direct activation of separate time partitions from the importer.
+This interface type makes it possible for importers to interleave calculations of different time partitions of different FMUs efficiently to support, for example, real-time simulation of multiple FMUs in hardware-resource-constrained systems, like HiL systems.</p>
 <div class="paragraph">
-<p>Note that since this interface is different from the co-simulation interface, it is recommended that FMUs providing a Scheduled Exection interface also provide a Co-Simulation interface as well, for use in systems that do not require the execution control of Scheduled Exection.</p>
+<p>Note that this interface is different from the co-simulation interface.
+It is recommended that FMUs providing a Scheduled Execution interface also provide a Co-Simulation interface for use in systems that do not require the execution control of Scheduled Execution.</p>
 </div>
 </dd>
 <dt class="hdlist1">Clocked Model-Exchange (FMI 3.0)</dt>
 <dd>
-<p>FMI 3.0 will offer support for clocked model-exchange, where signals are only considered active when their related clocks tick.
-This allows for more precise support for discrete/continuous hybrid systems, or systems with multiple non-least-common-denominator clocks/rates.</p>
+<p>FMI 3.0 will support clocked model exchange, where signals are only considered active when their related clocks tick.
+This allows for more precise support for discrete/continuous hybrid systems or systems with multiple non-least-common-denominator clocks/rates.</p>
 </dd>
 </dl>
 </div>
@@ -889,34 +893,20 @@ This allows for more precise support for discrete/continuous hybrid systems, or 
 <dd>
 <p>FMI offers the ability to distribute FMUs that contain C source code as one of its target implementations, which then relies on the portability of the code and the ability of the receiving implementation to compile that code to its target architecture.</p>
 <div class="paragraph">
-<p>The use of source code implies the usual trade offs (e.g. potential portability problems in the code, availability of compilers on the target platform, need for code obfuscation to add IP protection). On the other hand this makes the FMU usable on platforms for which the generating party has no available compiler toolchain or cross-compilation support.</p>
+<p>The use of source code implies the usual trade-offs:
+The potential broader portability of the source code is balanced by, for example, potential portability problems in the code, availability of compilers on the target platform, need for code obfuscation to add IP protection.
+On the other hand, this makes the FMU usable on platforms for which the generating party has no available compiler toolchain or cross-compilation support.</p>
 </div>
 </dd>
 <dt class="hdlist1">Binary FMUs for Desktop Platforms (FMI 1.0)</dt>
 <dd>
-<p>This sub-feature describes the usual ability to generate FMUs with binary implementations (either dynamically or statically linked libraries) for the usual desktop computing platforms (e.g. Windows/x64, Linux/x64).</p>
+<p>This sub-feature describes the usual ability to generate FMUs with binary implementations (either dynamically or statically linked libraries) for the typical desktop computing platforms, like Windows/x64 and Linux/x64.</p>
 </dd>
 <dt class="hdlist1">Binary FMUs for non-Desktop Platforms (e.g. HiL) (FMI 1.0)</dt>
 <dd>
 <p>FMI supports the inclusion of multiple binary implementations of an FMU.
-This sub-feature deals with the requirement to generate FMUs that include binary implementations for non-Desktop platforms, e.g. for common HiL platforms or other, potentially embedded, target architectures.
-This is a catch-all feature indication, since of course the actual requirement will have to be specific towards the architectures actually needed.</p>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_execution_mode">2.8. Execution Mode</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Asynchronous FMUs (FMI 2.0)</dt>
-<dd>
-<p>FMI has since FMI 1.0 supported the ability to create asynchronous FMUs for co-simulation, that allow the actual fmi2DoStep calculations to run in the background, with the importer either being called-back or polling to determine when the actual calculations have finished.
-This feature has found very infrequent support and use, since it places the burden on the FMU implementation to use internal multi-threading or co-processing mechanisms to handle the necessary parallelism, whereas an importer can attain the same effect under its own control through the use of multiple threads on which to call normal, blocking FMUs.</p>
-<div class="paragraph">
-<p>Starting with FMI 3.0 this feature has been dropped for the given reasons.
-The guidance given in this document is to always avoid use of this feature for reasons of portability, future proofing and robustness.</p>
-</div>
+This sub-feature deals with the requirement to generate FMUs that include binary implementations for non-Desktop platforms, like common HiL platforms or other potentially embedded target architectures.
+This is a catch-all feature since the actual requirement will have to be specific for the architectures actually needed.</p>
 </dd>
 </dl>
 </div>
@@ -927,7 +917,7 @@ The guidance given in this document is to always avoid use of this feature for r
 <h2 id="top-profiles">3. Feature Profiles</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The initial set of use-case based feature profiles includes a set of five feature profiles, which can be seen in overview in table <a href="#feature-matrix">Feature Overview</a>.
+<p>The initial set of use-case-based feature profiles includes a set of five feature profiles, which can be seen in the overview in table <a href="#feature-matrix">Feature Overview</a>.
 They are described in detail in the following sections.</p>
 </div>
 <div class="sect2">
@@ -978,7 +968,8 @@ They are described in detail in the following sections.</p>
 <div class="sect2">
 <h3 id="_sensor_profile">3.2. Sensor Profile</h3>
 <div class="paragraph">
-<p>This is a basic sensor simulation profile, supporting complex input and output using e.g. OSI-encoded sensor data via binary variables and dynamic timing. Also suitable for non-sensor simulations with those characterstics.</p>
+<p>This is a basic sensor simulation profile, supporting complex input and output using, for example, OSI-encoded sensor data via binary variables and dynamic timing.
+Also suitable for non-sensor simulations with those characteristics.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -1020,7 +1011,8 @@ They are described in detail in the following sections.</p>
 <div class="sect2">
 <h3 id="_basic_hil_sensor_hil_profile">3.3. Basic HiL &amp; Sensor HiL Profile</h3>
 <div class="paragraph">
-<p>This is a basic profile supporting HiL use, including mechatronic and sensor simulation usage. This assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.</p>
+<p>This is a basic profile supporting HiL use, including mechatronics and sensor simulation usage.
+This profile assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -1129,7 +1121,7 @@ They are described in detail in the following sections.</p>
 <div class="sect2">
 <h3 id="_dynamics_profile">3.5. Dynamics Profile</h3>
 <div class="paragraph">
-<p>This is a profile for high dynamics mechatronic simulation, including variable cycle times, model-exchange to allow for efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.</p>
+<p>This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -1213,7 +1205,8 @@ They are described in detail in the following sections.</p>
 <div class="sect2">
 <h3 id="_dynamics_controller_profile">3.6. Dynamics Controller Profile</h3>
 <div class="paragraph">
-<p>This is a profile for high dynamics mechatronic simulation that include discrete controller implementations.  This extends the dynamics profile to include model-exchange with clocks, to allow for efficient handling of tightly coupled sub-systems with reliable support for the coupling of discrete controller time partitions across FMUs.</p>
+<p>This is a profile for high dynamics mechatronic simulation that includes discrete controller implementations.
+This profile extends the dynamics profile to include model exchange with clocks to allow for efficient handling of tightly coupled sub-systems with reliable support for coupling discrete controller time partitions across FMUs.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -1300,7 +1293,7 @@ They are described in detail in the following sections.</p>
 <div class="sect2">
 <h3 id="_feature_overview">3.7. Feature Overview</h3>
 <div class="paragraph">
-<p>In the table below, the placement of an <code>X</code> indicates a required feature, a <code>*</code> indicates a recommended feature, and a <code>-</code> indicates a discouraged feature.</p>
+<p>In the table below, the placement of an <code>X</code> indicates a required feature, and a <code>*</code> indicates a recommended feature.</p>
 </div>
 <table id="feature-matrix" class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1673,34 +1666,13 @@ They are described in detail in the following sections.</p>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 </tr>
-<tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Execution Mode</p></th>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Asynchronous FMUs</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">-</p></td>
-</tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>The support for source code FMUs is not strictly necessary for the Basic CS and Sensor Profiles, but is highly recommended to support portability of FMUs to new platforms.</p>
+<p>The support for source code FMUs is not strictly necessary for the Basic CS and Sensor profiles but is highly recommended to support the portability of FMUs to new platforms.</p>
 </div>
 <div class="paragraph">
-<p>More generally, support for source code FMUs and binary FMUs for desktop and non-desktop platforms, is recommended wherever feasible, to aid portability and interoperability.</p>
+<p>More generally, support for source code FMUs and binary FMUs for desktop and non-desktop platforms is recommended wherever feasible to aid portability and interoperability.</p>
 </div>
 </div>
 </div>
