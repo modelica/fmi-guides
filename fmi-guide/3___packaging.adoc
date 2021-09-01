@@ -22,13 +22,29 @@ Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating 
 
 === Documentation and Additional Resources
 
-==== FMU Importing Implementations
+==== Icons
 
-Implementations should support using supplied icon information in the FMU (i.e. a model.png file in PNG format in the root of the ZIP archive) when displaying the FMU in a graphical notation or user interface. Implementations should allow easy access to any documentation being supplied in the FMU in the FMI-specified ways.
+Implementations should support using supplied icon information in the FMU when displaying the FMU in a graphical notation or user interface.
 
-==== FMU Exporting Implementations
+For FMI 3.0, icon information is available as part of the ports and icons information.
+This optionally includes detailed icon information for individual ports, as well as global icon information.
 
-Implementations should generate a useful icon for the FMU and package this in the ZIP archive in the way documented in the FMI standards (i.e. as a model.png file in PNG format in the root of the ZIP archive). Implementations should allow the user to easily author/add documentation for the FMU and package this in the FMI-specified way in the ZIP archive.
+For prior versions of FMI, only a model.png file in PNG format in the root of the ZIP archive is available.
+
+Exporting implementations should, at a minimum, generate an informative icon for the FMU and package this in the ZIP archive in the way documented in the FMI standards.
+Whenever possible, more detailed information should be provided using the ports and icons information.
+
+==== Documentation
+
+The documentation folder of FMUs provides a specific way to ensure that important documentation needed to use FMUs effectively always travel with the FMU.
+Implementations should therefore allow easy access to any documentation supplied in the FMU.
+
+Exporting implementations should allow the user to easily author/add documentation for the FMU.
+
+Exporting implementations should also include any additional documentation needed to effectively run the FMU in the documentation:
+
+- Implementations that produce FMUs that are not considered stand-alone, i.e. specifying `needsExecutionTool=true` in their model description, should provide sufficient information inside the documentation that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.
+- Implementations that produce FMUs that require runtime licenses should provide information on what kind of license is needed and how to provide that license so the FMU can use it.
 
 === Support for 32&64bit Variants of Platforms
 
