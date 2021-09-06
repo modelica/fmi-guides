@@ -2,23 +2,23 @@
 
 === ZIP Archive Structure
 
-==== FMU Importing Implementations
+==== Pathnames and Prefixes
 
-Importing implementations should be prepared to support the extraction of FMU ZIP archives with leading “./” prefixes on entries in the archive (e.g. “./modelDescription.xml” instead of “modelDescription.xml”).
+Exporting implementations should ensure that the generated FMU ZIP archives are compliant to the ZIP specification.
+This implies that only the forward slash `/` shall be used as a path separator, and that path specifications like `.` or `..` do not have specific interpretations, like current directory, etc.
+
+More specifically the ZIP archive should only contain entries with no leading prefix, i.e. the entries should be `modelDescription.xml`, `binaries/x86_64-windows/myfmu.dll`, etc., and not `./modelDescription.xml`, or `myfmu/binaries/x86_64-windows/myfmu.dll`.
+
+To enable interopartion with not-quite conforming implementations, importing implementations should be prepared to support the extraction of FMU ZIP archives with leading `./` prefixes on entries in the archive.
 Similarly, implementations should be prepared to support extraction of FMU ZIP archives that use "\" as the path separator.
 
-Even though the FMI standards do not provide any indication that such leading prefixes or path separators are valid, a number of implementations have historically generated FMU ZIP archives with such prefixes or path separators.
-
-When possible, implementations should unpack the complete ZIP archive content in one location since some FMUs depend on this even if the standard only specifies access to the resources folder.
-
-==== FMU Exporting Implementations
-
-Exporting implementations should ensure that the generated FMU ZIP archives only contain entries with no leading prefix, i.e. the entries should be “modelDescription.xml” “binaries/win32/myfmu.dll”, etc., and not “./modelDescription.xml”, “./binaries/win32/myfmu.dll”.
-While the FMI standards 1.0 and 2.0 can be interpreted to be ambiguous in this area, upcoming bug fix releases will likely clarify this to recommend canonical pathnames, i.e. no leading “./” prefixes.
+==== Access to FMU package content
 
 The exporting implementation should not rely on the importing implementation completely unpacking the FMU in one location, since only access to the resources folder is actually specified in the standard.
 
 Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated, but those fallbacks are by their nature non-portable fallback mechanisms which only come into play when other, standard conforming mechanisms are not available.
+
+When possible, implementations should unpack the complete ZIP archive content in one location since some FMUs depend on this even if the standard only specifies access to the resources folder.
 
 === Documentation and Additional Resources
 
@@ -26,7 +26,7 @@ Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating 
 
 Implementations should support using supplied icon information in the FMU when displaying the FMU in a graphical notation or user interface.
 
-For FMI 3.0, icon information is available as part of the ports and icons information.
+For FMI 3.0, icon information is available as part of the ports and icons information contained in the `icons/terminalsAndIcons.xml` file of the FMU.
 This optionally includes detailed icon information for individual ports, as well as global icon information.
 
 For prior versions of FMI, only a model.png file in PNG format in the root of the ZIP archive is available.
@@ -48,13 +48,18 @@ Exporting implementations should also include any additional documentation neede
 
 === Support for 32&64bit Variants of Platforms
 
-==== FMU Importing Implementations
+Common platforms in use today are available in 32bit and 64bit variants, for example Windows or Linux on Intel processors, or Linux ARM processors.
 
-Implementations that run on target platforms which provide 32bit and 64bit Application Binary Interfaces that are mutually incompatible in one process image (like e.g. Windows or Linux on Intel/AMD 64bit processors) should provide the ability to run simulations as either 32bit or 64bit processes in order to be able to import 32bit or 64bit binary FMUs into that process. Ideally providing the ability to automatically bridge FMUs that are not available in the simulation process ABI (e.g. 32bit-only FMUs when running a 64bit simulation process or for 64bit-only FMUs when running a 32bit simulation process on a 64bit-capable platform) through a separate process and inter-process communication (IPC) mechanisms (or via system provided mechanisms) should be strongly considered.
+While those variants are usually closely related, and 64bit variants commonly support running 32bit and 64bit binaries side-by-side, this support is limited:
+Most platforms do not support running 32bit and 64bit inside one process image, but only in separate processes.
 
-==== FMU Exporting Implementations
+Since FMI is designed around the ability to run FMUs inside the host implementation process image for efficiency, this means that 32bit and 64bit variants of the same platform are usually not directly compatible.
 
-Implementations that support target platforms which provide 32bit and 64bit ABIs that are mutually incompatible in one process image (like e.g. Windows or Linux on Intel/AMD 64bit processors) should optionally support generating binary FMUs for both variants, ideally in one go from one process and incorporated into one FMU.
+For this reason exporting implementations should ideally generate FMUs that contain both 32bit and 64bit variants of the binaries, allowing importers to select an appropriate binary.
+
+Since not all exporting implementations can generate both variants easily, importing implementations should consider providing the ability to bridge between 32bit and 64bit implementations, using either inter-process communication or system provided facilities where possible.
+
+Going forward this is likely to be less of a problem on desktop systems, which are migrating to 64bit only implementation spaces, but for mobile or embedded platforms this issue is likely to be pertinent for some time.
 
 === Support for Multiple Platforms
 
@@ -62,9 +67,13 @@ FMU exporting implementations should strive to support common platforms out of t
 
 === Compiler Dependencies
 
-==== FMU Exporting Implementations
+Exporting implementations should document supported compilers, their versions, and required compiler flags and settings in order to compile generated source FMUs for common platforms.
 
-Exporting implementations should document supported compilers, their versions, and required compiler flags and settings in order to compile generated source FMUs for common platforms. When generating binary FMUs directly, the supported/used compilers, compiler flags and settings should also be documented, in order to allow users to troubleshoot integration issues when integrating binary FMUs into other environments. Where possible the use of user supplied compilers and compiler flags and settings should be supported in order to automate generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.
+For FMI 3.0, the compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU, to allow automated building from source as far as possible. 
+
+When generating binary FMUs directly, the supported/used compilers, compiler flags and settings should also be documented, in order to allow users to troubleshoot integration issues when integrating binary FMUs into other environments.
+
+Where possible the use of user supplied compilers and compiler flags and settings should be supported in order to automate generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.
 
 === Handling of FMU namespaces
 
