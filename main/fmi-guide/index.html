@@ -586,7 +586,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-a9c9236eed9519102c6c9238e5f6358fdfd681eb,</span>
+<span id="revnumber">version main-f614aca77bfae8ff90449a77fc18e08130cb5551,</span>
 <span id="revdate">2021-09-06</span>
 </div>
 <div id="toc" class="toc2">
@@ -879,7 +879,7 @@ Robust participation, including testing with a relevant selection of available r
 This implies that only the forward slash <code>/</code> shall be used as a path separator, and that path specifications like <code>.</code> or <code>..</code> do not have specific interpretations, like current directory, etc.</p>
 </div>
 <div class="paragraph">
-<p>More specifically the ZIP archive should only contain entries with no leading prefix, i.e. the entries should be <code>modelDescription.xml</code>, <code>binaries/win32/myfmu.dll</code>, etc., and not <code>./modelDescription.xml</code>, <code>./binaries/win32/myfmu.dll</code>.</p>
+<p>More specifically the ZIP archive should only contain entries with no leading prefix, i.e. the entries should be <code>modelDescription.xml</code>, <code>binaries/x86_64-windows/myfmu.dll</code>, etc., and not <code>./modelDescription.xml</code>, or <code>myfmu/binaries/x86_64-windows/myfmu.dll</code>.</p>
 </div>
 <div class="paragraph">
 <p>To enable interopartion with not-quite conforming implementations, importing implementations should be prepared to support the extraction of FMU ZIP archives with leading <code>./</code> prefixes on entries in the archive.
@@ -907,7 +907,7 @@ Similarly, implementations should be prepared to support extraction of FMU ZIP a
 <p>Implementations should support using supplied icon information in the FMU when displaying the FMU in a graphical notation or user interface.</p>
 </div>
 <div class="paragraph">
-<p>For FMI 3.0, icon information is available as part of the ports and icons information.
+<p>For FMI 3.0, icon information is available as part of the ports and icons information contained in the <code>icons/terminalsAndIcons.xml</code> file of the FMU.
 This optionally includes detailed icon information for individual ports, as well as global icon information.</p>
 </div>
 <div class="paragraph">
