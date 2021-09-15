@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 2.0/3.0 Feature Profiles</h1>
 <div class="details">
-<span id="revnumber">version main-f614aca77bfae8ff90449a77fc18e08130cb5551,</span>
-<span id="revdate">2021-09-06</span>
+<span id="revnumber">version main-d88b573d17fdb8d818371c42c590f9634b6c9bf6,</span>
+<span id="revdate">2021-09-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -615,7 +615,8 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_sil_ecu_profile">3.4. SIL ECU Profile</a></li>
 <li><a href="#_dynamics_profile">3.5. Dynamics Profile</a></li>
 <li><a href="#_dynamics_controller_profile">3.6. Dynamics Controller Profile</a></li>
-<li><a href="#_feature_overview">3.7. Feature Overview</a></li>
+<li><a href="#_optimization_profile">3.7. Optimization Profile</a></li>
+<li><a href="#_feature_overview">3.8. Feature Overview</a></li>
 </ul>
 </li>
 <li><a href="#_references">References</a></li>
@@ -846,6 +847,16 @@ Furthermore, it can be stated whether this dependency is linear (this allows to 
 Directional derivatives can be computed for continuous-time states and outputs.
 This is useful when connecting FMUs, and the partial derivatives of the connected FMU shall be computed.
 Suppose the exported FMU performs this computation analytically. In that case, all numerical algorithms based on these partial derivatives (for example, the numerical integration method or nonlinear algebraic solvers) are more efficient and reliable.</p>
+</dd>
+<dt class="hdlist1">Adjoint Derivatives (FMI 3.0)</dt>
+<dd>
+<p>FMI 3.0 supports the ability of FMUs to provide adjoint derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
+Adjoint derivatives can be computed for continuous-time states and outputs.</p>
+<div class="paragraph">
+<p>Adjoint derivatives are beneficial in several contexts:
+For machine learning applications, adjoint derivatives (also called vector gradient products) are used in backpropagation to perform gradient-based optimization of parameters using reverse mode automatic differentiation.
+Similarly adjoint derivatives can also be used for parameter estimation.</p>
+</div>
 </dd>
 <dt class="hdlist1">Restartable Early Return in Hybrid Co-Simulation (FMI 3.0)</dt>
 <dd>
@@ -1291,7 +1302,69 @@ This profile extends the dynamics profile to include model exchange with clocks 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_feature_overview">3.7. Feature Overview</h3>
+<h3 id="_optimization_profile">3.7. Optimization Profile</h3>
+<div class="paragraph">
+<p>This is a profile that caters to different but overlapping optimization use cases:
+-	Model-predictive control (with the model as an FMU)
+-	Parameter identification of a model via optimization
+-	Training of ML models (e.g. neural networks) (need for adjoint derivatives, for Backpropagation)</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Required Features</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Tunable Parameters</p>
+</li>
+<li>
+<p>Store/Restore FMU State</p>
+</li>
+<li>
+<p>Serialize/Deserialize FMU State</p>
+</li>
+<li>
+<p>New Integer Types</p>
+</li>
+<li>
+<p>Fixed-size Input/Output Arrays</p>
+</li>
+<li>
+<p>Fixed-size Parameter Arrays</p>
+</li>
+<li>
+<p>Resizable Parameter Arrays</p>
+</li>
+<li>
+<p>Variable Co-Simulation Communication Step Size</p>
+</li>
+<li>
+<p>State and Output Dependencies</p>
+</li>
+<li>
+<p>Output Derivatives in Co-Simulation</p>
+</li>
+<li>
+<p>Directional Derivatives</p>
+</li>
+<li>
+<p>Adjoint Derivatives</p>
+</li>
+<li>
+<p>Intermediate Output Values in Co-Simulation</p>
+</li>
+<li>
+<p>Binary FMUs for Desktop Platforms</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feature_overview">3.8. Feature Overview</h3>
 <div class="paragraph">
 <p>In the table below, the placement of an <code>X</code> indicates a required feature, and a <code>*</code> indicates a recommended feature.</p>
 </div>
@@ -1322,7 +1395,70 @@ This profile extends the dynamics profile to include model exchange with clocks 
 </thead>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Parameter Handling</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Optimization Profile</p></th>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Parameter Handling</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Tunable Parameters</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">X</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">State Handling</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Store/Restore FMU State</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Serialize/Deserialize FMU State</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Data Types</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
@@ -1330,81 +1466,29 @@ This profile extends the dynamics profile to include model exchange with clocks 
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">String Inputs/Outputs</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Tunable Parameters</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">State Handling</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></th>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Store/Restore FMU State</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Serialize/Deserialize FMU State</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Data Types</p></th>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String Inputs/Outputs</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Binary Data Type Input/Output</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Binary Data Type Input/Output</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
@@ -1419,17 +1503,70 @@ This profile extends the dynamics profile to include model exchange with clocks 
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">New Integer Types</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">New Integer Types</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">X</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Array Input/Output Handling</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Fixed-size Arrays</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Array Input/Output Handling</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">X</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Dynamically resizable Arrays</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Resizable Arrays with Size-Dependencies</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Array Parameter Handling</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
@@ -1437,25 +1574,26 @@ This profile extends the dynamics profile to include model exchange with clocks 
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Fixed-size Arrays</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed-size Arrays</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamically resizable Arrays</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dynamically resizable Arrays</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
@@ -1472,121 +1610,100 @@ This profile extends the dynamics profile to include model exchange with clocks 
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Array Parameter Handling</p></th>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Calculation Model</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed-size Arrays</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamically resizable Arrays</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Resizable Arrays with Size-Dependencies</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Calculation Model</p></th>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Variable Co-Simulation Communication Step Size</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Variable Co-Simulation Communication Step Size</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">State and Output Dependencies</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock">X</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">State and Output Dependencies</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Output Derivatives in Co-Simulation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Output Derivatives in Co-Simulation</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Directional Derivatives</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Directional Derivatives</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">2.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Adjoint Derivatives</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Restartable Early Return in Hybrid Co-Simulation</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Restartable Early Return in Hybrid Co-Simulation</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Intermediate Output Values in Co-Simulation</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></th>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Intermediate Output Values in Co-Simulation</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
@@ -1603,68 +1720,68 @@ This profile extends the dynamics profile to include model exchange with clocks 
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Scheduled Execution Interface</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Scheduled Execution Interface</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Clocked Model-Exchange</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Clocked Model-Exchange</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Execution Targets</p></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Execution Targets</p></th>
+<th class="tableblock halign-left valign-top"></th>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Source Code FMUs</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Source Code FMUs</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">*</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Binary FMUs for Desktop Platforms</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock">X</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Binary FMUs for Desktop Platforms</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Binary FMUs for non-Desktop Platforms (e.g. HiL)</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock">X</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Binary FMUs for non-Desktop Platforms (e.g. HiL)</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">1.0</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
 </tr>
 </tbody>
 </table>
