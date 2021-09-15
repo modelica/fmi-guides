@@ -113,6 +113,14 @@ Directional derivatives can be computed for continuous-time states and outputs.
 This is useful when connecting FMUs, and the partial derivatives of the connected FMU shall be computed.
 Suppose the exported FMU performs this computation analytically. In that case, all numerical algorithms based on these partial derivatives (for example, the numerical integration method or nonlinear algebraic solvers) are more efficient and reliable.
 
+Adjoint Derivatives (FMI 3.0)::
+FMI 3.0 supports the ability of FMUs to provide adjoint derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
+Adjoint derivatives can be computed for continuous-time states and outputs.
++
+Adjoint derivatives are beneficial in several contexts:
+For machine learning applications, adjoint derivatives (also called vector gradient products) are used in backpropagation to perform gradient-based optimization of parameters using reverse mode automatic differentiation.
+Similarly adjoint derivatives can also be used for parameter estimation.
+
 Restartable Early Return in Hybrid Co-Simulation (FMI 3.0)::
 FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine before completing the whole indicated time step.
 This can be used to signal an internal event or discontinuity, allowing the importer to continue the step after this early return.

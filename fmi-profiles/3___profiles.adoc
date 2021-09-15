@@ -136,47 +136,72 @@ Recommended Features::
   - Directional Derivatives
 
 
+=== Optimization Profile
+
+This is a profile that caters to different but overlapping optimization use cases:
+-	Model-predictive control (with the model as an FMU)
+-	Parameter identification of a model via optimization
+-	Training of ML models (e.g. neural networks) (need for adjoint derivatives, for Backpropagation)
+
+Required Features::
+  - Tunable Parameters
+  - Store/Restore FMU State
+  - Serialize/Deserialize FMU State
+  - New Integer Types
+  - Fixed-size Input/Output Arrays
+  - Fixed-size Parameter Arrays
+  - Resizable Parameter Arrays
+  - Variable Co-Simulation Communication Step Size
+  - State and Output Dependencies
+  - Output Derivatives in Co-Simulation
+  - Directional Derivatives
+  - Adjoint Derivatives
+  - Intermediate Output Values in Co-Simulation
+  - Binary FMUs for Desktop Platforms
+
+
 === Feature Overview
 
 In the table below, the placement of an `X` indicates a required feature, and a `*` indicates a recommended feature.
 
 [[feature-matrix]]
-[cols="1h,<3,7*^1"]
+[cols="1h,<3,8*^1"]
 |========
-|Area|Feature|FMI Version|Basic CS Profile|Sensor Profile|Basic HiL & Sensor HiL Profile|SIL ECU Profile|Dynamics Profile|Dynamics Controller Profile
+|Area|Feature|FMI Version|Basic CS Profile|Sensor Profile|Basic HiL & Sensor HiL Profile|SIL ECU Profile|Dynamics Profile|Dynamics Controller Profile|Optimization Profile
 
-2+|Parameter Handling|||||||
-| |Tunable Parameters|2.0|X|X|X|X|X|X
-2+|State Handling|||||||
-| |Store/Restore FMU State|2.0||||X|X|X
-| |Serialize/Deserialize FMU State|2.0|||||X|X
-2+|Data Types|||||||
-| |String Inputs/Outputs|2.0|||||X|X
-| |Binary Data Type Input/Output|3.0||X|X|X|X|X
-| |Binary Data Type Parameters|3.0||X|X|X||
-| |New Integer Types|3.0|||X|X|X|X
-2+|Array Input/Output Handling|||||||
-| |Fixed-size Arrays|3.0|X||X|X|X|X
-| |Dynamically resizable Arrays|3.0|X|||X|X|X
-| |Resizable Arrays with Size-Dependencies|3.0|||||X|X
-2+|Array Parameter Handling|||||||
-| |Fixed-size Arrays|3.0|X||X|X|X|X
-| |Dynamically resizable Arrays|3.0|X|||X|X|X
-| |Resizable Arrays with Size-Dependencies|3.0|||||X|X
-2+|Calculation Model|||||||
-| |Variable Co-Simulation Communication Step Size|1.0||X||X|X|X
-| |State and Output Dependencies|2.0|||||X|X
-| |Output Derivatives in Co-Simulation|2.0|||||X|X
-| |Directional Derivatives|2.0|||||*|*
-| |Restartable Early Return in Hybrid Co-Simulation|3.0|||||X|X
-| |Intermediate Output Values in Co-Simulation|3.0|||||X|X
-| |Co-Simulation with Clock Information|3.0||||X|X|X
-| |Scheduled Execution Interface|3.0|||X|X||
-| |Clocked Model-Exchange|3.0||||||X
-2+|Execution Targets|||||||
-| |Source Code FMUs|1.0|*|*|X|X||
-| |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X|X
-| |Binary FMUs for non-Desktop Platforms (e.g. HiL)|1.0|||X|X||
+2+|Parameter Handling||||||||
+| |Tunable Parameters|2.0|X|X|X|X|X|X|X
+2+|State Handling||||||||
+| |Store/Restore FMU State|2.0||||X|X|X|X
+| |Serialize/Deserialize FMU State|2.0|||||X|X|X
+2+|Data Types||||||||
+| |String Inputs/Outputs|2.0|||||X|X|
+| |Binary Data Type Input/Output|3.0||X|X|X|X|X|
+| |Binary Data Type Parameters|3.0||X|X|X|||
+| |New Integer Types|3.0|||X|X|X|X|X
+2+|Array Input/Output Handling||||||||
+| |Fixed-size Arrays|3.0|X||X|X|X|X|X
+| |Dynamically resizable Arrays|3.0|X|||X|X|X|
+| |Resizable Arrays with Size-Dependencies|3.0|||||X|X|
+2+|Array Parameter Handling||||||||
+| |Fixed-size Arrays|3.0|X||X|X|X|X|X
+| |Dynamically resizable Arrays|3.0|X|||X|X|X|X
+| |Resizable Arrays with Size-Dependencies|3.0|||||X|X|
+2+|Calculation Model||||||||
+| |Variable Co-Simulation Communication Step Size|1.0||X||X|X|X|X
+| |State and Output Dependencies|2.0|||||X|X|X
+| |Output Derivatives in Co-Simulation|2.0|||||X|X|X
+| |Directional Derivatives|2.0|||||*|*|X
+| |Adjoint Derivatives|3.0|||||||X
+| |Restartable Early Return in Hybrid Co-Simulation|3.0|||||X|X|
+| |Intermediate Output Values in Co-Simulation|3.0|||||X|X|X
+| |Co-Simulation with Clock Information|3.0||||X|X|X|
+| |Scheduled Execution Interface|3.0|||X|X|||
+| |Clocked Model-Exchange|3.0||||||X|
+2+|Execution Targets||||||||
+| |Source Code FMUs|1.0|*|*|X|X|||
+| |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X|X|X
+| |Binary FMUs for non-Desktop Platforms (e.g. HiL)|1.0|||X|X|||
 |========
 
 The support for source code FMUs is not strictly necessary for the Basic CS and Sensor profiles but is highly recommended to support the portability of FMUs to new platforms.
