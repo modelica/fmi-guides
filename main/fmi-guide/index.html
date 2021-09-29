@@ -589,7 +589,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-e26c1f45380d64922effee262f8b598ecdd5bd24,</span>
+<span id="revnumber">version main-0354882fe088538e18d80a9b0f4292128cb71aad,</span>
 <span id="revdate">2021-09-29</span>
 </div>
 <div id="toc" class="toc2">
@@ -637,65 +637,46 @@ document.addEventListener('keydown', (event) => {
 </li>
 <li><a href="#_parameter_and_variable_handling">4. Parameter and Variable Handling</a>
 <ul class="sectlevel2">
-<li><a href="#_support_for_physical_units">4.1. Support for Physical Units</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_3">4.1.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_2">4.1.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_support_for_minmax_range_information">4.2. Support for Min/Max Range Information</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_4">4.2.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_3">4.2.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_support_for_structured_naming_convention">4.3. Support for Structured Naming Convention</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_5">4.3.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_4">4.3.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_selection_of_exported_parametersvariables">4.4. Selection of Exported Parameters/Variables</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_exporting_implementations_5">4.4.1. FMU Exporting Implementations</a></li>
-</ul>
-</li>
+<li><a href="#_support_for_physical_units">4.1. Support for Physical Units</a></li>
+<li><a href="#_support_for_minmax_range_information">4.2. Support for Min/Max Range Information</a></li>
+<li><a href="#_support_for_structured_naming_convention">4.3. Support for Structured Naming Convention</a></li>
+<li><a href="#_selection_of_exported_parametersvariables">4.4. Selection of Exported Parameters/Variables</a></li>
 </ul>
 </li>
 <li><a href="#_simulation">5. Simulation</a>
 <ul class="sectlevel2">
 <li><a href="#_instantiation">5.1. Instantiation</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_6">5.1.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_6">5.1.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_3">5.1.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations_2">5.1.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_initialization">5.2. Initialization</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_7">5.2.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_7">5.2.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_4">5.2.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations_3">5.2.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_startup">5.3. Startup</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_8">5.3.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_5">5.3.1. FMU Importing Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_support_for_solvers">5.4. Support for Solvers</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_9">5.4.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_8">5.4.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_6">5.4.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations_4">5.4.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_support_for_mixing_fmus_types">5.5. Support for Mixing FMUs Types</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_10">5.5.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_7">5.5.1. FMU Importing Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_logging_support">5.6. Logging Support</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_11">5.6.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_9">5.6.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_8">5.6.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations_5">5.6.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 </ul>
@@ -1030,68 +1011,74 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_support_for_physical_units">4.1. Support for Physical Units</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_3">4.1.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>Importing implementations should support the processing of physical unit information when present on the variables of an imported FMU, including support for unit consistency checks and optional automatic unit conversions, especially when FMI 2.0 SI-based unit information is available. The unit information should be overridable by the user for exceptional circumstances, when erroneous unit information on a variable has to be manually adjusted and changes to the FMU are not otherwise practicable.</p>
+<p>Importing implementations should support the processing of physical unit information when present on the variables of an imported FMU, including support for unit consistency checks and optional automatic unit conversions, especially when FMI 2.0/3.0 SI-based unit information is available.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations_2">4.1.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
-<p>Exporting implementations should generate physical unit information on all exported variables, when such information is available in the model (or can be automatically derived). Especially on FMI 2.0 and later the support for full SI-based units should be used.</p>
+<p>The unit information should be overridable by the user to account for exceptional circumstances:
+For example, when erroneous unit information on a variable has to be manually adjusted since changes to the FMU are not otherwise practicable.</p>
 </div>
+<div class="paragraph">
+<p>Exporting implementations should generate physical unit information on all exported variables when such information is available in the model (or can be automatically derived).</p>
+</div>
+<div class="paragraph">
+<p>On FMI 2.0 and later versions, the support for SI-based units should be used.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_support_for_minmax_range_information">4.2. Support for Min/Max Range Information</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_4">4.2.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>Importing implementations should support the processing of min/max limit information when present on the variables of an imported FMU, including support for limit consistency checks and optional runtime checking. The limit information should be overridable by the user for exceptional circumstances, when erroneous limits on a variable has to be manually adjusted/removed because changes to the FMU are not otherwise practicable. Implementations are well-advised to heed the explanations in section 2.2.3 of the FMI 2.0 standard when implementing min/max checking/handling routines.</p>
+<p>Importing implementations should support the processing of min/max limit information when present on the variables of an imported FMU.
+This support should include support for limit consistency checks and optional runtime checking.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations_3">4.2.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
-<p>Exporting implementations should generate min/max limit information on all exported variables that support this information in FMI, when such limit information is available in the model (or can be automatically derived). Ideally it should be possible to optionally generate FMUs that check the limits (especially user-supplied limits) at runtime and produce suitable errors and diagnostic logging information when limits are breached. Implementations are well-advised to heed the explanations in section 2.2.3 of the FMI 2.0 standard when implementing min/max checking/handling routines.</p>
+<p>The limit information should be overridable by the user to account for exceptional circumstances:
+For example, when erroneous limits on a variable have to be manually adjusted since changes to the FMU are not otherwise practicable.</p>
 </div>
+<div class="paragraph">
+<p>Exporting implementations should generate min/max limit information on all exported variables that support this information in FMI when such limit information is available in the model (or can be automatically derived).
+Ideally, it should be possible to generate FMUs that optionally check the limits (especially user-supplied limits) at runtime and produce suitable errors and diagnostic logging information when limits are breached.</p>
+</div>
+<div class="paragraph">
+<p>Implementations are well-advised to heed the explanations in section 2.2.6.3 of the FMI 3.0 standard when implementing min/max checking and handling routines.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_support_for_structured_naming_convention">4.3. Support for Structured Naming Convention</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_5">4.3.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>Importing implementations should support the structured naming convention for variables that is specified in the FMI standards to support the interchange of array/matrix and record/struct information. These complex interfaces should be mapped to suitable internal data structures and formats, like vectors/arrays, records/structs or busses. Parameter editors and similar editing UIs and APIs should efficiently support these data types, so that e.g. a multi-dimensional array can be efficiently edited, both in terms of speed and in terms of user interface.</p>
+<p>Importing and exporting implementations should support the structured naming convention for variables specified in the FMI standards to support the interchange of array/matrix and record/struct information.</p>
 </div>
 <div class="paragraph">
-<p>If the implementation also supports exporting FMUs, the mapping of data structures should allow for efficient round-tripping, i.e. it should be possible to export (part of) a model as an FMU with complex data structures at its interfaces, and have that FMU use structured naming in such a way that the resulting FMU can be imported into the same tool and support the same native interface.</p>
+<p>For FMI 3.0, implementations should support both native arrays and the structured naming convention.
+This support should include support for bridging between those two ways of expressing arrays, especially when supporting older versions of FMI as well as FMI 3.0.
+When exporting arrays, preference should be given to native arrays over structured naming convention mappings.</p>
 </div>
 <div class="paragraph">
-<p>Since complex data structures being exported through the structured naming convention can easily lead to 10,000 or more scalar variables, implementations should be prepared to deal with FMUs containing very many scalar variables efficiently.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations_4">4.3.2. FMU Exporting Implementations</h4>
-<div class="paragraph">
-<p>Exporting implementations should support exporting of FMUs that employ the structured naming convention for variables that is specified in the FMI standards to support the interchange of array/matrix and record/struct information. The internal data structures should be mapped to suitable FMI structured names, e.g. mapping vectors to arrays, and records/structs or busses to hierarchical names.</p>
+<p>Importing implementations should map complex interfaces expressed via the structured naming convention to suitable internal data structures and formats, like vectors/arrays, records/structs, or busses.</p>
 </div>
 <div class="paragraph">
-<p>If the implementation also supports importing FMUs, the mapping of data structures should allow for efficient round-tripping, i.e. it should be possible to export (part of) a model as an FMU with complex data structures at its interfaces, and have that FMU use structured naming in such a way that the resulting FMU can be imported into the same tool and support the same native interface.</p>
+<p>Exporting implementations should map their internal data structures to suitable FMI structured names, mapping vectors to arrays, and records/structs or busses to hierarchical names.</p>
 </div>
 <div class="paragraph">
-<p>Since complex data structures being exported through the structured naming convention can easily lead to 10,000 or more scalar variables, implementations should be prepared to deal with the generation of FMUs containing very many scalar variables efficiently.</p>
+<p>If an implementation supports importing as well as exporting FMUs, the mapping of data structures should allow for efficient round-tripping:
+It should be possible to export (part of) a model as an FMU with complex data structures at its interface and have that FMU use structured naming in such a way that the resulting FMU can be imported into the same tool and support the same native interface.</p>
 </div>
+<div class="paragraph">
+<p>Parameter editors and similar editing UIs and APIs should efficiently support complex data types so that a multi-dimensional array can be efficiently edited, both in terms of speed and user interface.</p>
+</div>
+<div class="paragraph">
+<p>Exporting complex data structures through the structured naming convention can easily lead to 10,000 or more scalar variables.
+Implementations should therefore be prepared to deal with FMUs containing very many scalar variables efficiently.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_selection_of_exported_parametersvariables">4.4. Selection of Exported Parameters/Variables</h3>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations_5">4.4.1. FMU Exporting Implementations</h4>
 <div class="paragraph">
-<p>In order to generate FMUs that are easily handled and also to guard against exposing too much internal details (for both IP protection reasons and for reasons of clarity of interfaces) exporting implementations should allow the user to efficiently select which parameters or variables are to be exposed in the FMU as FMU parameters and variables, and which should be kept hidden as implementation detail. In the case of state variables this must be done in accordance to the requirements of the standards, i.e. certain state variables always have to be exposed in e.g. Model Exchange FMUs.</p>
+<p>In order to generate FMUs that are easily handled and also to guard against exposing too many internal details (for both IP protection reasons and reasons of clarity of interfaces), exporting implementations should allow the user to efficiently select which parameters or variables are to be exposed in the FMU as parameters and variables, and which should be kept hidden.</p>
 </div>
+<div class="paragraph">
+<p>In the case of state variables, this must be done in accordance with the requirements of the standards:
+Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 </div>
 </div>
 </div>
@@ -1102,7 +1089,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <div class="sect2">
 <h3 id="_instantiation">5.1. Instantiation</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_6">5.1.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_3">5.1.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Be sure to pass valid values into the fmiInstantiate/fmiInstantiateSlave/fmi2Instantiate calls for all arguments. Note especially that null pointers are not valid for any of the string arguments to these functions. Implementations must pass proper values especially for the following fields:</p>
 </div>
@@ -1124,7 +1111,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_6">5.1.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations_2">5.1.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>Exporting implementations should guard (by safely handling these cases without crashing) against common errors in calls to the fmiInstantiate/fmiInstantiateSlave/fmi2Instantiate functions, including:</p>
 </div>
@@ -1146,7 +1133,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <div class="sect2">
 <h3 id="_initialization">5.2. Initialization</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_7">5.2.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_4">5.2.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>When performing initialization of variable values, including parameters and initial values for other variables, do not rely on default values being already set in the FMU (i.e. burned into the binary so to speak): While the FMI standards specify that default values shall both be specified in the modelDescription.xml file and are already set in the FMU upon instantiation, some implementations generate FMUs where this is not true, i.e. the default values of variables when not set do not match the values as specified in the modelDescription.xml file. Since there is little effort in actually setting default values through the FMI API at initialization time, the more conservative approach is to always set default values through the API based on the modelDescription.xml file, or on the actual parameter/initial values as specified by the user, not relying on any burned in default values.</p>
 </div>
@@ -1155,7 +1142,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_7">5.2.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations_3">5.2.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>The FMI standards specify that default values for parameters or initial values for other variables shall be both indicated in the modelDescription.xml file and shall be “burned in”, i.e. the values shall be set automatically as default values upon FMU instantiation, so that importing implementations can rely on the standard-mandated behavior that unset variables have their default values as specified in the modelDescription.xml.</p>
 </div>
@@ -1164,7 +1151,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <div class="sect2">
 <h3 id="_startup">5.3. Startup</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_8">5.3.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_5">5.3.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>For FMI 1.0 Co-Simulation FMUs importing implementations should honor the canHandleEvents capability of the FMU: If this capability attribute is false, then the implementation cannot call the doStep function with zero communicationStepSize, even at time 0 (used e.g. for generating valid initial values). In those cases the integration environment must start simulation with the first simulation step, without any event iteration. With FMI 2.0 Co-Simulation FMUs do not support 0-size time steps in any case.</p>
 </div>
@@ -1173,7 +1160,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <div class="sect2">
 <h3 id="_support_for_solvers">5.4. Support for Solvers</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_9">5.4.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_6">5.4.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should support a wide variety of solver algorithms, in order to support Model-Exchange FMUs as fully as possible. Ideally this support should include support for attaching external solvers through specified APIs, so that experienced users can extend the supported solver base for specific new domains where appropriate. Supporting the use of several different solvers in one model that integrates a number of FMUs, so that e.g. different Model Exchange FMUs can be solved through different solvers than other parts of the model – without resorting to Co-Simulation FMUs – can be beneficial in terms of performance and usability.</p>
 </div>
@@ -1182,7 +1169,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_8">5.4.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations_4">5.4.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>Exporting implementations should offer all of their built-in solver algorithms (including solver settings like step-size, tolerance, etc.) for export when generating Co-Simulation FMUs, so that the same solvers can be used inside the environment as in exported FMUs. This should ideally also include the ability to export Co-Simulation FMUs using user-supplied solvers, where appropriate (e.g. where the environment supports the integration of external solvers for model evaluation).</p>
 </div>
@@ -1191,7 +1178,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <div class="sect2">
 <h3 id="_support_for_mixing_fmus_types">5.5. Support for Mixing FMUs Types</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_10">5.5.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_7">5.5.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should support mixing FMUs of different types (and different FMI versions) in one simulation model, ensuring proper semantics for connections between those FMUs and each other as well as the rest of the simulation model. This should also be checked in cross-checking with other implementations.</p>
 </div>
@@ -1203,7 +1190,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <div class="sect2">
 <h3 id="_logging_support">5.6. Logging Support</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_11">5.6.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_8">5.6.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should allow fine-grained selection of FMU logging output recording/display, either based on the new FMU-defined logging categories for FMI 2.0 or on the raw string category argument of the logging callback in FMI 1.0.</p>
 </div>
@@ -1212,7 +1199,7 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_9">5.6.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations_5">5.6.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>Exporting implementations should support the fine-grained selection of logging categories in FMI 2.0 and should use fine-grained category names in the category argument for FMI 1.0 logging callback calls. In FMI 1.0 they should try to not produce verbose logging output when the debug logging flag is false.</p>
 </div>
