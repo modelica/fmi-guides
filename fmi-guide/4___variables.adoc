@@ -2,44 +2,51 @@
 
 === Support for Physical Units
 
-==== FMU Importing Implementations
+Importing implementations should support the processing of physical unit information when present on the variables of an imported FMU, including support for unit consistency checks and optional automatic unit conversions, especially when FMI 2.0/3.0 SI-based unit information is available.
 
-Importing implementations should support the processing of physical unit information when present on the variables of an imported FMU, including support for unit consistency checks and optional automatic unit conversions, especially when FMI 2.0 SI-based unit information is available. The unit information should be overridable by the user for exceptional circumstances, when erroneous unit information on a variable has to be manually adjusted and changes to the FMU are not otherwise practicable.
+The unit information should be overridable by the user to account for exceptional circumstances:
+For example, when erroneous unit information on a variable has to be manually adjusted since changes to the FMU are not otherwise practicable.
 
-==== FMU Exporting Implementations
+Exporting implementations should generate physical unit information on all exported variables when such information is available in the model (or can be automatically derived).
 
-Exporting implementations should generate physical unit information on all exported variables, when such information is available in the model (or can be automatically derived). Especially on FMI 2.0 and later the support for full SI-based units should be used.
+On FMI 2.0 and later versions, the support for SI-based units should be used.
 
 === Support for Min/Max Range Information
 
-==== FMU Importing Implementations
+Importing implementations should support the processing of min/max limit information when present on the variables of an imported FMU.
+This support should include support for limit consistency checks and optional runtime checking.
 
-Importing implementations should support the processing of min/max limit information when present on the variables of an imported FMU, including support for limit consistency checks and optional runtime checking. The limit information should be overridable by the user for exceptional circumstances, when erroneous limits on a variable has to be manually adjusted/removed because changes to the FMU are not otherwise practicable. Implementations are well-advised to heed the explanations in section 2.2.3 of the FMI 2.0 standard when implementing min/max checking/handling routines.
+The limit information should be overridable by the user to account for exceptional circumstances:
+For example, when erroneous limits on a variable have to be manually adjusted since changes to the FMU are not otherwise practicable.
 
-==== FMU Exporting Implementations
+Exporting implementations should generate min/max limit information on all exported variables that support this information in FMI when such limit information is available in the model (or can be automatically derived).
+Ideally, it should be possible to generate FMUs that optionally check the limits (especially user-supplied limits) at runtime and produce suitable errors and diagnostic logging information when limits are breached.
 
-Exporting implementations should generate min/max limit information on all exported variables that support this information in FMI, when such limit information is available in the model (or can be automatically derived). Ideally it should be possible to optionally generate FMUs that check the limits (especially user-supplied limits) at runtime and produce suitable errors and diagnostic logging information when limits are breached. Implementations are well-advised to heed the explanations in section 2.2.3 of the FMI 2.0 standard when implementing min/max checking/handling routines.
+Implementations are well-advised to heed the explanations in section 2.2.6.3 of the FMI 3.0 standard when implementing min/max checking and handling routines.
 
 === Support for Structured Naming Convention
 
-==== FMU Importing Implementations
+Importing and exporting implementations should support the structured naming convention for variables specified in the FMI standards to support the interchange of array/matrix and record/struct information.
 
-Importing implementations should support the structured naming convention for variables that is specified in the FMI standards to support the interchange of array/matrix and record/struct information. These complex interfaces should be mapped to suitable internal data structures and formats, like vectors/arrays, records/structs or busses. Parameter editors and similar editing UIs and APIs should efficiently support these data types, so that e.g. a multi-dimensional array can be efficiently edited, both in terms of speed and in terms of user interface.
+For FMI 3.0, implementations should support both native arrays and the structured naming convention.
+This support should include support for bridging between those two ways of expressing arrays, especially when supporting older versions of FMI as well as FMI 3.0.
+When exporting arrays, preference should be given to native arrays over structured naming convention mappings.
 
-If the implementation also supports exporting FMUs, the mapping of data structures should allow for efficient round-tripping, i.e. it should be possible to export (part of) a model as an FMU with complex data structures at its interfaces, and have that FMU use structured naming in such a way that the resulting FMU can be imported into the same tool and support the same native interface.
+Importing implementations should map complex interfaces expressed via the structured naming convention to suitable internal data structures and formats, like vectors/arrays, records/structs, or busses.
 
-Since complex data structures being exported through the structured naming convention can easily lead to 10,000 or more scalar variables, implementations should be prepared to deal with FMUs containing very many scalar variables efficiently.
+Exporting implementations should map their internal data structures to suitable FMI structured names, mapping vectors to arrays, and records/structs or busses to hierarchical names.
 
-==== FMU Exporting Implementations
+If an implementation supports importing as well as exporting FMUs, the mapping of data structures should allow for efficient round-tripping:
+It should be possible to export (part of) a model as an FMU with complex data structures at its interface and have that FMU use structured naming in such a way that the resulting FMU can be imported into the same tool and support the same native interface.
 
-Exporting implementations should support exporting of FMUs that employ the structured naming convention for variables that is specified in the FMI standards to support the interchange of array/matrix and record/struct information. The internal data structures should be mapped to suitable FMI structured names, e.g. mapping vectors to arrays, and records/structs or busses to hierarchical names.
+Parameter editors and similar editing UIs and APIs should efficiently support complex data types so that a multi-dimensional array can be efficiently edited, both in terms of speed and user interface.
 
-If the implementation also supports importing FMUs, the mapping of data structures should allow for efficient round-tripping, i.e. it should be possible to export (part of) a model as an FMU with complex data structures at its interfaces, and have that FMU use structured naming in such a way that the resulting FMU can be imported into the same tool and support the same native interface.
-
-Since complex data structures being exported through the structured naming convention can easily lead to 10,000 or more scalar variables, implementations should be prepared to deal with the generation of FMUs containing very many scalar variables efficiently.
+Exporting complex data structures through the structured naming convention can easily lead to 10,000 or more scalar variables.
+Implementations should therefore be prepared to deal with FMUs containing very many scalar variables efficiently.
 
 === Selection of Exported Parameters/Variables
 
-==== FMU Exporting Implementations
+In order to generate FMUs that are easily handled and also to guard against exposing too many internal details (for both IP protection reasons and reasons of clarity of interfaces), exporting implementations should allow the user to efficiently select which parameters or variables are to be exposed in the FMU as parameters and variables, and which should be kept hidden.
 
-In order to generate FMUs that are easily handled and also to guard against exposing too much internal details (for both IP protection reasons and for reasons of clarity of interfaces) exporting implementations should allow the user to efficiently select which parameters or variables are to be exposed in the FMU as FMU parameters and variables, and which should be kept hidden as implementation detail. In the case of state variables this must be done in accordance to the requirements of the standards, i.e. certain state variables always have to be exposed in e.g. Model Exchange FMUs.
+In the case of state variables, this must be done in accordance with the requirements of the standards:
+Certain state variables always have to be exposed in Model Exchange FMUs.
