@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-0354882fe088538e18d80a9b0f4292128cb71aad,</span>
-<span id="revdate">2021-09-29</span>
+<span id="revnumber">version main-2b33c590044c757fb27d98f4e77e4ac8f6014fd3,</span>
+<span id="revdate">2021-11-03</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -754,18 +754,22 @@ Even if erroneous implementations are fixed at a later date, they will affect us
 <div class="sect2">
 <h3 id="_versions_of_fmi_to_support">2.1. Versions of FMI to support</h3>
 <div class="paragraph">
-<p>When planning on which versions of FMI to support in your implementation, support for the newest FMI version (currently FMI 3.0) is, of course, strongly recommended.</p>
+<p>When planning on which versions of FMI to support in your implementation, support for the newest FMI version (currently FMI 3.0) is, of course, highly recommended.</p>
 </div>
 <div class="paragraph">
 <p>It should be noted that there is no cross-version compatibility between major versions of FMI.</p>
 </div>
 <div class="paragraph">
-<p>The life cycles of both simulation environments and generated FMUs can wildly differ and span many years in development projects. Therefore support for both legacy FMU integration and generation of legacy FMUs is crucial for flexible interoperation in development projects.</p>
+<p>The life cycles of both simulation environments and generated FMUs can wildly differ and span many years in development projects.
+Therefore support for both legacy FMU integration and generation of legacy FMUs is crucial for flexible interoperation in development projects.</p>
 </div>
 <div class="paragraph">
-<p>Currently, this means that support for the very widely supported FMI version 2.0 should be considered strongly.
-Similarly, support for the integration of FMUs using different FMI versions should also be strongly considered.
-For FMI 1.0/2.0 and 3.0 interoperability the bridging between the different variable types of 1.0/2.0 and 3.0 and the handling of arrays needs to be taken into account.</p>
+<p>Currently, this means that support for the very widely supported FMI version 2.0 should be strongly considered.
+Similarly, support for the integration of FMUs using different FMI versions should also be strongly considered.</p>
+</div>
+<div class="paragraph">
+<p>For FMI 1.0/2.0 and 3.0 interoperability the bridging between the different variable types of 1.0/2.0 and 3.0 and the handling of arrays needs to be taken into account.
+In projects that employ the SSP standard, the variant handling facilities of SSP can be used to package multiple versions of an FMU into one package.</p>
 </div>
 <div class="paragraph">
 <p>When bugfix releases of the FMI standard become available, implementations should take these into account in a timely fashion to react to detected clarifications in the standard.</p>
