@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-2b33c590044c757fb27d98f4e77e4ac8f6014fd3,</span>
-<span id="revdate">2021-11-03</span>
+<span id="revnumber">version main-9cae93ba154904ef09885049aa769176bc518f7e,</span>
+<span id="revdate">2021-11-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -622,17 +622,8 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_support_for_3264bit_variants_of_platforms">3.3. Support for 32&amp;64bit Variants of Platforms</a></li>
 <li><a href="#_support_for_multiple_platforms">3.4. Support for Multiple Platforms</a></li>
 <li><a href="#_compiler_dependencies">3.5. Compiler Dependencies</a></li>
-<li><a href="#_handling_of_fmu_namespaces">3.6. Handling of FMU namespaces</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations">3.6.1. FMU Importing Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_handling_of_code_dependencies">3.7. Handling of Code Dependencies</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_2">3.7.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations">3.7.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
+<li><a href="#_handling_of_fmu_namespaces">3.6. Handling of FMU namespaces</a></li>
+<li><a href="#_handling_of_code_dependencies">3.7. Handling of Code Dependencies</a></li>
 </ul>
 </li>
 <li><a href="#_parameter_and_variable_handling">4. Parameter and Variable Handling</a>
@@ -647,36 +638,36 @@ document.addEventListener('keydown', (event) => {
 <ul class="sectlevel2">
 <li><a href="#_instantiation">5.1. Instantiation</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_3">5.1.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_2">5.1.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations">5.1.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations">5.1.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_initialization">5.2. Initialization</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_4">5.2.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_3">5.2.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_2">5.2.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations_2">5.2.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_startup">5.3. Startup</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_5">5.3.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_3">5.3.1. FMU Importing Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_support_for_solvers">5.4. Support for Solvers</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_6">5.4.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_4">5.4.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_4">5.4.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations_3">5.4.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_support_for_mixing_fmus_types">5.5. Support for Mixing FMUs Types</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_7">5.5.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_5">5.5.1. FMU Importing Implementations</a></li>
 </ul>
 </li>
 <li><a href="#_logging_support">5.6. Logging Support</a>
 <ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_8">5.6.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_5">5.6.2. FMU Exporting Implementations</a></li>
+<li><a href="#_fmu_importing_implementations_6">5.6.1. FMU Importing Implementations</a></li>
+<li><a href="#_fmu_exporting_implementations_4">5.6.2. FMU Exporting Implementations</a></li>
 </ul>
 </li>
 </ul>
@@ -865,27 +856,33 @@ Robust participation, including testing with a relevant selection of available r
 <div class="sect3">
 <h4 id="_pathnames_and_prefixes">3.1.1. Pathnames and Prefixes</h4>
 <div class="paragraph">
-<p>Exporting implementations should ensure that the generated FMU ZIP archives are compliant to the ZIP specification.
-This implies that only the forward slash <code>/</code> shall be used as a path separator, and that path specifications like <code>.</code> or <code>..</code> do not have specific interpretations, like current directory, etc.</p>
+<p>Exporting implementations should ensure that the generated FMU ZIP archives are compliant with the ZIP specification.
+This implies that only the forward slash <code>/</code> shall be used as a path separator and that path specifications like <code>.</code> or <code>..</code> do not have specific interpretations, like the current directory, etc.</p>
 </div>
 <div class="paragraph">
-<p>More specifically the ZIP archive should only contain entries with no leading prefix, i.e. the entries should be <code>modelDescription.xml</code>, <code>binaries/x86_64-windows/myfmu.dll</code>, etc., and not <code>./modelDescription.xml</code>, or <code>myfmu/binaries/x86_64-windows/myfmu.dll</code>.</p>
+<p>More specifically, the ZIP archive should only contain entries with no leading prefix:app-name:
+For example, valid entries would be <code>modelDescription.xml</code> or <code>binaries/x86_64-windows/myfmu.dll</code>, not <code>./modelDescription.xml</code>, or <code>myfmu/binaries/x86_64-windows/myfmu.dll</code>.</p>
 </div>
 <div class="paragraph">
-<p>To enable interopartion with not-quite conforming implementations, importing implementations should be prepared to support the extraction of FMU ZIP archives with leading <code>./</code> prefixes on entries in the archive.
-Similarly, implementations should be prepared to support extraction of FMU ZIP archives that use "\" as the path separator.</p>
+<p>To enable interoperation with not-quite conforming implementations, importing implementations should be prepared to support the extraction of FMU ZIP archives with leading <code>./</code> prefixes on entries in the archive.
+Similarly, implementations should be prepared to support the extraction of FMU ZIP archives that use "\" as the path separator.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_access_to_fmu_package_content">3.1.2. Access to FMU package content</h4>
 <div class="paragraph">
-<p>The exporting implementation should not rely on the importing implementation completely unpacking the FMU in one location, since only access to the resources folder is actually specified in the standard.</p>
+<p>The exporting implementation should not rely on the importing implementation completely unpacking the FMU in one location.
+The standard only specifies access to the resources folder.</p>
 </div>
 <div class="paragraph">
-<p>Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated, but those fallbacks are by their nature non-portable fallback mechanisms which only come into play when other, standard conforming mechanisms are not available.</p>
+<p>Some of the fallbacks (discussed in sections 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated.
+However, those fallbacks are, by their nature non-portable mechanisms, that only come into play when other, standard-conforming mechanisms are not available.</p>
 </div>
 <div class="paragraph">
 <p>When possible, implementations should unpack the complete ZIP archive content in one location since some FMUs depend on this even if the standard only specifies access to the resources folder.</p>
+</div>
+<div class="paragraph">
+<p>Note that FMI 3.0 provides access to the resource folder using a native path, whereas FMI 1.0 and FMI 2.0 specify a URI to the resource folder that still needs to be translated to a system path for access.</p>
 </div>
 </div>
 </div>
@@ -923,12 +920,22 @@ Implementations should therefore allow easy access to any documentation supplied
 <div class="ulist">
 <ul>
 <li>
-<p>Implementations that produce FMUs that are not considered stand-alone, i.e. specifying <code>needsExecutionTool=true</code> in their model description, should provide sufficient information inside the documentation that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.</p>
+<p>Implementations that produce FMUs that are not considered stand-alone, i.e., specifying <code>needsExecutionTool=true</code> in their model description, should provide sufficient information inside the documentation that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.</p>
 </li>
 <li>
 <p>Implementations that produce FMUs that require runtime licenses should provide information on what kind of license is needed and how to provide that license so the FMU can use it.</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>In many instances, for example, when open-source licenses are employed, license information and other additional information is needed to be shipped with an FMU for distribution.
+In those cases, exporting implementations should allow the user to easily add those information items to the documentation shipped with an FMU.</p>
+</div>
+<div class="paragraph">
+<p>Where the license information is required by the exporting implementation itself, it can directly add that information to the FMU itself.</p>
+</div>
+<div class="paragraph">
+<p>This support by an implementation should not be understood to remove the need for the user to ensure that they are in compliance with relevant licenses and their legal obligations.</p>
 </div>
 </div>
 </div>
@@ -951,61 +958,72 @@ Most platforms do not support running 32bit and 64bit inside one process image, 
 <p>Since not all exporting implementations can generate both variants easily, importing implementations should consider providing the ability to bridge between 32bit and 64bit implementations, using either inter-process communication or system provided facilities where possible.</p>
 </div>
 <div class="paragraph">
-<p>Going forward this is likely to be less of a problem on desktop systems, which are migrating to 64bit only implementation spaces, but for mobile or embedded platforms this issue is likely to be pertinent for some time.</p>
+<p>Going forward, this is likely to be less of a problem on desktop systems, which are migrating to 64bit only implementation spaces.
+For mobile or embedded platforms, this issue is likely to be still pertinent for some time.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_support_for_multiple_platforms">3.4. Support for Multiple Platforms</h3>
 <div class="paragraph">
-<p>FMU exporting implementations should strive to support common platforms out of the box, and should provide support for generating FMUs that contain multiple binary implementations, and where feasible a source code implementation, in one go.</p>
+<p>FMU exporting implementations should strive to support common platforms out of the box.
+They should provide support for generating FMUs that contain multiple binary implementations, and where feasible, a source code implementation in one go.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_compiler_dependencies">3.5. Compiler Dependencies</h3>
 <div class="paragraph">
-<p>Exporting implementations should document supported compilers, their versions, and required compiler flags and settings in order to compile generated source FMUs for common platforms.</p>
+<p>Exporting implementations should document supported compilers, their versions, and required compiler flags and settings to compile generated source FMUs for common platforms.</p>
 </div>
 <div class="paragraph">
-<p>For FMI 3.0, the compilers and required compiler flags and settings should be placed in the <code>buildDescription.xml</code> file of the FMU, to allow automated building from source as far as possible.</p>
+<p>For FMI 3.0, the compilers and required compiler flags and settings should be placed in the <code>buildDescription.xml</code> file of the FMU to allow automated building from source as far as possible.</p>
 </div>
 <div class="paragraph">
-<p>When generating binary FMUs directly, the supported/used compilers, compiler flags and settings should also be documented, in order to allow users to troubleshoot integration issues when integrating binary FMUs into other environments.</p>
+<p>When generating binary FMUs directly, the supported and used compilers, compiler flags, and settings should also be documented.
+This allows users to troubleshoot integration issues when integrating binary FMUs into other environments.</p>
 </div>
 <div class="paragraph">
-<p>Where possible the use of user supplied compilers and compiler flags and settings should be supported in order to automate generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.</p>
+<p>Where possible, user-supplied compilers, compiler flags, and settings should be supported to automate the generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_handling_of_fmu_namespaces">3.6. Handling of FMU namespaces</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations">3.6.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>Importing implementations should correctly handle the import of multiple 1.0 FMUs with identical model identifiers. In the case of FMUs with dynamic library implementations this is supported by most platforms since symbol lookup can be performed scoped to one dynamic library namespace (see e.g. dlsym/GetProcAddr functions for Linux/Windows). Starting with 2.0 FMUs with dynamic library implementations will always use identical symbols for the entry points in any case, so that this has to be supported correctly.</p>
+<p>Importing implementations should correctly handle the import of multiple FMI 1.0 FMUs with identical model identifiers.
+In the case of FMUs with dynamic library implementations, this is supported by most platforms since symbol lookup can be performed scoped to one dynamic library namespace (see, for example, the <code>dlsym</code> and <code>GetProcAddr</code> functions for Linux and Windows).</p>
 </div>
 <div class="paragraph">
-<p>For source code or static library implementations the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.</p>
+<p>Starting with FMI 2.0, FMUs with dynamic library implementations will always use identical symbols for the entry points in any case, so that this has to be supported correctly.</p>
 </div>
+<div class="paragraph">
+<p>For source code or static library implementations, the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_handling_of_code_dependencies">3.7. Handling of Code Dependencies</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_2">3.7.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>Importing implementations should consider changing the working directory of the process to the relevant binary subdirectory of the unpacked FMU when loading the FMU DLL/SO to allow unsophisticated exporting implementations to load dependent DLLs/SOs relative to this directory. It is of course the responsibility of the FMU DLL/SO to implement proper dependent DLL/SO loading regardless of the current working directory of the process, however in practice a number of current or former implementations did not correctly implement this and can thus fail to load when the current directory is not the directory that contains the FMU DLL/SO.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations">3.7.2. FMU Exporting Implementations</h4>
-<div class="paragraph">
-<p>Exporting implementations should ideally avoid reliance on additional dynamic libraries, i.e. generated dynamic libraries should ideally be stand-alone. Where that is not feasible, implementations should prefer to use manual dynamic loading of dependent libraries at runtime (e.g. using dlopen/LoadLibrary), where the load path of the libraries is based on the resources URI provided, or should use DLL-relative path derivation either of the DLL folder or of the resources folder when the resources URI is not available (FMI 1.0 ME) or not valid.</p>
+<p>Importing implementations should consider changing the working directory of the process to the relevant binary subdirectory of the unpacked FMU when loading the FMU dynamic library.
+This is to allow unsophisticated exporting implementations to load dependent dynamic libraries relative to this directory.
+It is, of course, the responsibility of the FMU to implement proper dependent dynamic library loading regardless of the current working directory of the process.
+However, in practice, a number of current or former implementations did not correctly implement this.
+They can thus fail to load when the current directory is not the directory that contains the FMU dynamic library.</p>
 </div>
 <div class="paragraph">
-<p>Relying on pre-linking, where the dynamic loading of the dependent libraries is automatically handled by the platform dynamic linker/loader is not likely to work in all cases (e.g. on Windows the searched paths will be based on the simulator executable, not the FMU DLL), and is unlikely to provide user-understandable error messages in case of failure.</p>
+<p>Exporting implementations should ideally avoid reliance on additional dynamic libraries:
+Generated dynamic libraries should ideally be stand-alone.</p>
 </div>
 <div class="paragraph">
-<p>Note that simple calls to LoadLibrary/LoadLibraryEx on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons: The search path is going to be based on the location of the simulator executable and not the FMU DLL.</p>
+<p>Where that is not feasible, implementations should prefer to use manual dynamic loading of dependent libraries at runtime (for example, using <code>dlopen</code> or <code>LoadLibrary</code>).
+The load path of the libraries should be based on the path to the resources folder provided.
+When the resources path is not available (for example, in FMI 1.0 ME) or not valid, an implementation can use dynamic library-relative path derivation, either against the binary folder or the resources folder.</p>
 </div>
+<div class="paragraph">
+<p>Relying on pre-linking, where the dynamic loading of the dependent libraries is automatically handled by the platform dynamic linker/loader, is not likely to work in all cases:
+For example, on Windows, the searched paths will be based on the importer executable, not the location of the FMU DLL.
+Furthermore, in case of failure, automatic linking is unlikely to provide user-understandable error messages.</p>
+</div>
+<div class="paragraph">
+<p>Note that simple calls to <code>LoadLibrary</code> or <code>LoadLibraryEx</code> on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons:
+The search path will be based on the location of the importer executable and not the FMU DLL.</p>
 </div>
 </div>
 </div>
@@ -1093,7 +1111,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 <div class="sect2">
 <h3 id="_instantiation">5.1. Instantiation</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_3">5.1.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations">5.1.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Be sure to pass valid values into the fmiInstantiate/fmiInstantiateSlave/fmi2Instantiate calls for all arguments. Note especially that null pointers are not valid for any of the string arguments to these functions. Implementations must pass proper values especially for the following fields:</p>
 </div>
@@ -1115,7 +1133,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_2">5.1.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations">5.1.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>Exporting implementations should guard (by safely handling these cases without crashing) against common errors in calls to the fmiInstantiate/fmiInstantiateSlave/fmi2Instantiate functions, including:</p>
 </div>
@@ -1137,7 +1155,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 <div class="sect2">
 <h3 id="_initialization">5.2. Initialization</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_4">5.2.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_2">5.2.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>When performing initialization of variable values, including parameters and initial values for other variables, do not rely on default values being already set in the FMU (i.e. burned into the binary so to speak): While the FMI standards specify that default values shall both be specified in the modelDescription.xml file and are already set in the FMU upon instantiation, some implementations generate FMUs where this is not true, i.e. the default values of variables when not set do not match the values as specified in the modelDescription.xml file. Since there is little effort in actually setting default values through the FMI API at initialization time, the more conservative approach is to always set default values through the API based on the modelDescription.xml file, or on the actual parameter/initial values as specified by the user, not relying on any burned in default values.</p>
 </div>
@@ -1146,7 +1164,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_3">5.2.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations_2">5.2.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>The FMI standards specify that default values for parameters or initial values for other variables shall be both indicated in the modelDescription.xml file and shall be “burned in”, i.e. the values shall be set automatically as default values upon FMU instantiation, so that importing implementations can rely on the standard-mandated behavior that unset variables have their default values as specified in the modelDescription.xml.</p>
 </div>
@@ -1155,7 +1173,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 <div class="sect2">
 <h3 id="_startup">5.3. Startup</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_5">5.3.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_3">5.3.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>For FMI 1.0 Co-Simulation FMUs importing implementations should honor the canHandleEvents capability of the FMU: If this capability attribute is false, then the implementation cannot call the doStep function with zero communicationStepSize, even at time 0 (used e.g. for generating valid initial values). In those cases the integration environment must start simulation with the first simulation step, without any event iteration. With FMI 2.0 Co-Simulation FMUs do not support 0-size time steps in any case.</p>
 </div>
@@ -1164,7 +1182,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 <div class="sect2">
 <h3 id="_support_for_solvers">5.4. Support for Solvers</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_6">5.4.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_4">5.4.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should support a wide variety of solver algorithms, in order to support Model-Exchange FMUs as fully as possible. Ideally this support should include support for attaching external solvers through specified APIs, so that experienced users can extend the supported solver base for specific new domains where appropriate. Supporting the use of several different solvers in one model that integrates a number of FMUs, so that e.g. different Model Exchange FMUs can be solved through different solvers than other parts of the model – without resorting to Co-Simulation FMUs – can be beneficial in terms of performance and usability.</p>
 </div>
@@ -1173,7 +1191,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_4">5.4.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations_3">5.4.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>Exporting implementations should offer all of their built-in solver algorithms (including solver settings like step-size, tolerance, etc.) for export when generating Co-Simulation FMUs, so that the same solvers can be used inside the environment as in exported FMUs. This should ideally also include the ability to export Co-Simulation FMUs using user-supplied solvers, where appropriate (e.g. where the environment supports the integration of external solvers for model evaluation).</p>
 </div>
@@ -1182,7 +1200,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 <div class="sect2">
 <h3 id="_support_for_mixing_fmus_types">5.5. Support for Mixing FMUs Types</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_7">5.5.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_5">5.5.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should support mixing FMUs of different types (and different FMI versions) in one simulation model, ensuring proper semantics for connections between those FMUs and each other as well as the rest of the simulation model. This should also be checked in cross-checking with other implementations.</p>
 </div>
@@ -1194,7 +1212,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 <div class="sect2">
 <h3 id="_logging_support">5.6. Logging Support</h3>
 <div class="sect3">
-<h4 id="_fmu_importing_implementations_8">5.6.1. FMU Importing Implementations</h4>
+<h4 id="_fmu_importing_implementations_6">5.6.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should allow fine-grained selection of FMU logging output recording/display, either based on the new FMU-defined logging categories for FMI 2.0 or on the raw string category argument of the logging callback in FMI 1.0.</p>
 </div>
@@ -1203,7 +1221,7 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_fmu_exporting_implementations_5">5.6.2. FMU Exporting Implementations</h4>
+<h4 id="_fmu_exporting_implementations_4">5.6.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>Exporting implementations should support the fine-grained selection of logging categories in FMI 2.0 and should use fine-grained category names in the category argument for FMI 1.0 logging callback calls. In FMI 1.0 they should try to not produce verbose logging output when the debug logging flag is false.</p>
 </div>
