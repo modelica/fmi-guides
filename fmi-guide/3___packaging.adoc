@@ -4,21 +4,26 @@
 
 ==== Pathnames and Prefixes
 
-Exporting implementations should ensure that the generated FMU ZIP archives are compliant to the ZIP specification.
-This implies that only the forward slash `/` shall be used as a path separator, and that path specifications like `.` or `..` do not have specific interpretations, like current directory, etc.
+Exporting implementations should ensure that the generated FMU ZIP archives are compliant with the ZIP specification.
+This implies that only the forward slash `/` shall be used as a path separator and that path specifications like `.` or `..` do not have specific interpretations, like the current directory, etc.
 
-More specifically the ZIP archive should only contain entries with no leading prefix, i.e. the entries should be `modelDescription.xml`, `binaries/x86_64-windows/myfmu.dll`, etc., and not `./modelDescription.xml`, or `myfmu/binaries/x86_64-windows/myfmu.dll`.
+More specifically, the ZIP archive should only contain entries with no leading prefix:app-name:
+For example, valid entries would be `modelDescription.xml` or `binaries/x86_64-windows/myfmu.dll`, not `./modelDescription.xml`, or `myfmu/binaries/x86_64-windows/myfmu.dll`.
 
-To enable interopartion with not-quite conforming implementations, importing implementations should be prepared to support the extraction of FMU ZIP archives with leading `./` prefixes on entries in the archive.
-Similarly, implementations should be prepared to support extraction of FMU ZIP archives that use "\" as the path separator.
+To enable interoperation with not-quite conforming implementations, importing implementations should be prepared to support the extraction of FMU ZIP archives with leading `./` prefixes on entries in the archive.
+Similarly, implementations should be prepared to support the extraction of FMU ZIP archives that use "\" as the path separator.
 
 ==== Access to FMU package content
 
-The exporting implementation should not rely on the importing implementation completely unpacking the FMU in one location, since only access to the resources folder is actually specified in the standard.
+The exporting implementation should not rely on the importing implementation completely unpacking the FMU in one location.
+The standard only specifies access to the resources folder.
 
-Obviously some of the fallbacks (discussed in section 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated, but those fallbacks are by their nature non-portable fallback mechanisms which only come into play when other, standard conforming mechanisms are not available.
+Some of the fallbacks (discussed in sections 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated.
+However, those fallbacks are, by their nature non-portable mechanisms, that only come into play when other, standard-conforming mechanisms are not available.
 
 When possible, implementations should unpack the complete ZIP archive content in one location since some FMUs depend on this even if the standard only specifies access to the resources folder.
+
+Note that FMI 3.0 provides access to the resource folder using a native path, whereas FMI 1.0 and FMI 2.0 specify a URI to the resource folder that still needs to be translated to a system path for access.
 
 === Documentation and Additional Resources
 
@@ -43,8 +48,15 @@ Exporting implementations should allow the user to easily author/add documentati
 
 Exporting implementations should also include any additional documentation needed to effectively run the FMU in the documentation:
 
-- Implementations that produce FMUs that are not considered stand-alone, i.e. specifying `needsExecutionTool=true` in their model description, should provide sufficient information inside the documentation that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.
+- Implementations that produce FMUs that are not considered stand-alone, i.e., specifying `needsExecutionTool=true` in their model description, should provide sufficient information inside the documentation that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.
 - Implementations that produce FMUs that require runtime licenses should provide information on what kind of license is needed and how to provide that license so the FMU can use it.
+
+In many instances, for example, when open-source licenses are employed, license information and other additional information is needed to be shipped with an FMU for distribution.
+In those cases, exporting implementations should allow the user to easily add those information items to the documentation shipped with an FMU.
+
+Where the license information is required by the exporting implementation itself, it can directly add that information to the FMU itself.
+
+This support by an implementation should not be understood to remove the need for the user to ensure that they are in compliance with relevant licenses and their legal obligations.
 
 === Support for 32&64bit Variants of Platforms
 
@@ -59,40 +71,52 @@ For this reason exporting implementations should ideally generate FMUs that cont
 
 Since not all exporting implementations can generate both variants easily, importing implementations should consider providing the ability to bridge between 32bit and 64bit implementations, using either inter-process communication or system provided facilities where possible.
 
-Going forward this is likely to be less of a problem on desktop systems, which are migrating to 64bit only implementation spaces, but for mobile or embedded platforms this issue is likely to be pertinent for some time.
+Going forward, this is likely to be less of a problem on desktop systems, which are migrating to 64bit only implementation spaces.
+For mobile or embedded platforms, this issue is likely to be still pertinent for some time.
 
 === Support for Multiple Platforms
 
-FMU exporting implementations should strive to support common platforms out of the box, and should provide support for generating FMUs that contain multiple binary implementations, and where feasible a source code implementation, in one go.
+FMU exporting implementations should strive to support common platforms out of the box.
+They should provide support for generating FMUs that contain multiple binary implementations, and where feasible, a source code implementation in one go.
 
 === Compiler Dependencies
 
-Exporting implementations should document supported compilers, their versions, and required compiler flags and settings in order to compile generated source FMUs for common platforms.
+Exporting implementations should document supported compilers, their versions, and required compiler flags and settings to compile generated source FMUs for common platforms.
 
-For FMI 3.0, the compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU, to allow automated building from source as far as possible. 
+For FMI 3.0, the compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU to allow automated building from source as far as possible. 
 
-When generating binary FMUs directly, the supported/used compilers, compiler flags and settings should also be documented, in order to allow users to troubleshoot integration issues when integrating binary FMUs into other environments.
+When generating binary FMUs directly, the supported and used compilers, compiler flags, and settings should also be documented.
+This allows users to troubleshoot integration issues when integrating binary FMUs into other environments.
 
-Where possible the use of user supplied compilers and compiler flags and settings should be supported in order to automate generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.
+Where possible, user-supplied compilers, compiler flags, and settings should be supported to automate the generation of binary FMUs for non-common targets or to support user-specific requirements in the binary FMU compilation/linking stage.
 
 === Handling of FMU namespaces
 
-==== FMU Importing Implementations
+Importing implementations should correctly handle the import of multiple FMI 1.0 FMUs with identical model identifiers.
+In the case of FMUs with dynamic library implementations, this is supported by most platforms since symbol lookup can be performed scoped to one dynamic library namespace (see, for example, the `dlsym` and `GetProcAddr` functions for Linux and Windows).
 
-Importing implementations should correctly handle the import of multiple 1.0 FMUs with identical model identifiers. In the case of FMUs with dynamic library implementations this is supported by most platforms since symbol lookup can be performed scoped to one dynamic library namespace (see e.g. dlsym/GetProcAddr functions for Linux/Windows). Starting with 2.0 FMUs with dynamic library implementations will always use identical symbols for the entry points in any case, so that this has to be supported correctly.
+Starting with FMI 2.0, FMUs with dynamic library implementations will always use identical symbols for the entry points in any case, so that this has to be supported correctly.
 
-For source code or static library implementations the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.
+For source code or static library implementations, the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.
 
 === Handling of Code Dependencies
 
-==== FMU Importing Implementations
+Importing implementations should consider changing the working directory of the process to the relevant binary subdirectory of the unpacked FMU when loading the FMU dynamic library.
+This is to allow unsophisticated exporting implementations to load dependent dynamic libraries relative to this directory.
+It is, of course, the responsibility of the FMU to implement proper dependent dynamic library loading regardless of the current working directory of the process.
+However, in practice, a number of current or former implementations did not correctly implement this.
+They can thus fail to load when the current directory is not the directory that contains the FMU dynamic library.
 
-Importing implementations should consider changing the working directory of the process to the relevant binary subdirectory of the unpacked FMU when loading the FMU DLL/SO to allow unsophisticated exporting implementations to load dependent DLLs/SOs relative to this directory. It is of course the responsibility of the FMU DLL/SO to implement proper dependent DLL/SO loading regardless of the current working directory of the process, however in practice a number of current or former implementations did not correctly implement this and can thus fail to load when the current directory is not the directory that contains the FMU DLL/SO.
+Exporting implementations should ideally avoid reliance on additional dynamic libraries:
+Generated dynamic libraries should ideally be stand-alone.
 
-==== FMU Exporting Implementations
+Where that is not feasible, implementations should prefer to use manual dynamic loading of dependent libraries at runtime (for example, using `dlopen` or `LoadLibrary`).
+The load path of the libraries should be based on the path to the resources folder provided.
+When the resources path is not available (for example, in FMI 1.0 ME) or not valid, an implementation can use dynamic library-relative path derivation, either against the binary folder or the resources folder.
 
-Exporting implementations should ideally avoid reliance on additional dynamic libraries, i.e. generated dynamic libraries should ideally be stand-alone. Where that is not feasible, implementations should prefer to use manual dynamic loading of dependent libraries at runtime (e.g. using dlopen/LoadLibrary), where the load path of the libraries is based on the resources URI provided, or should use DLL-relative path derivation either of the DLL folder or of the resources folder when the resources URI is not available (FMI 1.0 ME) or not valid.
+Relying on pre-linking, where the dynamic loading of the dependent libraries is automatically handled by the platform dynamic linker/loader, is not likely to work in all cases:
+For example, on Windows, the searched paths will be based on the importer executable, not the location of the FMU DLL.
+Furthermore, in case of failure, automatic linking is unlikely to provide user-understandable error messages.
 
-Relying on pre-linking, where the dynamic loading of the dependent libraries is automatically handled by the platform dynamic linker/loader is not likely to work in all cases (e.g. on Windows the searched paths will be based on the simulator executable, not the FMU DLL), and is unlikely to provide user-understandable error messages in case of failure.
-
-Note that simple calls to LoadLibrary/LoadLibraryEx on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons: The search path is going to be based on the location of the simulator executable and not the FMU DLL.
+Note that simple calls to `LoadLibrary` or `LoadLibraryEx` on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons:
+The search path will be based on the location of the importer executable and not the FMU DLL.
