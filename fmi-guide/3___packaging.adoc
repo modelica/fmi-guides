@@ -34,7 +34,7 @@ Implementations should support using supplied icon information in the FMU when d
 For FMI 3.0, icon information is available as part of the ports and icons information contained in the `icons/terminalsAndIcons.xml` file of the FMU.
 This optionally includes detailed icon information for individual ports, as well as global icon information.
 
-For prior versions of FMI, only a model.png file in PNG format in the root of the ZIP archive is available.
+For prior versions of FMI, only a `model.png` file in PNG format in the root of the ZIP archive is available.
 
 Exporting implementations should, at a minimum, generate an informative icon for the FMU and package this in the ZIP archive in the way documented in the FMI standards.
 Whenever possible, more detailed information should be provided using the ports and icons information.
@@ -83,7 +83,7 @@ They should provide support for generating FMUs that contain multiple binary imp
 
 Exporting implementations should document supported compilers, their versions, and required compiler flags and settings to compile generated source FMUs for common platforms.
 
-For FMI 3.0, the compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU to allow automated building from source as far as possible. 
+For FMI 3.0, the compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU to allow automated building from source as far as possible.
 
 When generating binary FMUs directly, the supported and used compilers, compiler flags, and settings should also be documented.
 This allows users to troubleshoot integration issues when integrating binary FMUs into other environments.
@@ -93,7 +93,7 @@ Where possible, user-supplied compilers, compiler flags, and settings should be 
 === Handling of FMU namespaces
 
 Importing implementations should correctly handle the import of multiple FMI 1.0 FMUs with identical model identifiers.
-In the case of FMUs with dynamic library implementations, this is supported by most platforms since symbol lookup can be performed scoped to one dynamic library namespace (see, for example, the `dlsym` and `GetProcAddr` functions for Linux and Windows).
+In the case of FMUs with dynamic library implementations, this is supported by most platforms since symbol lookup can be performed scoped to one dynamic library namespace (see, for example, the `dlsym` and `GetProcAddr` functions for Linux and Windows, respectively).
 
 Starting with FMI 2.0, FMUs with dynamic library implementations will always use identical symbols for the entry points in any case, so that this has to be supported correctly.
 
