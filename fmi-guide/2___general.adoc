@@ -70,6 +70,7 @@ If generated FMUs require licenses to run (FMU runtime licenses), the mechanism 
 
 The license handling should be tested widely as part of cross-implementation checks to ensure that the license handling works correctly in varied circumstances.
 
-If an error or problem occurs in the license handling, e.g., a missing license, an informative message should be provided to the user through the FMU logging callback mechanism. This allows importing implementations to provide proper feedback to the user.
+If an error or problem occurs in the license handling, e.g., a missing license, an informative message should be provided to the user through the FMU logging callback mechanism.
+This allows importing implementations to provide proper feedback to the user.
 
 Exchange of FMUs can be eased tremendously if an option exists to generate FMUs that do not require license mechanisms at the receiving party.

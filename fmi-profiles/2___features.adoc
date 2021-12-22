@@ -6,7 +6,8 @@ It should be noted that the features are not only drawn from areas of the FMI st
 
 None of the information presented here shall be construed to speak to the normative aspects of the standard and towards compliance with it.
 
-The features are split into feature areas to give thematic context to the individual features.  These feature areas provide the subsections of this chapter.
+The features are split into feature areas to give thematic context to the individual features.
+These feature areas provide the subsections of this chapter.
 
 
 === Parameter Handling
@@ -111,7 +112,8 @@ Directional Derivatives (FMI 2.0)::
 FMI 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
 Directional derivatives can be computed for continuous-time states and outputs.
 This is useful when connecting FMUs, and the partial derivatives of the connected FMU shall be computed.
-Suppose the exported FMU performs this computation analytically. In that case, all numerical algorithms based on these partial derivatives (for example, the numerical integration method or nonlinear algebraic solvers) are more efficient and reliable.
+Suppose the exported FMU performs this computation analytically.
+In that case, all numerical algorithms based on these partial derivatives (for example, the numerical integration method or nonlinear algebraic solvers) are more efficient and reliable.
 
 Adjoint Derivatives (FMI 3.0)::
 FMI 3.0 supports the ability of FMUs to provide adjoint derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:

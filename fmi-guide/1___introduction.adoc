@@ -12,6 +12,8 @@ This document is intended for simulation tool vendors planning to support FMI in
 It assumes a technical audience and tries to give further information and hints in areas where either the relevant specification documents have been found sometimes to be less clear than expected or where user expectations are relevant to implementation choices.
 It also considers errors and bugs encountered in the practical use of existing FMI implementations and guides to avoid common pitfalls.
 
+This document will be maintained and expanded over time as new issues or needs for clarification appear.
+
 Since interoperability of implementations is of crucial concern for FMI users, guidance is, where applicable, based on the general robustness principle (also often termed Postel’s law):
 
 [quote]
