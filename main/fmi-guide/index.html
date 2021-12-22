@@ -589,7 +589,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-8ec7319ce02b8c48c5759ba802945bbd041dc9c4,</span>
+<span id="revnumber">version main-df57a03453d5eb06a0757d5e0ef878f35bfd71b8,</span>
 <span id="revdate">2021-12-22</span>
 </div>
 <div id="toc" class="toc2">
@@ -636,40 +636,12 @@ document.addEventListener('keydown', (event) => {
 </li>
 <li><a href="#_simulation">5. Simulation</a>
 <ul class="sectlevel2">
-<li><a href="#_instantiation">5.1. Instantiation</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations">5.1.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations">5.1.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_initialization">5.2. Initialization</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_2">5.2.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_2">5.2.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_startup">5.3. Startup</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_3">5.3.1. FMU Importing Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_support_for_solvers">5.4. Support for Solvers</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_4">5.4.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_3">5.4.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_support_for_mixing_fmus_types">5.5. Support for Mixing FMUs Types</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_5">5.5.1. FMU Importing Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_logging_support">5.6. Logging Support</a>
-<ul class="sectlevel3">
-<li><a href="#_fmu_importing_implementations_6">5.6.1. FMU Importing Implementations</a></li>
-<li><a href="#_fmu_exporting_implementations_4">5.6.2. FMU Exporting Implementations</a></li>
-</ul>
-</li>
+<li><a href="#_instantiation">5.1. Instantiation</a></li>
+<li><a href="#_initialization">5.2. Initialization</a></li>
+<li><a href="#_startup">5.3. Startup</a></li>
+<li><a href="#_support_for_solvers">5.4. Support for Solvers</a></li>
+<li><a href="#_support_for_mixing_fmus_types">5.5. Support for Mixing FMUs Types</a></li>
+<li><a href="#_logging_support">5.6. Logging Support</a></li>
 </ul>
 </li>
 <li><a href="#_co_simulation_specific_issues">6. Co-Simulation Specific Issues</a></li>
@@ -1114,90 +1086,97 @@ Certain state variables always have to be exposed in Model Exchange FMUs.</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_instantiation">5.1. Instantiation</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations">5.1.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>Be sure to pass valid values into the fmiInstantiate/fmiInstantiateSlave/fmi2Instantiate calls for all arguments.
-Note especially that null pointers are not valid for any of the string arguments to these functions.
+<p>Importing implementations must pass valid values into the following instantiation calls for all of their arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>FMI 3.0: <code>fmi3InstantiateModelExchange</code>, <code>fmi3InstantiateCoSimulation</code>, and <code>fmi3InstantiateScheduledExecution</code></p>
+</li>
+<li>
+<p>FMI 2.0: <code>fmi2Instantiate</code></p>
+</li>
+<li>
+<p>FMI 1.0: <code>fmiInstantiate</code>, <code>fmiInstantiateSlave</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note especially that null pointers are not valid for any of the string arguments to these functions, unless explicitly allowed.
 Implementations must pass proper values especially for the following fields:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>instanceName must not be the null pointer, the empty string or a string only containing whitespace.</p>
+<p><code>instanceName</code> must not be the null pointer, the empty string or a string only containing whitespace.</p>
 </li>
 <li>
-<p>GUID/fmuGUID must match the value of the guid attribute from the modelDescription.xml file.</p>
+<p><code>instantiationToken</code> (3.0), <code>fmuGUID</code> (2.0), and <code>GUID</code> (1.0)  must match the value of the <code>instantiationToken</code> (3.0) and <code>guid</code> (2.0/1.0) attribute from the modelDescription.xml file, respectively.</p>
 </li>
 <li>
-<p>fmuLocation/fmuResourceLocation must be a valid URI (per RFC 3986), and should be a URI with the file scheme, since that is currently the only scheme that is required to be supported by the FMU.
+<p>For FMI 3.0, <code>resourcePath</code> must be a valid native path to the FMU&#8217;s <code>resources</code> directory.
+If an FMU has no <code>resources</code> directory or if no such path can be provided due to implementation restrictions the <code>resourcePath</code> argument must be a null pointer.</p>
+</li>
+<li>
+<p>For FMI 2.0/1.0 <code>fmuResourceLocation</code>/<code>fmuLocation/</code> must be a valid URI (per RFC 3986), and should be a URI with the <code>file</code> scheme, since that is currently the only scheme that is required to be supported by the FMU.
 Note that the description of this in the FMI 1.0 standards is very unclear and confusing, so that in practice, until a proper cleanup version of the 1.0 standard is released, as far as valid URIs are concerned the implementation should follow the spirit of the rules as laid out in the FMI 2.0 standard for the fmuResourceLocation argument, but pointing to the root of the unpacked FMU archive rather than the resources directory.
-Note also that <a href="file://C:/" class="bare">file://C:/</a> and similar are not valid file URIs, but should rather be supplied as either <a href="file:///C:/" class="bare">file:///C:/</a> (empty authority) or as file:/C:/ (missing authority) to be valid URIs.
+Note also that <code><a href="file://C:/" class="bare">file://C:/</a></code> and similar are not valid file URIs, but should rather be supplied as either <code><a href="file:///C:/" class="bare">file:///C:/</a></code> (empty authority) or as <code>file:/C:/</code> (missing authority) to be valid URIs.
 Furthermore the validity of a URI is not influenced by the existence or non-existence of the file/directory pointed to, so that in the case of FMI 2.0, a URI pointing to the resources directory would still be a valid URI, even if the unpacked FMU archive did not contain a resources directory.</p>
 </li>
 <li>
-<p>mimeType (FMI 1.0 only) must not be null and must be a valid MIME type; unless specific requirements indicate otherwise, “application/x-fmu-sharedlibrary” is the proper string to pass here.</p>
+<p><code>mimeType</code> (FMI 1.0 only) must not be null and must be a valid MIME type; unless specific requirements indicate otherwise, <code>application/x-fmu-sharedlibrary</code> is the proper string to pass here.</p>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations">5.1.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
-<p>Exporting implementations should guard (by safely handling these cases without crashing) against common errors in calls to the fmiInstantiate/fmiInstantiateSlave/fmi2Instantiate functions, including:</p>
+<p>Exporting implementations should guard (by safely handling these cases without crashing) against common errors in calls to the instantiation functions, including:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>instanceName, GUID/fmuGUID, fmuLocation/fmuResourceLocation and mimeType might all be null pointers or empty strings, or otherwise invalid,</p>
+<p><code>instanceName</code>, <code>GUID</code>/<code>fmuGUID</code>/<code>instantiationToken</code>, <code>fmuLocation</code>/<code>fmuResourceLocation</code> and <code>mimeType</code> might all be null pointers or empty strings, or otherwise invalid,</p>
 </li>
 <li>
-<p>GUID/fmuGUID is possibly not the guid attribute from the modelDescription, but something else entirely (i.e. neither the guid attribute from this version of the FMU nor from a former version),</p>
+<p><code>GUID</code>/<code>fmuGUID</code>/<code>instantationToken</code> is possibly not the <code>guid</code>/<code>instantiationToken</code> attribute from the model description, but something else entirely (i.e. neither the guid attribute from this version of the FMU nor from a former version),</p>
 </li>
 <li>
-<p>Especially under FMI 1.0 fmuLocation is very likely not pointing to the right location (either pointing to the resources directory, or the root directory of the unzipped FMU, to the zipped FMU, or to a different directory entirely), or is an invalid URI (e.g. <a href="file://C:/something" class="bare">file://C:/something</a> or the empty string) or of an unknown scheme.
+<p>Especially under FMI 1.0 <code>fmuLocation</code> is very likely not pointing to the right location (either pointing to the resources directory, or the root directory of the unzipped FMU, to the zipped FMU, or to a different directory entirely), or is an invalid URI (e.g. <code><a href="file://C:/something" class="bare">file://C:/something</a></code> or the empty string) or of an unknown scheme.
 This of course makes resource-loading difficult.
-For Model Exchange FMUs (which are not passed an fmuLocation argument in any case) and for Co-Simulation FMUs (which often get these kinds of illegal/unclear URIs) as a fallback mechanism, it is recommended to load resources from paths derived from the location of the SharedObject/DLL for platforms that support this: On Win32 for example this can be achieved through the use of GetModuleFileName with the module_handle of the DLL (as provided in a DllMain argument), or via dladdr on a known symbol in the FMU on OS X or Linux andsimilar ELF-based systems.
-Note that this kind of mechanism should only be used as a fallback, if fmuLocation is not provided (ME FMUs) or is invalid in some way.</p>
+For Model Exchange FMUs (which are not passed an <code>fmuLocation</code> argument in any case) and for Co-Simulation FMUs (which often get these kinds of illegal/unclear URIs) as a fallback mechanism, it is recommended to load resources from paths derived from the location of the SharedObject/DLL for platforms that support this:
+On Win32 for example this can be achieved through the use of <code>GetModuleFileName</code> with the <code>module_handle</code> of the DLL (as provided in a <code>DllMain</code> argument), or via <code>dladdr</code> on a known symbol in the FMU on OS X or Linux and similar ELF-based systems.
+Note that this kind of mechanism should only be used as a fallback, if <code>fmuLocation</code> is not provided (ME FMUs) or is invalid in some way.</p>
 </li>
 </ul>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_initialization">5.2. Initialization</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_2">5.2.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>When performing initialization of variable values, including parameters and initial values for other variables, do not rely on default values being already set in the FMU (i.e. burned into the binary so to speak): While the FMI standards specify that default values shall both be specified in the modelDescription.xml file and are already set in the FMU upon instantiation, some implementations generate FMUs where this is not true, i.e. the default values of variables when not set do not match the values as specified in the modelDescription.xml file.
+<p>When performing initialization of variable values, including parameters and initial values for other variables, importers should not rely on default values being already set in the FMU (i.e. burned into the binary so to speak):
+While the FMI standards specify that default values shall both be specified in the <code>modelDescription.xml</code> file and are already set in the FMU upon instantiation, some implementations generate FMUs where this is not true, i.e. the default values of variables when not set do not match the values as specified in the <code>modelDescription.xml</code> file.
 Since there is little effort in actually setting default values through the FMI API at initialization time, the more conservative approach is to always set default values through the API based on the modelDescription.xml file, or on the actual parameter/initial values as specified by the user, not relying on any burned in default values.</p>
 </div>
 <div class="paragraph">
-<p>Be certain to respect the different order of necessary function calls between FMI 1.0 and FMI 2.0 when performing initialization (this phase has seen larger changes between FMI 1.0 and 2.0 due to the introduction of explicit phases/modes in the FMI API, whereas these phases where only implicit in FMI 1.0).</p>
+<p>Exporting implementations must ensure that any default values specified for variables in the <code>modelDescription.xml</code> file are actually “burned in”:
+The values shall be set automatically as default values upon FMU instantiation, so that importing implementations can rely on the standard-mandated behavior that unset variables have their default values as specified in the <code>modelDescription.xml</code>.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations_2">5.2.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
-<p>The FMI standards specify that default values for parameters or initial values for other variables shall be both indicated in the modelDescription.xml file and shall be “burned in”, i.e. the values shall be set automatically as default values upon FMU instantiation, so that importing implementations can rely on the standard-mandated behavior that unset variables have their default values as specified in the modelDescription.xml.</p>
-</div>
+<p>Importers should respect the different order of necessary function calls between FMI 1.0 and FMI 2.0/3.0 when performing initialization (this phase has seen larger changes between FMI 1.0 and 2.0/3.0 due to the introduction of explicit phases/modes in the FMI API, whereas these phases where only implicit in FMI 1.0).</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_startup">5.3. Startup</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_3">5.3.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>For FMI 1.0 Co-Simulation FMUs importing implementations should honor the canHandleEvents capability of the FMU: If this capability attribute is false, then the implementation cannot call the doStep function with zero communicationStepSize, even at time 0 (used e.g. for generating valid initial values).
+<p>For FMI 1.0 Co-Simulation FMUs importing implementations should honor the <code>canHandleEvents</code> capability of the FMU: If this capability attribute is false, then the implementation cannot call the <code>doStep</code> function with zero <code>communicationStepSize</code>, even at time 0 (used e.g. for generating valid initial values).
 In those cases the integration environment must start simulation with the first simulation step, without any event iteration.
-With FMI 2.0 Co-Simulation FMUs do not support 0-size time steps in any case.</p>
-</div>
+With FMI 2.0 Co-Simulation FMUs do not support 0-size time steps in any case.
+With FMI 3.0, Co-Simulation FMUs can support event handling explicitly via the <code>hasEventMode</code> capability flag.
+Importers can make use of this feature by passing <code>fmi3True</code> for the <code>eventModeUsed</code> argument of the <code>fmi3InstantiateCoSimulation</code> call.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_support_for_solvers">5.4. Support for Solvers</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_4">5.4.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should support a wide variety of solver algorithms, in order to support Model-Exchange FMUs as fully as possible.
 Ideally this support should include support for attaching external solvers through specified APIs, so that experienced users can extend the supported solver base for specific new domains where appropriate.
@@ -1206,48 +1185,37 @@ Supporting the use of several different solvers in one model that integrates a n
 <div class="paragraph">
 <p>In any case the proper documentation of the employed solver algorithms and their configurable settings is very beneficial in understanding and handling differences between implementations.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations_3">5.4.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
 <p>Exporting implementations should offer all of their built-in solver algorithms (including solver settings like step-size, tolerance, etc.) for export when generating Co-Simulation FMUs, so that the same solvers can be used inside the environment as in exported FMUs.
 This should ideally also include the ability to export Co-Simulation FMUs using user-supplied solvers, where appropriate (e.g. where the environment supports the integration of external solvers for model evaluation).</p>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_support_for_mixing_fmus_types">5.5. Support for Mixing FMUs Types</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_5">5.5.1. FMU Importing Implementations</h4>
 <div class="paragraph">
 <p>Importing implementations should support mixing FMUs of different types (and different FMI versions) in one simulation model, ensuring proper semantics for connections between those FMUs and each other as well as the rest of the simulation model.
 This should also be checked in cross-checking with other implementations.</p>
 </div>
 <div class="paragraph">
-<p>As a side issue, importing implementations should try to use as much of the fine-grained direct dependency information potentially present in FMI 1.0 (and even more so in FMI 2.0) as possible, in order to avoid algorithmic loops being detected where they are not really present.</p>
-</div>
+<p>As a side issue, importing implementations should try to use as much of the fine-grained direct dependency information potentially present in FMI 1.0 (and even more so in FMI 2.0/3.0) as possible, in order to avoid algorithmic loops being detected where they are not really present.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_logging_support">5.6. Logging Support</h3>
-<div class="sect3">
-<h4 id="_fmu_importing_implementations_6">5.6.1. FMU Importing Implementations</h4>
 <div class="paragraph">
-<p>Importing implementations should allow fine-grained selection of FMU logging output recording/display, either based on the new FMU-defined logging categories for FMI 2.0 or on the raw string category argument of the logging callback in FMI 1.0.</p>
+<p>Importing implementations should allow fine-grained selection of FMU logging output recording/display, either based on the new FMU-defined logging categories for FMI 2.0/3.0 or on the raw string category argument of the logging callback in FMI 1.0.</p>
 </div>
 <div class="paragraph">
 <p>Note that since the logging callback type signature in FMI 1.0 and 2.0 uses a variable argument list, this can have implications for the calling convention of that function on platforms that have different calling conventions for C functions with variable argument lists than for functions with fixed argument lists.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_fmu_exporting_implementations_4">5.6.2. FMU Exporting Implementations</h4>
 <div class="paragraph">
-<p>Exporting implementations should support the fine-grained selection of logging categories in FMI 2.0 and should use fine-grained category names in the category argument for FMI 1.0 logging callback calls.
-In FMI 1.0 they should try to not produce verbose logging output when the debug logging flag is false.</p>
+<p>Starting with FMI 3.0, the logging callback uses a fixed argument list.</p>
 </div>
 <div class="paragraph">
-<p>Note that since the logging callback type signature in FMI 1.0 and 2.0 uses a variable argument list, this can have implications for the calling convention of that function on platforms that have different calling conventions for C functions with variable argument lists than for functions with fixed argument lists.</p>
+<p>Exporting implementations should support the fine-grained selection of logging categories in FMI 2.0/3.0 and should use fine-grained category names in the category argument for FMI 1.0 logging callback calls.</p>
 </div>
+<div class="paragraph">
+<p>In FMI 1.0 they should try to not produce verbose logging output when the debug logging flag is false.</p>
 </div>
 </div>
 </div>
