@@ -21,6 +21,8 @@ Note also that `file://C:/` and similar are not valid file URIs, but should rath
 Furthermore the validity of a URI is not influenced by the existence or non-existence of the file/directory pointed to, so that in the case of FMI 2.0, a URI pointing to the resources directory would still be a valid URI, even if the unpacked FMU archive did not contain a resources directory.
 * `mimeType` (FMI 1.0 only) must not be null and must be a valid MIME type; unless specific requirements indicate otherwise, `application/x-fmu-sharedlibrary` is the proper string to pass here.
 
+If an importer tries to create a second instance of an FMU with `canBeInstantiatedOnlyOncePerProcess == false`, the FMU should provide an error message and return `NULL`.
+
 Exporting implementations should guard (by safely handling these cases without crashing) against common errors in calls to the instantiation functions, including:
 
 * `instanceName`, `GUID`/`fmuGUID`/`instantiationToken`, `fmuLocation`/`fmuResourceLocation` and `mimeType` might all be null pointers or empty strings, or otherwise invalid,
