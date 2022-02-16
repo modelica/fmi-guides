@@ -120,3 +120,18 @@ Furthermore, in case of failure, automatic linking is unlikely to provide user-u
 
 Note that simple calls to `LoadLibrary` or `LoadLibraryEx` on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons:
 The search path will be based on the location of the importer executable and not the FMU DLL.
+
+=== Interaction between FMU and Importer
+
+The FMU code will run in the process environment that the importer provides.
+This might be the same process as the importer, or it might be a separate process or processes.
+The FMU code cannot make any assumptions on this, but must rather be conservative in its behavior in the face of this.
+
+==== Global State
+
+The functions the FMU provides must not change global settings which affect the overall process and/or thread environment:
+
+For example, an FMU function must not change the current working directory of the process, since this is by definition visible outside of the current execution thread.
+
+FMU funtions can, on the other hand, change the floating point control word of the CPU during their execution, since this is directly tied to the thread of execution.
+However they must restore the floating point control word before returning, so as to not affect state outside of the current thread of execution.
