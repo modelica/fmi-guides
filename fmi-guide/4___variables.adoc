@@ -9,7 +9,57 @@ For example, when erroneous unit information on a variable has to be manually ad
 
 Exporting implementations should generate physical unit information on all exported variables when such information is available in the model (or can be automatically derived).
 
-On FMI 2.0 and later versions, the support for SI-based units should be used.
+On FMI 2.0 and later versions, the support for SI-based units, using the `BaseUnit` element should be used.
+This enables a number of important use cases:
+
+Unit check when connecting variables of different FMUs::
++
+When only one of an input variable `v2` and an output variable `v1`, connected with equation `v2 = v1`, defines a `BaseUnit` element, or neither does, the connection equation `v2 = v1` holds.
++
+When two variables `v1` and `v2` (of the same or different FMUs) are connected and for both of them `BaseUnit` elements are defined, then they must have identical exponents of their `BaseUnit`.
+If both `factor` and `offset` attributes are also identical, the connection equation `v2 = v1` again holds.
+If `factor` and `offset` are not identical, the tool may either trigger an error or, if supported, perform a conversion; in other words, use the connection equation (in this case the `relativeQuantity` of the `TypeDefinition`, see below, has to be taken into account in order to determine whether `offset` shall or shall not be utilized):
++
+`factor(v1) * v1 + (if relativeQuantity(v1) then 0 else offset(v1)) = factor(v2) * v2 + (if relativeQuantity(v2) then 0 else offset(v2))` +
+where `relativeQuantity(v1) = relativeQuantity(v2)` is required.
++
+As a result, wrong connections can be detected (for example, connecting a force with an angle-based variable would trigger an error) and conversions between, say, US and SI units can be either automatically performed or, if not supported, an error is triggered as well.
++
+This approach is not satisfactory for variables belonging to different quantities that have, however, the same `BaseUnit`, such as quantities `Energy` and `Torque`, or `AngularVelocity` and `Frequency`.
+To handle such cases, quantity definitions have to be taken into account (see `TypeDefinitions`) and quantity names need to be standardized.
++
+This approach allows a general treatment of units, without being forced to standardize the grammar and allowed values for units (for example, in FMI 1.0, a unit could be defined as `N.m` in one FMU and as `N*m` in another FMU, and a tool would have to reject a connection, since the units are not identical.
+In FMI 2.0 and later, the connection would be accepted, provided both elements have the same `BaseUnit` definition).
+
+Dimensional analysis of equations::
++
+In order to check the validity of equations in a modeling language, the defined units can be used for dimensional analysis, by using the `BaseUnit` definition of the respective unit.
+For this purpose, the `BaseUnit` `rad` has to be treated as `1`.
+Example:
++
+[latexmath]
+++++
+\begin{align*}
+J \cdot \alpha = \tau \rightarrow [kg.m^2]*[rad/s^2] = [kg.m^2/s^2] & \quad \text{// o.k. ("rad" is treated as "1")} \\
+J \cdot \alpha = f \rightarrow [kg.m^2]*[rad/s^2] = [kg.m/s^2] & \quad \text{// error, since dimensions do not agree}
+\end{align*}
+++++
+
+Unit propagation::
++
+If unit definitions are missing for variables, they might be deduced from the equations where the variables are used.
+If no unit computation is needed, `rad` is propagated.
+If a unit computation is needed and one of the involved units has `rad` as a `BaseUnit`, then unit propagation is not possible.
+Examples:
++
+- a = b + c, and `Unit` of c is provided, but not `Unit` of a and b: +
+The Unit definition of `c` (in other words, `Unit.name`, `BaseUnit`, `DisplayUnit`) is also used for `a` and `b`.
+For example, if BaseUnit(c) = `rad/s`, then BaseUnit(a) = BaseUnit(b) = `rad/s`.
++
+- a = b*c, and `Unit` of a and of c is provided, but not `Unit` of b: +
+If `rad` is either part of the `BaseUnit` of `a` and/or of `c`, then the `BaseUnit` of `b` cannot be deduced (otherwise it can be deduced).
+Example: If `BaseUnit(a) = kg.m/s2` and `BaseUnit(c) = m/s2`, then the `BaseUnit(b) can be deduced to be `kg`.
+In such a case `Unit.name` of b cannot be deduced from the `Unit.name` of `a` and `c`, and a tool would typically construct the `Unit.name` of `b` from the deduced `BaseUnit`.
 
 === Support for Min/Max Range Information
 
