@@ -18,7 +18,7 @@ Similarly, implementations should be prepared to support the extraction of FMU Z
 The exporting implementation should not rely on the importing implementation completely unpacking the FMU in one location.
 The standard only specifies access to the resources folder.
 
-Some of the fallbacks (discussed in sections 3.8 and 5.1) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated.
+Some of the fallbacks (discussed in <<Handling of Code Dependencies>> and <<Instantiation>>) for locating the resources folder relative to the executing DLL/shared object rely on the structure being completely recreated.
 However, those fallbacks are, by their nature non-portable mechanisms, that only come into play when other, standard-conforming mechanisms are not available.
 
 When possible, implementations should unpack the complete ZIP archive content in one location since some FMUs depend on this even if the standard only specifies access to the resources folder.
