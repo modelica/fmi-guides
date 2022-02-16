@@ -7,7 +7,7 @@
 Exporting implementations should ensure that the generated FMU ZIP archives are compliant with the ZIP specification.
 This implies that only the forward slash `/` shall be used as a path separator and that path specifications like `.` or `..` do not have specific interpretations, like the current directory, etc.
 
-More specifically, the ZIP archive should only contain entries with no leading prefix:app-name:
+More specifically, the ZIP archive should only contain entries with no leading prefix:
 For example, valid entries would be `modelDescription.xml` or `binaries/x86_64-windows/myfmu.dll`, not `./modelDescription.xml`, or `myfmu/binaries/x86_64-windows/myfmu.dll`.
 
 To enable interoperation with not-quite conforming implementations, importing implementations should be prepared to support the extraction of FMU ZIP archives with leading `./` prefixes on entries in the archive.
