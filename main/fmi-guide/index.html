@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-00427b568e9376feec0cea49bb845b2281ce984a,</span>
-<span id="revdate">2022-02-16</span>
+<span id="revnumber">version main-c2f0eb1f8c20a0f5f7a9c2bc57eaa03ec5f04e39,</span>
+<span id="revdate">2022-03-09</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -1020,7 +1020,78 @@ For example, when erroneous unit information on a variable has to be manually ad
 <p>Exporting implementations should generate physical unit information on all exported variables when such information is available in the model (or can be automatically derived).</p>
 </div>
 <div class="paragraph">
-<p>On FMI 2.0 and later versions, the support for SI-based units should be used.</p>
+<p>On FMI 2.0 and later versions, the support for SI-based units, using the <code>BaseUnit</code> element should be used.
+This enables a number of important use cases:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Unit check when connecting variables of different FMUs</dt>
+<dd>
+<div class="paragraph">
+<p>When only one of an input variable <code>v2</code> and an output variable <code>v1</code>, connected with equation <code>v2 = v1</code>, defines a <code>BaseUnit</code> element, or neither does, the connection equation <code>v2 = v1</code> holds.</p>
+</div>
+<div class="paragraph">
+<p>When two variables <code>v1</code> and <code>v2</code> (of the same or different FMUs) are connected and for both of them <code>BaseUnit</code> elements are defined, then they must have identical exponents of their <code>BaseUnit</code>.
+If both <code>factor</code> and <code>offset</code> attributes are also identical, the connection equation <code>v2 = v1</code> again holds.
+If <code>factor</code> and <code>offset</code> are not identical, the tool may either trigger an error or, if supported, perform a conversion; in other words, use the connection equation (in this case the <code>relativeQuantity</code> of the <code>TypeDefinition</code>, see below, has to be taken into account in order to determine whether <code>offset</code> shall or shall not be utilized):</p>
+</div>
+<div class="paragraph">
+<p><code>factor(v1) * v1 + (if relativeQuantity(v1) then 0 else offset(v1)) = factor(v2) * v2 + (if relativeQuantity(v2) then 0 else offset(v2))</code><br>
+where <code>relativeQuantity(v1) = relativeQuantity(v2)</code> is required.</p>
+</div>
+<div class="paragraph">
+<p>As a result, wrong connections can be detected (for example, connecting a force with an angle-based variable would trigger an error) and conversions between, say, US and SI units can be either automatically performed or, if not supported, an error is triggered as well.</p>
+</div>
+<div class="paragraph">
+<p>This approach is not satisfactory for variables belonging to different quantities that have, however, the same <code>BaseUnit</code>, such as quantities <code>Energy</code> and <code>Torque</code>, or <code>AngularVelocity</code> and <code>Frequency</code>.
+To handle such cases, quantity definitions have to be taken into account (see <code>TypeDefinitions</code>) and quantity names need to be standardized.</p>
+</div>
+<div class="paragraph">
+<p>This approach allows a general treatment of units, without being forced to standardize the grammar and allowed values for units (for example, in FMI 1.0, a unit could be defined as <code>N.m</code> in one FMU and as <code>N*m</code> in another FMU, and a tool would have to reject a connection, since the units are not identical.
+In FMI 2.0 and later, the connection would be accepted, provided both elements have the same <code>BaseUnit</code> definition).</p>
+</div>
+</dd>
+<dt class="hdlist1">Dimensional analysis of equations</dt>
+<dd>
+<div class="paragraph">
+<p>In order to check the validity of equations in a modeling language, the defined units can be used for dimensional analysis, by using the <code>BaseUnit</code> definition of the respective unit.
+For this purpose, the <code>BaseUnit</code> <code>rad</code> has to be treated as <code>1</code>.
+Example:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+J \cdot \alpha = \tau \rightarrow [kg.m^2]*[rad/s^2] = [kg.m^2/s^2] &amp; \quad \text{// o.k. ("rad" is treated as "1")} \\
+J \cdot \alpha = f \rightarrow [kg.m^2]*[rad/s^2] = [kg.m/s^2] &amp; \quad \text{// error, since dimensions do not agree}
+\end{align*}\]
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Unit propagation</dt>
+<dd>
+<div class="paragraph">
+<p>If unit definitions are missing for variables, they might be deduced from the equations where the variables are used.
+If no unit computation is needed, <code>rad</code> is propagated.
+If a unit computation is needed and one of the involved units has <code>rad</code> as a <code>BaseUnit</code>, then unit propagation is not possible.
+Examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a = b + c, and <code>Unit</code> of c is provided, but not <code>Unit</code> of a and b:<br>
+The Unit definition of <code>c</code> (in other words, <code>Unit.name</code>, <code>BaseUnit</code>, <code>DisplayUnit</code>) is also used for <code>a</code> and <code>b</code>.
+For example, if BaseUnit(c) = <code>rad/s</code>, then BaseUnit(a) = BaseUnit(b) = <code>rad/s</code>.</p>
+</li>
+<li>
+<p>a = b*c, and <code>Unit</code> of a and of c is provided, but not <code>Unit</code> of b:<br>
+If <code>rad</code> is either part of the <code>BaseUnit</code> of <code>a</code> and/or of <code>c</code>, then the <code>BaseUnit</code> of <code>b</code> cannot be deduced (otherwise it can be deduced).
+Example: If <code>BaseUnit(a) = kg.m/s2</code> and <code>BaseUnit(c) = m/s2</code>, then the <code>BaseUnit(b) can be deduced to be `kg</code>.
+In such a case <code>Unit.name</code> of b cannot be deduced from the <code>Unit.name</code> of <code>a</code> and <code>c</code>, and a tool would typically construct the <code>Unit.name</code> of <code>b</code> from the deduced <code>BaseUnit</code>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect2">
