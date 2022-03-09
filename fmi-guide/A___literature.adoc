@@ -6,3 +6,9 @@
 - [[[SEMVER200]]] Preston-Werner, T.: **Semantic Versioning 2.0.0**. https://semver.org/spec/v2.0.0.html
 
 - [[[SSP10]]] Modelica Association: **System Structure and Parameterization 1.0**. March 2019. https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf
+
+- [[[ABL12]]] &#197;kesson J., Braun W., Lindholm P., and Bachmann B. (2012): **Generation of Sparse Jacobians for the Functional Mockup Interface 2.0**. 9th International Modelica Conference, Munich, 2012. http://www.ep.liu.se/ecp/076/018/ecp12076018.pdf
+
+- [[[BPRS15]]] Atilim Gunes Baydin, Barak A. Pearlmutter, Alexey Andreyevich Radul, Jeffrey Mark Siskind (2015): *Automatic differentiation in machine learning: a survey*. https://www.jmlr.org/papers/volume18/17-468/17-468.pdf
+
+- [[[BKF17]]] Braun W., Kulshreshtha K., Franke R., Walther A., Bachmann B., Towards Adjoint and Directional Derivatives in FMI utilizing ADOL-C within OpenModelica, 12th International Modelica Conference, Prague, 2017. https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf
