@@ -135,7 +135,7 @@ To get the directional derivative of latexmath:[{Y}] with respect to latexmath:[
 Note that in order to get the directional derivative of latexmath:[{Y}] with respect to latexmath:[{U(2,1)}], the seed value `{0, 0, 1.0, 0}` has been used.
 The retrieved directional derivative `dd` is stored in a matrix of size 3x2, so `nSensitivity` is 6.
 
-===== Adjoint Derivatives [[adjointDerivatives]]
+==== Adjoint Derivatives [[adjointDerivatives]]
 
 Adjoint derivatives are beneficial in several contexts:
 
