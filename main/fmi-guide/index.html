@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-9d462f752cfb03b6a69681ca72fc2eb851c95f9d,</span>
-<span id="revdate">2022-03-09</span>
+<span id="revnumber">version main-bd53bbd7db3aa8f9ccdace6c4228ef967a28021f,</span>
+<span id="revdate">2022-03-16</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -655,11 +655,8 @@ document.addEventListener('keydown', (event) => {
 <ul class="sectlevel2">
 <li><a href="#_partial_derivatives">9.1. Partial Derivatives</a>
 <ul class="sectlevel3">
-<li><a href="#directionDerivatives">9.1.1. Directional Derivatives</a>
-<ul class="sectlevel4">
-<li><a href="#adjointDerivatives">9.1.1.1. Adjoint Derivatives</a></li>
-</ul>
-</li>
+<li><a href="#directionDerivatives">9.1.1. Directional Derivatives</a></li>
+<li><a href="#adjointDerivatives">9.1.2. Adjoint Derivatives</a></li>
 </ul>
 </li>
 </ul>
@@ -1512,8 +1509,9 @@ e \Delta U(1,1)+f \Delta U(2,1), e \Delta U(1,2)+ f \Delta U(2,2)
 Note that in order to get the directional derivative of \({Y}\) with respect to \({U(2,1)}\), the seed value <code>{0, 0, 1.0, 0}</code> has been used.
 The retrieved directional derivative <code>dd</code> is stored in a matrix of size 3x2, so <code>nSensitivity</code> is 6.</p>
 </div>
-<div class="sect4">
-<h5 id="adjointDerivatives">9.1.1.1. Adjoint Derivatives</h5>
+</div>
+<div class="sect3">
+<h4 id="adjointDerivatives">9.1.2. Adjoint Derivatives</h4>
 <div class="paragraph">
 <p>Adjoint derivatives are beneficial in several contexts:</p>
 </div>
@@ -1569,7 +1567,6 @@ For example, constructing the system Jacobian \({\mathbf{A} = \frac{\partial \ma
         // construct the Jacobian matrix column wise
         fmi3GetAdjointDerivative(S, &amp;vr_dx[i], 1, vr_x, nx, &amp;dk, 1, &amp;J[i][0], nx);
     }</code></pre>
-</div>
 </div>
 </div>
 </div>
