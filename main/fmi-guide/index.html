@@ -589,7 +589,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-bd53bbd7db3aa8f9ccdace6c4228ef967a28021f,</span>
+<span id="revnumber">version main-39ff8b8e0c27546b65e55376e6bedc174e7cfbc7,</span>
 <span id="revdate">2022-03-16</span>
 </div>
 <div id="toc" class="toc2">
@@ -624,6 +624,11 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_compiler_dependencies">3.5. Compiler Dependencies</a></li>
 <li><a href="#_handling_of_fmu_namespaces">3.6. Handling of FMU namespaces</a></li>
 <li><a href="#_handling_of_code_dependencies">3.7. Handling of Code Dependencies</a></li>
+<li><a href="#_interaction_between_fmu_and_importer">3.8. Interaction between FMU and Importer</a>
+<ul class="sectlevel3">
+<li><a href="#_global_state">3.8.1. Global State</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_parameter_and_variable_handling">4. Parameter and Variable Handling</a>
@@ -1009,6 +1014,27 @@ Furthermore, in case of failure, automatic linking is unlikely to provide user-u
 <div class="paragraph">
 <p>Note that simple calls to <code>LoadLibrary</code> or <code>LoadLibraryEx</code> on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons:
 The search path will be based on the location of the importer executable and not the FMU DLL.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interaction_between_fmu_and_importer">3.8. Interaction between FMU and Importer</h3>
+<div class="paragraph">
+<p>The FMU code will run in the process environment that the importer provides.
+This might be the same process as the importer, or it might be a separate process or processes.
+The FMU code cannot make any assumptions on this, but must rather be conservative in its behavior in the face of this.</p>
+</div>
+<div class="sect3">
+<h4 id="_global_state">3.8.1. Global State</h4>
+<div class="paragraph">
+<p>The functions the FMU provides must not change global settings which affect the overall process and/or thread environment:</p>
+</div>
+<div class="paragraph">
+<p>For example, an FMU function must not change the current working directory of the process, since this is by definition visible outside of the current execution thread.</p>
+</div>
+<div class="paragraph">
+<p>FMU funtions can, on the other hand, change the floating point control word of the CPU during their execution, since this is directly tied to the thread of execution.
+However they must restore the floating point control word before returning, so as to not affect state outside of the current thread of execution.</p>
+</div>
 </div>
 </div>
 </div>
