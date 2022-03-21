@@ -6,8 +6,9 @@ FMI 3.0 provides optional access to partial derivatives for variables of an FMU.
 Partial derivatives can be used:
 
 * in Newton algorithms to solve algebraic loops,
-* in implicit integration algorithms in Model Exchange, and
-* in iterative co-simulation algorithms.
+* in implicit integration algorithms in Model Exchange,
+* in iterative Co-Simulation algorithms, and
+* in optimization algorithms.
 
 To avoid expensive numeric approximations of these derivatives, FMI offers dedicated functions to retrieve partial derivatives for variables of an FMU:
 
@@ -28,16 +29,36 @@ with the Jacobian
 \end{bmatrix}
 ++++
 
-where latexmath:[\mathbf{v}_{\mathit{known}}] are the latexmath:[n] knowns, and latexmath:[\mathbf{g}] are the latexmath:[m] functions to calculate the latexmath:[m] unknown variables latexmath:[\mathbf{v}_{\mathit{unknwon}}]  from the knowns.
+where latexmath:[\mathbf{v}_{\mathit{known}}] are the latexmath:[n] knowns, and latexmath:[\mathbf{g}] are the latexmath:[m] functions to calculate the latexmath:[m] unknown variables latexmath:[\mathbf{v}_{\mathit{unknwon}}] from the knowns.
 
-Both functions can be used to compute Jacobian-vector products and to construct the partial derivative matrices column-wise resp. row-wise by choosing the seed vector latexmath:[\mathbf{v}_{\mathit{seed}} \in \mathbb{R}^n] resp. latexmath:[\mathbf{\bar{v}}_{\mathit{seed}} \in \mathbb{R}^m] accordingly.
+The functions can be used to compute Jacobian-vector products or to construct the partial derivative matrices column-wise or row-wise by choosing the seed vector latexmath:[\mathbf{v}_{\mathit{seed}} \in \mathbb{R}^n] or latexmath:[\mathbf{\bar{v}}_{\mathit{seed}} \in \mathbb{R}^m], respectively, accordingly.
 
 For information on the call signature see the FMI specification.
 
 ==== Directional Derivatives [[directionDerivatives]]
+The function `fmi3GetDirectionalDerivative` computes the directional derivative
+
+[latexmath]
+++++
+\mathbf{v}_{\mathit{sensitivity}} = \mathbf{J} \cdot \mathbf{v}_{\mathit{seed}}
+++++
+
+One can either retrieve the latexmath:[\mathit{i}]-th column of the Jacobian by specifying the latexmath:[\mathit{i}]-th unit vector latexmath:[\mathbf{e}_{\mathit{i}}] as the seed vector latexmath:[\mathbf{v}_{\mathit{seed}}], or compute a Jacobian-vector product latexmath:[\mathbf{Jv}] by using latexmath:[\mathbf{v}] as the seed vector latexmath:[\mathbf{v}_{\mathit{seed}}]. Therefore, the function can be utilized for the following purposes, among others:
+
+- Solving algebraic loops with a nonlinear solver requires matrix latexmath:[{\frac{\partial \mathbf{g}}{\partial \mathbf{u}}}].
+
+- Numerical integrators of stiff methods need matrix latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}].
+
+- If the FMU is connected with other FMUs, the partial derivatives of the state derivatives and outputs with respect to the continuous states and the inputs are needed in order to compute the Jacobian for the system of the connected FMUs.
+
+- If the FMU shall be linearized, the same derivatives as in the previous item are needed.
+
+- If the FMU is used as the model for an extended Kalman filter, latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}] and latexmath:[{\frac{\partial \mathbf{g}}{\partial \mathbf{x}}}] are needed.
+
+- If matrix-free linear solvers shall be used, Jacobian-vector products latexmath:[{\mathbf{Jv}}] are needed (e.g. as a user-supplied routine in CVODE <<CVODE570>>).
 
 [[example-directional-derivatives]]
-Example: +
+Example 1: +
 Assume an FMU has the output equations
 
 [latexmath]
@@ -71,18 +92,7 @@ Note that a direct implementation of this function with analytic derivatives:
 
 (c) Computes the directional derivative with the seed-values provided in the function arguments; so in the <<example-directional-derivatives,above example>>: latexmath:[{v_{\mathit{sensitivity}} = \Delta y_1 (\Delta x = 0, \Delta u_1 = 1, \Delta u_3 = 0, \Delta u_4 = 0)}]] and latexmath:[{v_{\mathit{sensitivity}} = \Delta y_1 (\Delta x = 0, \Delta u_1 = 0, \Delta u_3 = 1, \Delta u_4 = 0)}]]
 
-Note, function `fmi3GetDirectionalDerivative` can be utilized for the following purposes:
-
-- Numerical integrators of stiff methods need matrix latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}].
-
-- If the FMU is connected with other FMUs, the partial derivatives of the state derivatives and outputs with respect to the continuous states and the inputs are needed in order to compute the Jacobian for the system of the connected FMUs.
-
-- If the FMU shall be linearized, the same derivatives as in the previous item are needed.
-
-- If the FMU is used as the model for an extended Kalman filter, latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}] and latexmath:[{\frac{\partial \mathbf{g}}{\partial \mathbf{x}}}] are needed.
-
-- If matrix-free linear solvers shall be used, Jacobian-vector products latexmath:[{\mathbf{Jv}}] are needed (e.g. as a user-supplied routine in CVODE <<CVODE570>>).
-
+Example 2: +
 If a dense matrix shall be computed, the columns of the matrix can be easily constructed by successive calls of `fmi3GetDirectionalDerivative`.
 For example, constructing the system Jacobian latexmath:[{\mathbf{A} = \frac{\partial \mathbf{f}}{\partial \mathbf{x}}}] as dense matrix can be performed in the following way:
 
@@ -116,8 +126,7 @@ After each such call, the elements of the resulting directional derivative vecto
 
 More details and implementational notes are available from <<ABL12>>.
 
-Example:
-
+Example 3: +
 Directional derivatives for higher dimension variables are almost treated in the same way.
 Consider, for example, an FMU which calculates its output latexmath:[{Y}] by multiplying its 2x2 input latexmath:[{U}] with a 3x2 constant gain latexmath:[{K}], with
 
@@ -161,19 +170,22 @@ Note that in order to get the directional derivative of latexmath:[{Y}] with res
 The retrieved directional derivative `dd` is stored in a matrix of size 3x2, so `nSensitivity` is 6.
 
 ==== Adjoint Derivatives [[adjointDerivatives]]
+The function `fmi3GetAdjointDerivative` computes the adjoint derivative
+
+[latexmath]
+++++
+\mathbf{\bar{v}}_{\mathit{sensitivity}}^T = \mathbf{\bar{v}}_{\mathit{seed}}^T \cdot \mathbf{J} \quad \text{or} \quad \mathbf{\bar{v}}_{\mathit{sensitivity}} = \mathbf{J}^T \cdot \mathbf{\bar{v}}_{\mathit{seed}}
+++++
+
+One can either retrieve the latexmath:[\mathit{i}]-th row of the Jacobian by specifying the latexmath:[\mathit{i}]-th unit vector latexmath:[\mathbf{e}_{\mathit{i}}] as the seed vector latexmath:[\mathbf{\bar{v}}_{\mathit{seed}}], or compute a vector-Jacobian product latexmath:[\mathbf{v}^T\mathbf{J}] by using latexmath:[\mathbf{v}] as the seed vector latexmath:[\mathbf{\bar{v}}_{\mathit{seed}}].
 
 Adjoint derivatives are beneficial in several contexts:
 
-* in artificial intelligence (AI) frameworks the adjoint derivatives are called "vector gradient products" (VJPs).
-There adjoint derivatives are used in the backpropagation process to perform gradient-based optimization of parameters using reverse mode automatic differentiation (AD), see, e.g., <<BPRS15>>.
+* in artificial intelligence (AI) frameworks the adjoint derivatives are called "vector gradient products" (VJPs). There adjoint derivatives are used in the backpropagation process to perform gradient-based optimization of parameters using reverse mode automatic differentiation (AD), see, e.g., <<BPRS15>>.
 
 * in parameter estimation (see <<BKF17>>)
 
-Typically, reverse mode automatic differentiation (AD) is more efficient for these use cases than forward mode AD, as explained in the cited references.
-
-If one would like to construct the full Jacobian matrix, one can use either `fmi3GetDirectionalDerivative` (to column-wise construct it) or `fmi3GetAdjointDerivative` (to row-wise construct it, possibly improved with coloring methods as mentioned above).
-However in the applications motivating the adjoint derivatives, one does not need the full Jacobian matrix latexmath:[\mathbf{J}], but vector  latexmath:[\mathbf{v}^T] multiplied from the left to the Jacobian, i.e. latexmath:[\mathbf{v}^T\mathbf{J}].
-For computing the full Jacobian matrix, the column-wise construct is generally more efficient.
+Typically, reverse mode automatic differentiation (AD) is more efficient for these use cases than forward mode AD because the number of knowns is much higher than the number of unknowns (latexmath:[\mathit{n} \gg \mathit{m}]), as explained in the cited references. If the full Jacobian is needed and the number of knowns and unknowns are somewhat equal (latexmath:[\mathit{m} \approx \mathit{n}]) or small, the column-wise construct using `fmi3GetDirectionalDerivative` is generally more efficient.
 
 Example: +
 Assume an FMU has the output equations
@@ -194,7 +206,7 @@ h_2(u_1, u_2)
 ++++
 
 and latexmath:[\left( w_1,  w_2 \right)^T \cdot \mathbf{ \frac{\partial h}{\partial u} }] for some vector latexmath:[\left( w_1,  w_2 \right)^T] is needed.
-Then one can get this with one function call of `fmi3GetAdjointDerivative` (with arguments_ latexmath:[\mathbf{v}_{\mathit{unknown}} = \text{valueReferences of} \left \{ y_1, y_2 \right \},  \mathbf{v}_{\mathit{known}} = \text{valueReferences of} \left \{ u_1, u_2 \right \},  \mathbf{\bar{v}}_{\mathit{seed}} = \left( w_1, w_2 \right)^T]), while with `fmi3GetDirectionalDerivative` at least two calls would be necessary to first construct the Jacobian column-wise and then multiplying from the right with latexmath:[\left( w_1,  w_2 \right)^T].
+Then one can get this with one function call of `fmi3GetAdjointDerivative` (with arguments latexmath:[\mathbf{v}_{\mathit{unknown}} = \text{valueReferences of} \left \{ y_1, y_2 \right \}], latexmath:[\mathbf{v}_{\mathit{known}} = \text{valueReferences of} \left \{ u_1, u_2 \right \}],  latexmath:[\mathbf{\bar{v}}_{\mathit{seed}} = \left( w_1, w_2 \right)^T]), while with `fmi3GetDirectionalDerivative` at least two calls would be necessary to first construct the Jacobian column-wise and then multiplying from the right with latexmath:[\left( w_1,  w_2 \right)^T].
 
 If a dense matrix shall be computed, the rows of the matrix can be easily constructed by successive calls of `fmi3GetAdjointDerivative`.
 For example, constructing the system Jacobian latexmath:[{\mathbf{A} = \frac{\partial \mathbf{f}}{\partial \mathbf{x}}}] as a dense matrix can be performed in the following way:
