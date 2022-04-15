@@ -62,7 +62,7 @@ Implementers should test FMU integration with complex test cases, including the 
 Referenced Literature:
 
 [1] Modelica Association: FMU Compliance Checker. https://www.fmi-standard.org/downloads
-[2] Reference FMUs
+[2] Reference FMUs. https://github.com/modelica/Reference-FMUs/
 
 === Licensing and License Handling
 
