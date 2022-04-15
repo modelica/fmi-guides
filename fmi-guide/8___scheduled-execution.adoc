@@ -5,3 +5,41 @@
 The scheduled execution interface type is intended for use cases, where the ability to directly control the scheduling of internal time partitions of multiple FMUs from the outside is considered necessary.
 
 Note that in cases where the actual direct control of the runtime of internal time partitions is not required, the use of clocked co-simulation or model exchange interface types may be more appropriate.
+
+=== Handling of Preemptive Scheduling
+
+To support safe preemptive scheduling of model partitions in scheduled execution, FMI 3.0 provides the callbacks `fmi3LockPreemptionCallback` and `fmi3UnlockPreemptionCallback` so that FMUs can guard critical sections of its code against preemption.
+
+An FMU's code has to be prepared to correctly handle preemption of
+
+* `fmi3ActivateModelPartition`,
+* `fmi3Get{VariableType}`,
+* `fmi3Set{VariableType}`,
+* `fmi3GetClock`,
+* and `fmi3GetIntervalDecimal`
+
+among others.
+
+In general this means that the FMU's code has to secure access to its global states and variables wherever data inconsistencies due to potential preemptions are anticipated.
+
+Note that in order to avoid data inconsistencies and safeguard predictable and deadlock-free behavior with `fmi3Get{VariableType}` and `fmi3Set{VariableType}` a unique assignment of variables to model partitions via its associated clock is strongly recommended.
+If every variable is assigned uniquely to a model partition it is usually not necessary to use preemption locks in the context of `fmi3Get{VariableType}` and `fmi3Set{VariableType}`:
+
+The following example illustrates why every variable should be assigned uniquely to one model partition via its associated clock:
+
+* _An output variable is changed by two different model partitions:_ +
+The values returned by `fmi3Get{VariableType}` that is placed after `fmi3ActivateModelPartition` may return the values computed by the other model partition if that model partition has higher priority and preempted the execution meanwhile.
+* _An input variable is used by two different model partitions:_ +
+The variable values of a model partitions of lower priority may have been overwritten by a call to `fmi3Set{VariableType}` for a model partition of higher priority.
+
+Similarly, for `fmi3GetClock` the FMU has to ensure that the active state of an output clock is securely reset and cannot be observed twice for the same clock tick in case this call is preempted.
+
+For `fmi3GetIntervalDecimal` the FMU has to ensure that the countdown clock's interval qualifier is reset to `fmi3IntervalUnchanged` and cannot be observed twice for the same clock tick in case this call is preempted.
+
+Depending on their implementation, `fmi3CallbackLockPreemption` and `fmi3CallbackUnlockPreemption` have a non-negligible overhead, as well as a strong impact on the scheduler and therefore their use should be as rare and short as possible.
+
+In general, it is recommended to reduce dependencies between different model partitions of one FMU by design.
+One may also consider if the code can be preempted by other parts of the same FMU:
+E.g. a model partition cannot be interrupted if it is the only model partition or if it holds the highest priority.
+Similarly, a model partition, while it might be interrupted, might not need to guard data accesses if it is the only model partition of the FMU, or the one with the highest priority.
+In such cases no locks may be necessary.
