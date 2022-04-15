@@ -99,6 +99,19 @@ Starting with FMI 2.0, FMUs with dynamic library implementations will always use
 
 For source code or static library implementations, the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.
 
+For source code FMUs in FMI 3.0, the actual prefix that is used for the entry points is controlled through the mechanisms of the `fmi3Functions.h` header in the following way:
+
+* The source code of the FMU predefines the `FMI3_FUNCTION_PREFIX` preprocessor macro with the function prefix that matches the `modelIdentifier` attribute given in the `modelDescription.xml`.
+This is done before including the `fmi3Functions.h` header.
+* If the `fmi3Functions.h` header supplied with the standard is used for compilation, then this predefined prefix will be used as the function prefix, unless the `FMI3_OVERRIDE_FUNCTION_PREFIX` preprocessor macro is defined.
+If this macro is defined, then the actual function prefix will be taken from the preprocessor macro `FMI3_ACTUAL_FUNCTION_PREFIX`, if it is defined, or no prefix will be used, if it is undefined.
+* If an importing implementation requires something different, it can provide a `fmi3Functions.h` header file that does whatever the implementation requires, ignoring or using the predefined `FMI3_FUNCTION_PREFIX` macro as it sees fit.
+
+As the actual function symbols generated for an FMU are dependent on the implementation and its supplied `fmi3Functions.h` header any any other predefined preprocessor macros, FMU exporters must ensure that they only refer to the FMI API entry-points via the names generated from the `fmi3Functions.h` mechanisms.
+In other words, any references in the exported source code should be amenable to preprocessor expansion.
+
+For FMI 2.0 source code FMUs a similar approach can be used, however there are fewer guarantees on pre-defined preprocessor macros, since this area was only clarified in later patch releases of 2.0.
+
 === Handling of Code Dependencies
 
 Importing implementations should consider changing the working directory of the process to the relevant binary subdirectory of the unpacked FMU when loading the FMU dynamic library.
