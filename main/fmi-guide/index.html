@@ -589,7 +589,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-574c0c236b5f65367e5cebea98e10d84246d49d5,</span>
+<span id="revnumber">version main-797f8173675819b282f1bba65439ee8905728438,</span>
 <span id="revdate">2022-04-15</span>
 </div>
 <div id="toc" class="toc2">
@@ -1395,20 +1395,89 @@ Partial derivatives can be used:</p>
 <p>in Newton algorithms to solve algebraic loops,</p>
 </li>
 <li>
-<p>in implicit integration algorithms in Model Exchange, and</p>
+<p>in implicit integration algorithms in Model Exchange,</p>
 </li>
 <li>
-<p>in iterative co-simulation algorithms.</p>
+<p>in iterative Co-Simulation algorithms, and</p>
+</li>
+<li>
+<p>in optimization algorithms.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>To avoid expensive numeric approximations of these derivatives, FMI offers dedicated functions to retrieve partial derivatives for variables of an FMU.</p>
+<p>To avoid expensive numeric approximations of these derivatives, FMI offers dedicated functions to retrieve partial derivatives for variables of an FMU:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>fmi3GetDirectionalDerivative</code> to compute the directional derivatives \(\mathbf{v}_{\mathit{sensitivity}} = \mathbf{J} \cdot \mathbf{v}_{\mathit{seed}}\), and</p>
+</li>
+<li>
+<p><code>fmi3GetAdjointDerivative</code> to calculate the adjoint derivatives \(\mathbf{\bar{v}}_{\mathit{sensitivity}}^T = \mathbf{\bar{v}}_{\mathit{seed}}^T \cdot \mathbf{J}\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>with the Jacobian</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\mathbf{J}
+=
+\begin{bmatrix}
+\frac{\partial g_1}{\partial v_{\mathit{known},1}} &amp; \cdots &amp; \frac{\partial g_1}{\partial v_{\mathit{known},n}} \\
+\vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial g_m}{\partial v_{\mathit{known},1}} &amp; \cdots &amp; \frac{\partial g_m}{\partial v_{\mathit{known},n}}
+\end{bmatrix}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(\mathbf{v}_{\mathit{known}}\) are the \(n\) knowns, and \(\mathbf{g}\) are the \(m\) functions to calculate the \(m\) unknown variables \(\mathbf{v}_{\mathit{unknwon}}\) from the knowns.</p>
+</div>
+<div class="paragraph">
+<p>The functions can be used to compute Jacobian-vector products or to construct the partial derivative matrices column-wise or row-wise by choosing the seed vector \(\mathbf{v}_{\mathit{seed}} \in \mathbb{R}^n\) or \(\mathbf{\bar{v}}_{\mathit{seed}} \in \mathbb{R}^m\), respectively, accordingly.</p>
+</div>
+<div class="paragraph">
+<p>For information on the call signature see the FMI specification.</p>
 </div>
 <div class="sect3">
 <h4 id="directionDerivatives">9.1.1. Directional Derivatives</h4>
+<div class="paragraph">
+<p>The function <code>fmi3GetDirectionalDerivative</code> computes the directional derivative</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\mathbf{v}_{\mathit{sensitivity}} = \mathbf{J} \cdot \mathbf{v}_{\mathit{seed}}\]
+</div>
+</div>
+<div class="paragraph">
+<p>One can either retrieve the \(\mathit{i}\)-th column of the Jacobian by specifying the \(\mathit{i}\)-th unit vector \(\mathbf{e}_{\mathit{i}}\) as the seed vector \(\mathbf{v}_{\mathit{seed}}\), or compute a Jacobian-vector product \(\mathbf{Jv}\) by using \(\mathbf{v}\) as the seed vector \(\mathbf{v}_{\mathit{seed}}\). Therefore, the function can be utilized for the following purposes, among others:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Solving algebraic loops with a nonlinear solver requires matrix \({\frac{\partial \mathbf{g}}{\partial \mathbf{u}}}\).</p>
+</li>
+<li>
+<p>Numerical integrators of stiff methods need matrix \({\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}\).</p>
+</li>
+<li>
+<p>If the FMU is connected with other FMUs, the partial derivatives of the state derivatives and outputs with respect to the continuous states and the inputs are needed in order to compute the Jacobian for the system of the connected FMUs.</p>
+</li>
+<li>
+<p>If the FMU shall be linearized, the same derivatives as in the previous item are needed.</p>
+</li>
+<li>
+<p>If the FMU is used as the model for an extended Kalman filter, \({\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}\) and \({\frac{\partial \mathbf{g}}{\partial \mathbf{x}}}\) are needed.</p>
+</li>
+<li>
+<p>If matrix-free linear solvers shall be used, Jacobian-vector products \({\mathbf{Jv}}\) are needed (e.g. as a user-supplied routine in CVODE <a href="#CVODE570">[CVODE570]</a>).</p>
+</li>
+</ul>
+</div>
 <div id="example-directional-derivatives" class="paragraph">
-<p>Example:<br>
+<p>Example 1:<br>
 Assume an FMU has the output equations</p>
 </div>
 <div class="stemblock">
@@ -1450,26 +1519,8 @@ Depending on the environment where the FMUs are connected, these derivatives can
 <p>(c) Computes the directional derivative with the seed-values provided in the function arguments; so in the <a href="#example-directional-derivatives">above example</a>: \({v_{\mathit{sensitivity}} = \Delta y_1 (\Delta x = 0, \Delta u_1 = 1, \Delta u_3 = 0, \Delta u_4 = 0)}\)] and \({v_{\mathit{sensitivity}} = \Delta y_1 (\Delta x = 0, \Delta u_1 = 0, \Delta u_3 = 1, \Delta u_4 = 0)}\)]</p>
 </div>
 <div class="paragraph">
-<p>Note, function <code>fmi3GetDirectionalDerivative</code> can be utilized for the following purposes:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Numerical integrators of stiff methods need matrix \({\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}\).</p>
-</li>
-<li>
-<p>If the FMU is connected with other FMUs, the partial derivatives of the state derivatives and outputs with respect to the continuous states and the inputs are needed in order to compute the Jacobian for the system of the connected FMUs.</p>
-</li>
-<li>
-<p>If the FMU shall be linearized, the same derivatives as in the previous item are needed.</p>
-</li>
-<li>
-<p>If the FMU is used as the model for an extended Kalman filter, \({\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}\) and \({\frac{\partial \mathbf{g}}{\partial \mathbf{x}}}\) are needed.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>If a dense matrix shall be computed, the columns of the matrix can be easily constructed by successive calls of <code>fmi3GetDirectionalDerivative</code>.
+<p>Example 2:<br>
+If a dense matrix shall be computed, the columns of the matrix can be easily constructed by successive calls of <code>fmi3GetDirectionalDerivative</code>.
 For example, constructing the system Jacobian \({\mathbf{A} = \frac{\partial \mathbf{f}}{\partial \mathbf{x}}}\) as dense matrix can be performed in the following way:</p>
 </div>
 <div class="listingblock">
@@ -1512,10 +1563,8 @@ After each such call, the elements of the resulting directional derivative vecto
 <p>More details and implementational notes are available from <a href="#ABL12">[ABL12]</a>.</p>
 </div>
 <div class="paragraph">
-<p>Example:</p>
-</div>
-<div class="paragraph">
-<p>Directional derivatives for higher dimension variables are almost treated in the same way.
+<p>Example 3:<br>
+Directional derivatives for higher dimension variables are almost treated in the same way.
 Consider, for example, an FMU which calculates its output \({Y}\) by multiplying its 2x2 input \({U}\) with a 3x2 constant gain \({K}\), with</p>
 </div>
 <div class="stemblock">
@@ -1564,13 +1613,23 @@ The retrieved directional derivative <code>dd</code> is stored in a matrix of si
 <div class="sect3">
 <h4 id="adjointDerivatives">9.1.2. Adjoint Derivatives</h4>
 <div class="paragraph">
+<p>The function <code>fmi3GetAdjointDerivative</code> computes the adjoint derivative</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\mathbf{\bar{v}}_{\mathit{sensitivity}}^T = \mathbf{\bar{v}}_{\mathit{seed}}^T \cdot \mathbf{J} \quad \text{or} \quad \mathbf{\bar{v}}_{\mathit{sensitivity}} = \mathbf{J}^T \cdot \mathbf{\bar{v}}_{\mathit{seed}}\]
+</div>
+</div>
+<div class="paragraph">
+<p>One can either retrieve the \(\mathit{i}\)-th row of the Jacobian by specifying the \(\mathit{i}\)-th unit vector \(\mathbf{e}_{\mathit{i}}\) as the seed vector \(\mathbf{\bar{v}}_{\mathit{seed}}\), or compute a vector-Jacobian product \(\mathbf{v}^T\mathbf{J}\) by using \(\mathbf{v}\) as the seed vector \(\mathbf{\bar{v}}_{\mathit{seed}}\).</p>
+</div>
+<div class="paragraph">
 <p>Adjoint derivatives are beneficial in several contexts:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>in artificial intelligence (AI) frameworks the adjoint derivatives are called "vector gradient products" (VJPs).
-There adjoint derivatives are used in the backpropagation process to perform gradient-based optimization of parameters using reverse mode automatic differentiation (AD), see, e.g., <a href="#BPRS15">[BPRS15]</a>.</p>
+<p>in artificial intelligence (AI) frameworks the adjoint derivatives are called "vector gradient products" (VJPs). There adjoint derivatives are used in the backpropagation process to perform gradient-based optimization of parameters using reverse mode automatic differentiation (AD), see, e.g., <a href="#BPRS15">[BPRS15]</a>.</p>
 </li>
 <li>
 <p>in parameter estimation (see <a href="#BKF17">[BKF17]</a>)</p>
@@ -1578,12 +1637,7 @@ There adjoint derivatives are used in the backpropagation process to perform gra
 </ul>
 </div>
 <div class="paragraph">
-<p>Typically, reverse mode automatic differentiation (AD) is more efficient for these use cases than forward mode AD, as explained in the cited references.</p>
-</div>
-<div class="paragraph">
-<p>If one would like to construct the full Jacobian matrix, one can use either <code>fmi3GetDirectionalDerivative</code> (to column-wise construct it) or <code>fmi3GetAdjointDerivative</code> (to row-wise construct it, possibly improved with coloring methods as mentioned above).
-However in the applications motivating the adjoint derivatives, one does not need the full Jacobian matrix \(\mathbf{J}\), but vector  \(\mathbf{v}^T\) multiplied from the left to the Jacobian, i.e. \(\mathbf{v}^T\mathbf{J}\).
-For computing the full Jacobian matrix, the column-wise construct is generally more efficient.</p>
+<p>Typically, reverse mode automatic differentiation (AD) is more efficient for these use cases than forward mode AD because the number of knowns is much higher than the number of unknowns (\(\mathit{n} \gg \mathit{m}\)), as explained in the cited references. If the full Jacobian is needed and the number of knowns and unknowns are somewhat equal (\(\mathit{m} \approx \mathit{n}\)) or small, the column-wise construct using <code>fmi3GetDirectionalDerivative</code> is generally more efficient.</p>
 </div>
 <div class="paragraph">
 <p>Example:<br>
@@ -1606,7 +1660,7 @@ h_2(u_1, u_2)
 </div>
 <div class="paragraph">
 <p>and \(\left( w_1,  w_2 \right)^T \cdot \mathbf{ \frac{\partial h}{\partial u} }\) for some vector \(\left( w_1,  w_2 \right)^T\) is needed.
-Then one can get this with one function call of <code>fmi3GetAdjointDerivative</code> (with arguments_ \(\mathbf{v}_{\mathit{unknown}} = \text{valueReferences of} \left \{ y_1, y_2 \right \},  \mathbf{v}_{\mathit{known}} = \text{valueReferences of} \left \{ u_1, u_2 \right \},  \mathbf{v}_{\mathit{seed}} = \left( w_1, w_2 \right)^T\)), while with <code>fmi3GetDirectionalDerivative</code> at least two calls would be necessary to first construct the Jacobian column-wise and then multiplying from the right with \(\left( w_1,  w_2 \right)^T\).</p>
+Then one can get this with one function call of <code>fmi3GetAdjointDerivative</code> (with arguments \(\mathbf{v}_{\mathit{unknown}} = \text{valueReferences of} \left \{ y_1, y_2 \right \}\), \(\mathbf{v}_{\mathit{known}} = \text{valueReferences of} \left \{ u_1, u_2 \right \}\),  \(\mathbf{\bar{v}}_{\mathit{seed}} = \left( w_1, w_2 \right)^T\)), while with <code>fmi3GetDirectionalDerivative</code> at least two calls would be necessary to first construct the Jacobian column-wise and then multiplying from the right with \(\left( w_1,  w_2 \right)^T\).</p>
 </div>
 <div class="paragraph">
 <p>If a dense matrix shall be computed, the rows of the matrix can be easily constructed by successive calls of <code>fmi3GetAdjointDerivative</code>.
@@ -1639,13 +1693,16 @@ For example, constructing the system Jacobian \({\mathbf{A} = \frac{\partial \ma
 <p><a id="SSP10"></a>[SSP10] Modelica Association: <strong>System Structure and Parameterization 1.0</strong>. March 2019. <a href="https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf" class="bare">https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf</a></p>
 </li>
 <li>
+<p><a id="CVODE570"></a>[CVODE570]  Hindmarsh A., Serban R., Balos C., Gardner D., Reynolds D., Woodward C.: <strong>User Documentation for CVODE v5.7.0</strong>. February 2021, p. 85ff. <a href="https://computing.llnl.gov/sites/default/files/cv_guide-5.7.0.pdf" class="bare">https://computing.llnl.gov/sites/default/files/cv_guide-5.7.0.pdf</a></p>
+</li>
+<li>
 <p><a id="ABL12"></a>[ABL12] &#197;kesson J., Braun W., Lindholm P., and Bachmann B. (2012): <strong>Generation of Sparse Jacobians for the Functional Mockup Interface 2.0</strong>. 9th International Modelica Conference, Munich, 2012. <a href="http://www.ep.liu.se/ecp/076/018/ecp12076018.pdf" class="bare">http://www.ep.liu.se/ecp/076/018/ecp12076018.pdf</a></p>
 </li>
 <li>
 <p><a id="BPRS15"></a>[BPRS15] Atilim Gunes Baydin, Barak A. Pearlmutter, Alexey Andreyevich Radul, Jeffrey Mark Siskind (2015): <strong>Automatic differentiation in machine learning: a survey</strong>. <a href="https://www.jmlr.org/papers/volume18/17-468/17-468.pdf" class="bare">https://www.jmlr.org/papers/volume18/17-468/17-468.pdf</a></p>
 </li>
 <li>
-<p><a id="BKF17"></a>[BKF17] Braun W., Kulshreshtha K., Franke R., Walther A., Bachmann B., Towards Adjoint and Directional Derivatives in FMI utilizing ADOL-C within OpenModelica, 12th International Modelica Conference, Prague, 2017. <a href="https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf" class="bare">https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf</a></p>
+<p><a id="BKF17"></a>[BKF17] Braun W., Kulshreshtha K., Franke R., Walther A., Bachmann B. (2017): <strong>Towards Adjoint and Directional Derivatives in FMI utilizing ADOL-C within OpenModelica</strong>. 12th International Modelica Conference, Prague, 2017. <a href="https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf" class="bare">https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf</a></p>
 </li>
 </ul>
 </div>
