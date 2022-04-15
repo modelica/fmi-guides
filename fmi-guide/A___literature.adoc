@@ -1,7 +1,11 @@
 [bibliography]
 == References
 
+- [[[ISO8601-1]]] International Organization for Standardization: **ISO 8601-1:2019: Date and time -- Representation for information interchange -- Part 1: Basic rules**. February 2019. https://www.iso.org/standard/70907.html
+
 - [[[RFC2119]]] Bradner, S.: **Key words for use in RFCs to Indicate Requirement Levels**. RFC 2119, March 1997. https://www.ietf.org/rfc/rfc2119.txt
+
+- [[[RFC5322]]] Resnick, P., Ed.: **Internet Message Format**. RFC 5322, October 2008. https://www.ietf.org/rfc/rfc5322.txt
 
 - [[[SEMVER200]]] Preston-Werner, T.: **Semantic Versioning 2.0.0**. https://semver.org/spec/v2.0.0.html
 
