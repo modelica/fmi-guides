@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-39ff8b8e0c27546b65e55376e6bedc174e7cfbc7,</span>
-<span id="revdate">2022-03-16</span>
+<span id="revnumber">version main-574c0c236b5f65367e5cebea98e10d84246d49d5,</span>
+<span id="revdate">2022-04-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -986,6 +986,31 @@ In the case of FMUs with dynamic library implementations, this is supported by m
 </div>
 <div class="paragraph">
 <p>For source code or static library implementations, the problem of conflicting model identifiers can usually only be solved through compilation/linking to corresponding separate dynamic libraries or other similar mechanisms to deal with the relevant scoping issues.</p>
+</div>
+<div class="paragraph">
+<p>For source code FMUs in FMI 3.0, the actual prefix that is used for the entry points is controlled through the mechanisms of the <code>fmi3Functions.h</code> header in the following way:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The source code of the FMU predefines the <code>FMI3_FUNCTION_PREFIX</code> preprocessor macro with the function prefix that matches the <code>modelIdentifier</code> attribute given in the <code>modelDescription.xml</code>.
+This is done before including the <code>fmi3Functions.h</code> header.</p>
+</li>
+<li>
+<p>If the <code>fmi3Functions.h</code> header supplied with the standard is used for compilation, then this predefined prefix will be used as the function prefix, unless the <code>FMI3_OVERRIDE_FUNCTION_PREFIX</code> preprocessor macro is defined.
+If this macro is defined, then the actual function prefix will be taken from the preprocessor macro <code>FMI3_ACTUAL_FUNCTION_PREFIX</code>, if it is defined, or no prefix will be used, if it is undefined.</p>
+</li>
+<li>
+<p>If an importing implementation requires something different, it can provide a <code>fmi3Functions.h</code> header file that does whatever the implementation requires, ignoring or using the predefined <code>FMI3_FUNCTION_PREFIX</code> macro as it sees fit.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As the actual function symbols generated for an FMU are dependent on the implementation and its supplied <code>fmi3Functions.h</code> header any any other predefined preprocessor macros, FMU exporters must ensure that they only refer to the FMI API entry-points via the names generated from the <code>fmi3Functions.h</code> mechanisms.
+In other words, any references in the exported source code should be amenable to preprocessor expansion.</p>
+</div>
+<div class="paragraph">
+<p>For FMI 2.0 source code FMUs a similar approach can be used, however there are fewer guarantees on pre-defined preprocessor macros, since this area was only clarified in later patch releases of 2.0.</p>
 </div>
 </div>
 <div class="sect2">
