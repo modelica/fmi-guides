@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-a03772b3d20e869db4e998c45ec60603e64cef88,</span>
-<span id="revdate">2022-04-15</span>
+<span id="revnumber">version main-851db3e2e993b7425c452635b4e198aeab4b61d3,</span>
+<span id="revdate">2022-04-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -1289,11 +1289,23 @@ Note that this kind of mechanism should only be used as a fallback, if <code>fmu
 <div class="paragraph">
 <p>When performing initialization of variable values, including parameters and initial values for other variables, importers should not rely on default values being already set in the FMU (i.e. burned into the binary so to speak):
 While the FMI standards specify that default values shall both be specified in the <code>modelDescription.xml</code> file and are already set in the FMU upon instantiation, some implementations generate FMUs where this is not true, i.e. the default values of variables when not set do not match the values as specified in the <code>modelDescription.xml</code> file.
-Since there is little effort in actually setting default values through the FMI API at initialization time, the more conservative approach is to always set default values through the API based on the modelDescription.xml file, or on the actual parameter/initial values as specified by the user, not relying on any burned in default values.</p>
+Since there is little effort in actually setting default values through the FMI API at initialization time, the more conservative approach is to always set default values through the API based on the <code>modelDescription.xml</code> file, or on the actual parameter/initial values as specified by the user, not relying on any burned-in default values.</p>
 </div>
 <div class="paragraph">
-<p>Exporting implementations must ensure that any default values specified for variables in the <code>modelDescription.xml</code> file are actually “burned in”:
+<p>Exporting implementations must ensure that any default values specified for variables in the <code>modelDescription.xml</code> file are actually “burned-in”:
 The values shall be set automatically as default values upon FMU instantiation, so that importing implementations can rely on the standard-mandated behavior that unset variables have their default values as specified in the <code>modelDescription.xml</code>.</p>
+</div>
+<div class="paragraph">
+<p>Note that for all start values, especially the mandatory start values for input and parameter variables, it is the responsibility of the FMU&#8201;&#8212;&#8201;and hence the exporter or the user of the exporter&#8201;&#8212;&#8201;to provide suitable start values:
+An importer should be able to rely on those start values, i.e. it is always at liberty to use them unchanged, if no better start values are available to the importer.</p>
+</div>
+<div class="paragraph">
+<p>If an FMU provides start values that e.g. result in a division-by-zero or some other error inside the FMU if unchanged, these are obviously not suitable start values, and should not have been selected.</p>
+</div>
+<div class="paragraph">
+<p>Importers should however be aware of the existence of such FMUs, which can easily result from negligence during creation of an FMU:
+Imports should, if more suitable start values are available, set them at the earliest permissible point in time, to avoid uneccesarily triggering such errors in the FMU.
+For FMI 2.0/3.0, for example, different start values for inputs and parameters can and should already be set after instantiation, prior to entering initialization mode.</p>
 </div>
 <div class="paragraph">
 <p>Importers should respect the different order of necessary function calls between FMI 1.0 and FMI 2.0/3.0 when performing initialization (this phase has seen larger changes between FMI 1.0 and 2.0/3.0 due to the introduction of explicit phases/modes in the FMI API, whereas these phases where only implicit in FMI 1.0).</p>
