@@ -589,7 +589,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-50af4ace9da164f85f24b8c9578c2bbbb5e0b589,</span>
+<span id="revnumber">version main-190a901fb54371daaf29b0e780177dba253b74c0,</span>
 <span id="revdate">2022-04-26</span>
 </div>
 <div id="toc" class="toc2">
@@ -668,6 +668,7 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_scheduled_execution_specific_issues">8. Scheduled-Execution Specific Issues</a>
 <ul class="sectlevel2">
 <li><a href="#_use_cases_for_scheduled_execution">8.1. Use-cases for Scheduled Execution</a></li>
+<li><a href="#_handling_of_preemptive_scheduling">8.2. Handling of Preemptive Scheduling</a></li>
 </ul>
 </li>
 <li><a href="#_advanced_features">9. Advanced Features</a>
@@ -1710,6 +1711,75 @@ This might require at least mitigative internal event handling by the FMU itself
 </div>
 <div class="paragraph">
 <p>Note that in cases where the actual direct control of the runtime of internal time partitions is not required, the use of clocked co-simulation or model exchange interface types may be more appropriate.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_handling_of_preemptive_scheduling">8.2. Handling of Preemptive Scheduling</h3>
+<div class="paragraph">
+<p>To support safe preemptive scheduling of model partitions in scheduled execution, FMI 3.0 provides the callbacks <code>fmi3LockPreemptionCallback</code> and <code>fmi3UnlockPreemptionCallback</code> so that FMUs can guard critical sections of its code against preemption.</p>
+</div>
+<div class="paragraph">
+<p>An FMU&#8217;s code has to be prepared to correctly handle preemption of</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>fmi3ActivateModelPartition</code>,</p>
+</li>
+<li>
+<p><code>fmi3Get{VariableType}</code>,</p>
+</li>
+<li>
+<p><code>fmi3Set{VariableType}</code>,</p>
+</li>
+<li>
+<p><code>fmi3GetClock</code>,</p>
+</li>
+<li>
+<p>and <code>fmi3GetIntervalDecimal</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>among others.</p>
+</div>
+<div class="paragraph">
+<p>In general this means that the FMU&#8217;s code has to secure access to its global states and variables wherever data inconsistencies due to potential preemptions are anticipated.</p>
+</div>
+<div class="paragraph">
+<p>Note that in order to avoid data inconsistencies and safeguard predictable and deadlock-free behavior with <code>fmi3Get{VariableType}</code> and <code>fmi3Set{VariableType}</code> a unique assignment of variables to model partitions via its associated clock is strongly recommended.
+If every variable is assigned uniquely to a model partition it is usually not necessary to use preemption locks in the context of <code>fmi3Get{VariableType}</code> and <code>fmi3Set{VariableType}</code>:</p>
+</div>
+<div class="paragraph">
+<p>The following example illustrates why every variable should be assigned uniquely to one model partition via its associated clock:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>An output variable is changed by two different model partitions:</em><br>
+The values returned by <code>fmi3Get{VariableType}</code> that is placed after <code>fmi3ActivateModelPartition</code> may return the values computed by the other model partition if that model partition has higher priority and preempted the execution meanwhile.</p>
+</li>
+<li>
+<p><em>An input variable is used by two different model partitions:</em><br>
+The variable values of a model partitions of lower priority may have been overwritten by a call to <code>fmi3Set{VariableType}</code> for a model partition of higher priority.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Similarly, for <code>fmi3GetClock</code> the FMU has to ensure that the active state of an output clock is securely reset and cannot be observed twice for the same clock tick in case this call is preempted.</p>
+</div>
+<div class="paragraph">
+<p>For <code>fmi3GetIntervalDecimal</code> the FMU has to ensure that the countdown clock&#8217;s interval qualifier is reset to <code>fmi3IntervalUnchanged</code> and cannot be observed twice for the same clock tick in case this call is preempted.</p>
+</div>
+<div class="paragraph">
+<p>Depending on their implementation, <code>fmi3CallbackLockPreemption</code> and <code>fmi3CallbackUnlockPreemption</code> have a non-negligible overhead, as well as a strong impact on the scheduler and therefore their use should be as rare and short as possible.</p>
+</div>
+<div class="paragraph">
+<p>In general, it is recommended to reduce dependencies between different model partitions of one FMU by design.
+One may also consider if the code can be preempted by other parts of the same FMU:
+E.g. a model partition cannot be interrupted if it is the only model partition or if it holds the highest priority.
+Similarly, a model partition, while it might be interrupted, might not need to guard data accesses if it is the only model partition of the FMU, or the one with the highest priority.
+In such cases no locks may be necessary.</p>
 </div>
 </div>
 </div>
