@@ -8,7 +8,7 @@ Note that in cases where the actual direct control of the runtime of internal ti
 
 === Priority Levels of Clocks
 
-In scheduled execution clocks can be assigned priority information through the `priority` attribute on the clock variable.
+In scheduled execution clocks must be assigned priority information through the `priority` attribute on the clock variable.
 
 A clock's priority information is required to support the scheduled execution of several model partitions, especially in a preemptive scheduling regime.
 
