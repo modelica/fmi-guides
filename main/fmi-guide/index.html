@@ -589,7 +589,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-eee6d2da2c999d18c822e05b1aa2f324ec13f1cc,</span>
+<span id="revnumber">version main-f298a656a05be6389f136c7fd22a5b957083f4d2,</span>
 <span id="revdate">2022-04-26</span>
 </div>
 <div id="toc" class="toc2">
@@ -664,7 +664,11 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_event_handling_in_co_simulation">6.2. Event-Handling in Co-Simulation</a></li>
 </ul>
 </li>
-<li><a href="#_model_exchange_specific_issues">7. Model-Exchange Specific Issues</a></li>
+<li><a href="#_model_exchange_specific_issues">7. Model-Exchange Specific Issues</a>
+<ul class="sectlevel2">
+<li><a href="#_completed_integrator_step_function">7.1. Completed Integrator Step Function</a></li>
+</ul>
+</li>
 <li><a href="#_scheduled_execution_specific_issues">8. Scheduled-Execution Specific Issues</a>
 <ul class="sectlevel2">
 <li><a href="#_use_cases_for_scheduled_execution">8.1. Use-cases for Scheduled Execution</a></li>
@@ -1699,7 +1703,35 @@ This might require at least mitigative internal event handling by the FMU itself
 <div class="sect1">
 <h2 id="_model_exchange_specific_issues">7. Model-Exchange Specific Issues</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_completed_integrator_step_function">7.1. Completed Integrator Step Function</h3>
+<div class="paragraph">
+<p>Since the initial release, the FMI API provides a function of the FMU that the integrator is supposed to call at the end of every completed step.</p>
+</div>
+<div class="paragraph">
+<p>However the exact semantics, capability flags and rules when to call this function vary between all major releases of FMI:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In FMI 1.0 the function is called <code>fmiCompletedIntegratorStep</code> and the function must be called by the environment after every completed step of the integrator.</p>
+</li>
+<li>
+<p>In FMI 2.0 the function is called <code>fmi2CompletedIntegratorStep</code> and it must be called at every completed step of an integrator&#8201;&#8212;&#8201;provided the capability flag <code>completedIntegratorStepNotNeeded</code> is not provided or false.</p>
+</li>
+<li>
+<p>In FMI 3.0 the function is called <code>fmi3CompletedIntegratorStep</code> and it must be called after every completed step of the integrator&#8201;&#8212;&#8201;provided the capability flag <code>needsCompletedIntegratorStep</code> is true.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note especially that the name and logic of the capability flag controlling whether an importing implementation needs to call the function is changed between 2.0 and 3.0:
+Whereas in 1.0 the function must be called unconditionally, in 2.0 the function must be called unless the FMU actively disables this through the <code>completedIntegratorStepNotNeeded</code> capability flag, and in 3.0 the function must only be called if the FMU actively requests this through the <code>needsCompletedIntegratorStep</code> capability flag.</p>
+</div>
+<div class="paragraph">
+<p>Implementers migrating between releases or supporting new ones should take this into account.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
