@@ -81,8 +81,8 @@ Exporting implementations should allow the user to easily author/add documentati
 
 Exporting implementations should also include any additional documentation needed to effectively run the FMU in the documentation:
 
-- Implementations that produce FMUs that are not considered stand-alone, i.e., specifying `needsExecutionTool=true` in their model description, should provide sufficient information inside the documentation that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.
-- Implementations that produce FMUs that require runtime licenses should provide information on what kind of license is needed and how to provide that license so the FMU can use it.
+- Implementations that export FMUs that are not considered stand-alone, i.e., specifying `needsExecutionTool=true` in their model description, should provide sufficient information inside the documentation that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.
+- Implementations that export FMUs that require runtime licenses should provide information on what kind of license is needed and how to provide that license so the FMU can use it.
 
 In many instances, for example, when open-source licenses are employed, license information and other additional information is needed to be shipped with an FMU for distribution.
 In those cases, exporting implementations should allow the user to easily add those information items to the documentation shipped with an FMU.
