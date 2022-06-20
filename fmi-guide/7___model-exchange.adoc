@@ -4,7 +4,7 @@
 
 Since the initial release, the FMI API provides a function of the FMU that the integrator is supposed to call at the end of every completed step.
 
-However the exact semantics, capability flags and rules when to call this function vary between all major releases of FMI:
+However the exact semantics, capability flags, and rules when to call this function vary between all major releases of FMI:
 
 - In FMI 1.0 the function is called `fmiCompletedIntegratorStep` and the function must be called by the environment after every completed step of the integrator.
 
