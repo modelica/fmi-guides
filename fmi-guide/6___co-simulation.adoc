@@ -20,7 +20,7 @@ If early return capability is used in conjunction with external event handling, 
 
 === Event-Handling in Co-Simulation
 
-Starting with FMI 3.0, co-simulation FMUs can optionally support external event-handling, i.e. notifying the co-simulation master about events, which the master then handles by putting the FMU into event mode, where event iteration can take place.
+Starting with FMI 3.0, co-simulation FMUs can optionally support external event-handling, i.e. notifying the co-simulation algorithm of the importer about events, which the importer then handles by putting the FMU into event mode, where event iteration can take place.
 This is similar to the way model exchange has always supported external event handling.
 
 An FMU indicates this capability through the `hasEventMode` capability flag in its `modelDescription.xml` file.
