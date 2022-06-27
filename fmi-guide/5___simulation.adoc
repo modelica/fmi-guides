@@ -8,7 +8,7 @@ Importing implementations must pass valid values into the following instantiatio
 * FMI 2.0: `fmi2Instantiate`
 * FMI 1.0: `fmiInstantiate`, `fmiInstantiateSlave`
 
-Note especially that null pointers are not valid for any of the string arguments to these functions, unless explicitly allowed.
+Note especially that null pointers are not valid for any of the string arguments to these functions, unless explicitly allowed in the respective standard.
 Implementations must pass proper values especially for the following fields:
 
 * `instanceName` must not be the null pointer, the empty string or a string only containing whitespace.
@@ -21,7 +21,7 @@ Note also that `file://C:/` and similar are not valid file URIs, but should rath
 Furthermore the validity of a URI is not influenced by the existence or non-existence of the file/directory pointed to, so that in the case of FMI 2.0, a URI pointing to the resources directory would still be a valid URI, even if the unpacked FMU archive did not contain a resources directory.
 * `mimeType` (FMI 1.0 only) must not be null and must be a valid MIME type; unless specific requirements indicate otherwise, `application/x-fmu-sharedlibrary` is the proper string to pass here.
 
-If an importer tries to create a second instance of an FMU with `canBeInstantiatedOnlyOncePerProcess == false`, the FMU should provide an error message and return `NULL`.
+If an importer tries to create a second instance of an FMU where the capability flag `canBeInstantiatedOnlyOncePerProcess` is true, the FMU should provide an error message and return `NULL`.
 
 Exporting implementations should guard (by safely handling these cases without crashing) against common errors in calls to the instantiation functions, including:
 
@@ -43,20 +43,20 @@ Exporting implementations must ensure that any default values specified for vari
 The values shall be set automatically as default values upon FMU instantiation, so that importing implementations can rely on the standard-mandated behavior that unset variables have their default values as specified in the `modelDescription.xml`.
 
 Note that for all start values, especially the mandatory start values for input and parameter variables, it is the responsibility of the FMU -- and hence the exporter or the user of the exporter -- to provide suitable start values:
-An importer should be able to rely on those start values, i.e. it is always at liberty to use them unchanged, if no better start values are available to the importer.
+An importer should be able to rely on these start values, i.e. it is always at liberty to use them unchanged, if no better start values are available to the importer.
 
 If an FMU provides start values that e.g. result in a division-by-zero or some other error inside the FMU if unchanged, these are obviously not suitable start values, and should not have been selected.
 
 Importers should however be aware of the existence of such FMUs, which can easily result from negligence during creation of an FMU:
-Imports should, if more suitable start values are available, set them at the earliest permissible point in time, to avoid uneccesarily triggering such errors in the FMU.
+Importers should, if more suitable start values are available, set them at the earliest permissible point in time, to avoid uneccesarily triggering such errors in the FMU.
 For FMI 2.0/3.0, for example, different start values for inputs and parameters can and should already be set after instantiation, prior to entering initialization mode.
 
 Importers should respect the different order of necessary function calls between FMI 1.0 and FMI 2.0/3.0 when performing initialization (this phase has seen larger changes between FMI 1.0 and 2.0/3.0 due to the introduction of explicit phases/modes in the FMI API, whereas these phases where only implicit in FMI 1.0).
 
 === Startup
 
-For FMI 1.0 Co-Simulation FMUs importing implementations should honor the `canHandleEvents` capability of the FMU: If this capability attribute is false, then the implementation cannot call the `doStep` function with zero `communicationStepSize`, even at time 0 (used e.g. for generating valid initial values).
-In those cases the integration environment must start simulation with the first simulation step, without any event iteration.
+For FMI 1.0 Co-Simulation FMUs importing implementations should honor the `canHandleEvents` capability of the FMU: If this capability flag is false, then the implementation cannot call the `doStep` function with zero `communicationStepSize`, even at time 0 (used e.g. for generating valid initial values).
+In these cases the integration environment must start simulation with the first simulation step, without any event iteration.
 With FMI 2.0 Co-Simulation FMUs do not support 0-size time steps in any case.
 With FMI 3.0, Co-Simulation FMUs can support event handling explicitly via the `hasEventMode` capability flag.
 Importers can make use of this feature by passing `fmi3True` for the `eventModeUsed` argument of the `fmi3InstantiateCoSimulation` call.
@@ -64,7 +64,7 @@ Importers can make use of this feature by passing `fmi3True` for the `eventModeU
 === Support for Solvers
 
 Importing implementations should support a wide variety of solver algorithms, in order to support Model-Exchange FMUs as fully as possible.
-Ideally this support should include support for attaching external solvers through specified APIs, so that experienced users can extend the supported solver base for specific new domains where appropriate.
+Ideally this should include support for attaching external solvers through specified APIs, so that experienced users can extend the supported solver base for specific new domains where appropriate.
 Supporting the use of several different solvers in one model that integrates a number of FMUs, so that e.g. different Model Exchange FMUs can be solved through different solvers than other parts of the model – without resorting to Co-Simulation FMUs – can be beneficial in terms of performance and usability.
 
 In any case the proper documentation of the employed solver algorithms and their configurable settings is very beneficial in understanding and handling differences between implementations.
@@ -89,7 +89,7 @@ Starting with FMI 3.0, the logging callback uses a fixed argument list.
 
 Exporting implementations should support the fine-grained selection of logging categories in FMI 2.0/3.0 and should use fine-grained category names in the category argument for FMI 1.0 logging callback calls.
 
-In FMI 1.0 they should try to not produce verbose logging output when the debug logging flag is false.
+In FMI 1.0 they should try to not produce verbose logging output when the debug logging flag is `fmiFalse`.
 
 === Handling of Dependency Information
 

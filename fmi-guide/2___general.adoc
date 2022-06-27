@@ -53,16 +53,11 @@ This document can be found on the FMI standard homepage at https://fmi-standard.
 All implementers are advised to participate widely in the FMI Cross-Checking Initiative to test compatibility with current implementations of other tools.
 Robust participation, including testing with a relevant selection of available releases, is recommended.
 
-FMU exporting implementations should also use the FMU Compliance Checker [1] to do basic validation of generated FMUs.
+FMU exporting implementations should also use the FMU Compliance Checker <<FMUCC>> and VDMCheck <<VDMCheck>> to do basic validation of generated FMUs.
 
-FMU importing implementations should make use of the Reference FMUs [2] to do basic validation of FMU import.
+FMU importing implementations should make use of the Reference FMUs <<RefFMUs>> to do basic validation of FMU import.
 
 Implementers should test FMU integration with complex test cases, including the behavior of multiple connected FMUs with actual and pseudo algebraic loops, iteration during initialization, handling of structured naming, handling of Unicode characters inside and outside the basic multilingual plane, license handling, etc.
-
-Referenced Literature:
-
-[1] Modelica Association: FMU Compliance Checker. https://www.fmi-standard.org/downloads
-[2] Reference FMUs. https://github.com/modelica/Reference-FMUs/
 
 === Licensing and License Handling
 
@@ -74,3 +69,5 @@ If an error or problem occurs in the license handling, e.g., a missing license, 
 This allows importing implementations to provide proper feedback to the user.
 
 Exchange of FMUs can be eased tremendously if an option exists to generate FMUs that do not require license mechanisms at the receiving party.
+
+If license mechanisms are used for IP protection, alternative approaches can be useful to consider (see, for example, Appendix F IP Protection of the prostep ivip SmartSE Recommendation V2 <<SMARTSEV2>>).

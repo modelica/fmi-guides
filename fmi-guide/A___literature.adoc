@@ -18,3 +18,11 @@
 - [[[BPRS15]]] Atilim Gunes Baydin, Barak A. Pearlmutter, Alexey Andreyevich Radul, Jeffrey Mark Siskind (2015): *Automatic differentiation in machine learning: a survey*. https://www.jmlr.org/papers/volume18/17-468/17-468.pdf
 
 - [[[BKF17]]] Braun W., Kulshreshtha K., Franke R., Walther A., Bachmann B. (2017): *Towards Adjoint and Directional Derivatives in FMI utilizing ADOL-C within OpenModelica*. 12th International Modelica Conference, Prague, 2017. https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf
+
+- [[[SMARTSEV2]]] prostep ivip: **SmartSE Recommendation V2**. April 2018. https://www.prostep.org/fileadmin/downloads/prostep-ivip-Recommendation_PSI11_SmartSE_V2-0.zip
+
+- [[[FMUCC]]] Modelica Association: **FMU Compliance Checker**. https://www.fmi-standard.org/downloads
+
+- [[[RefFMUs]]] Modelica Association: **Reference FMUs**. https://github.com/modelica/Reference-FMUs/
+
+- [[[VDMCheck]]] INTO-CPS Association: **FMI-VDM-Model**. https://github.com/INTO-CPS-Association/FMI-VDM-Model

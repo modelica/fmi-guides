@@ -78,8 +78,9 @@ Implementations are well-advised to heed the explanations in section 2.2.6.3 of 
 
 Importing and exporting implementations should support the structured naming convention for variables specified in the FMI standards to support the interchange of array/matrix and record/struct information.
 
-For FMI 3.0, implementations should support both native arrays and the structured naming convention.
-This support should include support for bridging between those two ways of expressing arrays, especially when supporting older versions of FMI as well as FMI 3.0.
+Starting with FMI 3.0, FMI also supports array variables directly (called native arrays in the following discussion), i.e. without needing to use scalar variables and the structured naming convention.
+Hence, for FMI 3.0, implementations should support both native arrays and the structured naming convention.
+This support should include support for bridging between these two ways of expressing arrays, especially when supporting older versions of FMI as well as FMI 3.0.
 When exporting arrays, preference should be given to native arrays over structured naming convention mappings.
 
 Importing implementations should map complex interfaces expressed via the structured naming convention to suitable internal data structures and formats, like vectors/arrays, records/structs, or busses.
