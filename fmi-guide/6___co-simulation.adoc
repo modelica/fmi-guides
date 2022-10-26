@@ -37,3 +37,26 @@ However the exact point in time when the event occured will have already passed,
 This might require at least mitigative internal event handling by the FMU itself.
 
 For this reason it is usually recommended to use event handling support and early return capabilities together, both for exporters and importers, as this will give the best event handling control.
+
+=== Clock Ticks and Clock Activations
+
+Remember that a clock activation means setting its activation status to `fmi3ClockActive`, and that the source of a clock activation is
+
+* for input clocks the importer, by calling fmi3setClock() on the clock's FMU.
+* for output clocks the clock's FMU in Event Mode.
+
+A clock tick is the (future) time instant of a clock activation, and its cause. The importer needs to keep track of clock ticks and if necessary, doStep the clock's FMU to the time instant of the clock tick.
+
+The source of a clock tick is
+
+* for time-based input clocks and for triggered output clocks always the clock's FMU. The time instant of the clock tick is reported to the importer by clock-specific means.
+* for triggered input clocks not constrained by the standard, and as such one or more of
+** a triggered output clock activation of any FMU at the time instant of the tick.
+** a tick of any time-based input clock of any FMU.
+** any other source that the importer has knowledge of.
+		
+If the tick of a time-based input clock as cause of a triggered input clock's activation seems counter-intuitive, it may help to remember that
+
+* inports and outports are always between importer and FMU, not FMU and FMU (the latter may only appear to be so to a user in the context of defining connections between outports and inports, e.g. in a typical GUI).
+* the definition of a time-based clock's tick by an FMU is separate from the activation of that clock by the importer.
+* the time-based input clock is not 'connected' to the triggered input clock (in the sense of connecting one FMUs output port to another FMUs input port), it is the importer that keeps track of the shared tick, if necessary doSteps the FMU(s) to the time instant of the shared tick, and activates each input clock.
