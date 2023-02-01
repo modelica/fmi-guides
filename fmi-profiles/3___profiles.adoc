@@ -60,21 +60,22 @@ This is a profile supporting advanced SiL simulation of ECU and other clocked mo
 
 Required Features::
   - Tunable Parameters
-  - Store/Restore FMU State
   - Binary Data Type Input/Output
   - Binary Data Type Parameters
   - New Integer Types
   - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
   - Fixed-size Parameter Arrays
   - Resizable Parameter Arrays
   - Variable Co-Simulation Communication Step Size
   - Co-Simulation with Clock Information
+  - Binary FMUs for Desktop Platforms
+
+
+Recommended Features::
+  - Store/Restore FMU State
   - Scheduled Execution Interface
   - Source Code FMUs
-  - Binary FMUs for Desktop Platforms
   - Binary FMUs for non-Desktop Platforms (e.g. HiL)
-
 
 === Dynamics Profile
 
