@@ -6,19 +6,17 @@ They are described in detail in the following sections.
 
 === Basic CS Profile
 
-This is a basic profile for Co-Simulation, intended mainly for desktop simulation uses, which have no additional specific requirements and can perform well with fixed communication step sizes.
+This is a basic profile for Co-Simulation, that should be supported on any target - especially for desktop simulation usage. There are no additional specific requirements typically fixed communication step sizes are used. 
 
 Required Features::
-  - Tunable Parameters
   - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
   - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
   - Binary FMUs for Desktop Platforms
 
 Recommended Features::
+  - Tunable Parameters
   - Source Code FMUs
-
+  - Resizable Parameter Arrays
 
 === Sensor Profile
 
