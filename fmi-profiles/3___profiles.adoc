@@ -45,7 +45,6 @@ Required Features::
   - Tunable Parameters
   - Binary Data Type Input/Output
   - Binary Data Type Parameters
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - Scheduled Execution Interface
@@ -63,7 +62,6 @@ Required Features::
   - Store/Restore FMU State
   - Binary Data Type Input/Output
   - Binary Data Type Parameters
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Resizable Input/Output Arrays
   - Fixed-size Parameter Arrays
@@ -86,7 +84,6 @@ Required Features::
   - Serialize/Deserialize FMU State
   - String Inputs/Outputs
   - Binary Data Type Input/Output
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Resizable Input/Output Arrays
   - Resizable Input/Output Arrays with Size-Dependencies
@@ -116,7 +113,6 @@ Required Features::
   - Serialize/Deserialize FMU State
   - String Inputs/Outputs
   - Binary Data Type Input/Output
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Resizable Input/Output Arrays
   - Resizable Input/Output Arrays with Size-Dependencies
@@ -146,8 +142,7 @@ This is a profile that caters to different but overlapping optimization use case
 Required Features::
   - Tunable Parameters
   - Store/Restore FMU State
-  - Serialize/Deserialize FMU State
-  - New Integer Types
+  - Serialize/Deserialize FMU States
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - Resizable Parameter Arrays
