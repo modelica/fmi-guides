@@ -34,7 +34,7 @@ Required Features::
 
 Recommended Features::
   - Source Code FMUs
-
+  
 
 === Basic HiL & Sensor HiL Profile
 
@@ -48,11 +48,11 @@ Required Features::
   - New Integer Types
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
-  - Scheduled Execution Interface
   - Source Code FMUs
-  - Binary FMUs for Desktop Platforms
   - Binary FMUs for non-Desktop Platforms (e.g. HiL)
 
+Recommended Features::
+  - Scheduled Execution Interface
 
 === SIL ECU Profile
 
