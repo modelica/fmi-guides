@@ -76,50 +76,63 @@ Required Features::
   - Binary FMUs for non-Desktop Platforms (e.g. HiL)
 
 
-=== Dynamics Profile
+=== Dynamics ME Profile
 
-This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
+This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems
+
+Required Features::
+  - Tunable Parameters
+  - Directional Derivatives
+  - New Integer Types
+  - Fixed-size Input/Output Arrays
+  - Fixed-size Parameter Arrays
+  - Resizable Parameter Arrays
+  - State and Output Dependencies
+  - Binary FMUs for Desktop Platforms
+
+Recommended Features::
+  - Binary Data Type Input/Output
+  - Fixed-size Input/Output Arrays
+  - Resizable Parameter Arrays with Size-Dependencies
+
+=== Dynamics CS Profile
+
+This is a profile for high dynamics mechatronic simulation, including variable cycle times, for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation approaches.
 
 Required Features::
   - Tunable Parameters
   - Store/Restore FMU State
   - Serialize/Deserialize FMU State
-  - String Inputs/Outputs
-  - Binary Data Type Input/Output
   - New Integer Types
   - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Resizable Input/Output Arrays with Size-Dependencies
   - Fixed-size Parameter Arrays
   - Resizable Parameter Arrays
-  - Resizable Parameter Arrays with Size-Dependencies
   - Variable Co-Simulation Communication Step Size
   - State and Output Dependencies
   - Output Derivatives in Co-Simulation
   - Restartable Early Return in Hybrid Co-Simulation
   - Intermediate Output Values in Co-Simulation
-  - Co-Simulation with Clock Information
   - Binary FMUs for Desktop Platforms
 
 Recommended Features::
+  - Binary Data Type Input/Output
   - Directional Derivatives
+  - Intermediate Input Values in Co-Simulation
+  - Resizable Parameter Arrays with Size-Dependencies
 
 
 === Dynamics Controller Profile
 
 This is a profile for high dynamics mechatronic simulation that includes discrete controller implementations.
-This profile extends the dynamics profile to include model exchange with clocks to allow for efficient handling of tightly coupled sub-systems with reliable support for coupling discrete controller time partitions across FMUs.
+This profile extends the dynamics profile to include model exchange and co-simulation with clocks to allow for efficient handling of tightly coupled sub-systems with reliable support for coupling discrete controller time partitions across FMUs.
 
 Required Features::
   - Tunable Parameters
   - Store/Restore FMU State
   - Serialize/Deserialize FMU State
-  - String Inputs/Outputs
   - Binary Data Type Input/Output
   - New Integer Types
   - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Resizable Input/Output Arrays with Size-Dependencies
   - Fixed-size Parameter Arrays
   - Resizable Parameter Arrays
   - Resizable Parameter Arrays with Size-Dependencies
@@ -134,7 +147,8 @@ Required Features::
 
 Recommended Features::
   - Directional Derivatives
-
+  - Resizable Input/Output Arrays
+  - Resizable Input/Output Arrays with Size-Dependencies
 
 === Optimization Profile
 
