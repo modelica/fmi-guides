@@ -44,9 +44,6 @@ This sub-feature only deals with the use of the binary data type for inputs and 
 Binary Data Type Parameters::
 This sub-feature represents the ability to use the new binary data type of FMI 3.0 for parameters and constants, not just for inputs and outputs.
 
-New Integer Types::
-FMI 3.0 will offer a full complement of 8, 16, 32, and 64-bit signed and unsigned integer data types, not just the de-facto 32-bit signed integer data type that FMI 2.0 offers.
-
 === Array Input/Output Handling
 
 Fixed-size Arrays::

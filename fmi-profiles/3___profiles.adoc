@@ -43,7 +43,6 @@ Required Features::
   - Tunable Parameters
   - Binary Data Type Input/Output
   - Binary Data Type Parameters
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - Resizable Parameter Arrays
@@ -76,7 +75,6 @@ This is a profile for high dynamics mechatronic simulation, including variable c
 Required Features::
   - Tunable Parameters
   - Directional Derivatives (*ME only*)
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - State and Output Dependencies
@@ -106,7 +104,6 @@ Required Features::
   - Store/Restore FMU State
   - Serialize/Deserialize FMU State
   - Binary Data Type Input/Output
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Resizable Input/Output Arrays
   - Resizable Input/Output Arrays with Size-Dependencies
@@ -137,7 +134,6 @@ Required Features::
   - Tunable Parameters
   - Store/Restore FMU State
   - Serialize/Deserialize FMU State
-  - New Integer Types
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - Resizable Parameter Arrays
