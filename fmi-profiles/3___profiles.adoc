@@ -134,33 +134,33 @@ In the table below, the placement of an `X` indicates a required feature, and a 
 |Area|Feature|Basic CS Profile|Sensor Profile|XiL Profile|ECU Profile|Dynamics Profile|Dynamics Controller Profile|Optimization Profile
 
 2+|Parameter Handling|||||||
-| |Tunable Parameters|X|X|X|X|X|X|X|
+| |Tunable Parameters|X|X|X|X|X|X|X
 2+|State Handling|||||||
-| |Store/Restore FMU State|||*|*|*|X|
-| |Serialize/Deserialize FMU State|||||||X|
+| |Store/Restore FMU State||||*|*|*|X
+| |Serialize/Deserialize FMU State|||||||X
 2+|Data Types|||||||
 | |Binary Data Type Input/Output||X|X|*|*||
 | |Binary Data Type Parameters||X|X|X|||
-2+|Array Input/Output Handling||||||||
+2+|Array Input/Output Handling|||||||
 | |Fixed-size Arrays|X||X|X|X|X|X
 | |Resizable Arrays|||||||
 | |Resizable Arrays with Size-Dependencies|||||||
-2+|Array Parameter Handling||||||||
+2+|Array Parameter Handling|||||||
 | |Fixed-size Arrays|X||X|X|X|X|X
 | |Resizable Arrays|*|||X|X|*|*
 | |Resizable Arrays with Size-Dependencies|||||||
 2+|Calculation Model|||||||
-| |Variable Co-Simulation Communication Step Size||X|*|*|X|X|X|
-| |State and Output Dependencies||||X|X|X
-| |Output Derivatives in Co-Simulation|||||*|*|X|
-| |Directional Derivatives|||||*|*|X|
-| |Adjoint Derivatives||||||X|
-| |Restartable Early Return in Hybrid Co-Simulation||||*|*|X|
-| |Intermediate Variable Access||||*|*|X
-| |Co-Simulation with Clock Information||||X|X|X|
+| |Variable Co-Simulation Communication Step Size||X|*|*|X|X|X
+| |State and Output Dependencies|||||X|X|X
+| |Output Derivatives in Co-Simulation|||||*|*|X
+| |Directional Derivatives|||||*|*|X
+| |Adjoint Derivatives|||||||X
+| |Restartable Early Return in Hybrid Co-Simulation|||||*|*|X
+| |Intermediate Variable Access|||||*|*|X
+| |Co-Simulation with Clock Information|||||X|X|X
 | |Scheduled Execution Interface||||*|||
 | |Clocked Model-Exchange||||||X|
-2+|Execution Targets||||||
+2+|Execution Targets|||||||
 | |Source Code FMUs|*|*|X|X|||
 |========
 
