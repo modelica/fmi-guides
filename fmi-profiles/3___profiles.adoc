@@ -80,7 +80,7 @@ Recommended Features::
   - Resizable Parameter Arrays
   - Resizable Parameter Arrays with Size-Dependencies
   - Variable Co-Simulation Communication Step Size  (*CS only*)
-  - Restartable Early Return in Hybrid Co-Simulation (*CS only*)
+  - Early Return in Co-Simulation (*CS only*)
   - Output Derivatives in Co-Simulation (*CS only*)
   - Intermediate Variable Access (*CS only*)
   - Directional Derivatives (*CS only*)
@@ -155,7 +155,7 @@ In the table below, the placement of an `X` indicates a required feature, and a 
 | |Output Derivatives in Co-Simulation|||||*|*|X
 | |Directional Derivatives|||||*|*|X
 | |Adjoint Derivatives|||||||X
-| |Restartable Early Return in Hybrid Co-Simulation|||||*|*|X
+| |Early Return in Co-Simulation|||||*|*|X
 | |Intermediate Variable Access|||||*|*|X
 | |Co-Simulation with Clock Information|||||X|X|X
 | |Scheduled Execution Interface||||*|||

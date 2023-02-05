@@ -90,7 +90,7 @@ FMI since 1.0 offers the ability of co-simulation FMUs to support variable commu
 This option indicates whether support for variable step sizes by FMUs is deemed important for numerical performance.
 
 State and Output Dependencies::
-FMI 2.0 supports the ability of FMUs to provide information on the dependencies of state derivatives and output variables from inputs and states.
+FMI since 2.0 supports the ability of FMUs to provide information on the dependencies of state derivatives and output variables from inputs and states.
 In other words, the sparsity pattern for Jacobians can be defined.
 This allows simulating stiff FMUs with many states (> 1000 states) since sparse matrix methods can be utilized in the numerical integration method.
 Furthermore, it can be stated whether this dependency is linear (this allows to transform nonlinear algebraic equation systems into linear equation systems when connecting FMUs).
@@ -99,7 +99,7 @@ Output Derivatives in Co-Simulation::
 FMI since 2.0 offers the ability of co-simulation FMUs to give access to nth-order output derivatives to enable co-simulation algorithms to interpolate output values between communication steps with higher accuracy.
 
 Directional Derivatives::
-FMI 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
+FMI since 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
 Directional derivatives can be computed for continuous-time states and outputs.
 This is useful when connecting FMUs, and the partial derivatives of the connected FMU shall be computed.
 Suppose the exported FMU performs this computation analytically.
@@ -113,8 +113,8 @@ Adjoint derivatives are beneficial in several contexts:
 For machine learning applications, adjoint derivatives (also called vector gradient products) are used in backpropagation to perform gradient-based optimization of parameters using reverse mode automatic differentiation.
 Similarly adjoint derivatives can also be used for parameter estimation.
 
-Restartable Early Return in Hybrid Co-Simulation::
-FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine before completing the whole indicated time step.
+Early Return in Co-Simulation::
+FMI 3.0 offers support for FMUs to return from their fmi3DoStep calculation routine before completing the whole indicated time step.
 This can be used to signal an internal event or discontinuity, allowing the importer to continue the step after this early return.
 +
 This feature allows for more efficient co-simulation algorithms due to the more precise detection of event times, if, e.g., used in combination with resettable FMUs.
