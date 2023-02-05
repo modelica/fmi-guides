@@ -119,7 +119,7 @@ This can be used to signal an internal event or discontinuity, allowing the impo
 +
 This feature allows for more efficient co-simulation algorithms due to the more precise detection of event times, if, e.g., used in combination with resettable FMUs.
 
-Intermediate Output Values in Co-Simulation::
+Intermediate Variable Access::
 FMI 3.0 supports the option for FMUs to give access to intermediate output values through a mechanism called intermediate update mode.
 This feature provides access to values that are generated due to internal integration/calculation steps but would previously not have been visible unless the co-simulation algorithm reduces the communication step size.
 +

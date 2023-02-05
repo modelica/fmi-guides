@@ -83,7 +83,7 @@ Recommended Features::
   - Variable Co-Simulation Communication Step Size  (*CS only*)
   - Restartable Early Return in Hybrid Co-Simulation (*CS only*)
   - Output Derivatives in Co-Simulation (*CS only*)
-  - Intermediate Input Values in Co-Simulation (*CS only*)
+  - Intermediate Variable Access (*CS only*)
   - Directional Derivatives (*CS only*)
   - Store/Restore FMU State (*CS only*)
 
@@ -98,7 +98,7 @@ Required Features::
   - Clocked Model-Exchange (*ME only*)
   - Variable Co-Simulation Communication Step Size (*CS only*)
   - Restartable Early Return in Hybrid Co-Simulation (*CS only*)
-  - Intermediate Output Values in Co-Simulation  (*CS only*)
+  - Intermediate Variable Access  (*CS only*)
   - Co-Simulation with Clock Information (*CS only*)
 
 === Optimization Profile
@@ -119,7 +119,7 @@ Required Features::
   - Serialize/Deserialize FMU State (*CS only*)
   - Variable Co-Simulation Communication Step Size (*CS only*)
   - Output Derivatives in Co-Simulation (*CS only*)
-  - Intermediate Output Values in Co-Simulation (*CS only*)
+  - Intermediate Variable Access (*CS only*)
 
   Recommended Features::
   - Resizable Parameter Arrays
@@ -158,7 +158,7 @@ In the table below, the placement of an `X` indicates a required feature, and a 
 | |Directional Derivatives|2.0|||||*|*|X
 | |Adjoint Derivatives|3.0|||||||X
 | |Restartable Early Return in Hybrid Co-Simulation|3.0|||||X|X|
-| |Intermediate Output Values in Co-Simulation|3.0|||||X|X|X
+| |Intermediate Variable Access|3.0|||||X|X|X
 | |Co-Simulation with Clock Information|3.0||||X|X|X|
 | |Scheduled Execution Interface|3.0|||X|X|||
 | |Clocked Model-Exchange|3.0||||||X|
