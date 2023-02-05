@@ -149,10 +149,3 @@ The use of source code implies the usual trade-offs:
 The potential broader portability of the source code is balanced by, for example, potential portability problems in the code, availability of compilers on the target platform, need for code obfuscation to add IP protection.
 On the other hand, this makes the FMU usable on platforms for which the generating party has no available compiler toolchain or cross-compilation support.
 
-Binary FMUs for Desktop Platforms::
-This sub-feature describes the usual ability to generate FMUs with binary implementations (either dynamically or statically linked libraries) for the typical desktop computing platforms, like Windows/x64 and Linux/x64.
-
-Binary FMUs for non-Desktop Platforms (e.g. HiL)::
-FMI supports the inclusion of multiple binary implementations of an FMU.
-This sub-feature deals with the requirement to generate FMUs that include binary implementations for non-Desktop platforms, like common HiL platforms or other potentially embedded target architectures.
-This is a catch-all feature since the actual requirement will have to be specific for the architectures actually needed.

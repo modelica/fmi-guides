@@ -11,7 +11,6 @@ This is a basic profile for Co-Simulation, that should be supported on any binar
 Required Features::
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
-  - Binary FMUs for Desktop Platforms
 
 Recommended Features::
   - Tunable Parameters
@@ -29,7 +28,6 @@ Required Features::
   - Binary Data Type Input/Output
   - Binary Data Type Parameters
   - Variable Co-Simulation Communication Step Size
-  - Binary FMUs for Desktop Platforms
 
 Recommended Features::
   - Source Code FMUs
@@ -46,13 +44,11 @@ Required Features::
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - Resizable Parameter Arrays
-  - Binary FMUs for Desktop Platforms
   - Co-Simulation with Clock Information  (*CS only*)
 
 
 Recommended Features::
   - Source Code FMUs
-  - Binary FMUs for non-Desktop Platforms (e.g. HiL)
   - Variable Co-Simulation Communication Step Size (*CS only*)
   - Store/Restore FMU State(*CS only*)
   - Scheduled Execution Interface (*SE only*)
@@ -78,7 +74,6 @@ Required Features::
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - State and Output Dependencies
-  - Binary FMUs for Desktop Platforms
 
 Recommended Features::
   - Binary Data Type Input/Output
@@ -121,7 +116,6 @@ Required Features::
   - State and Output Dependencies
   - Directional Derivatives
   - Adjoint Derivatives
-  - Binary FMUs for Desktop Platforms
   - Serialize/Deserialize FMU State (*CS only*)
   - Variable Co-Simulation Communication Step Size (*CS only*)
   - Output Derivatives in Co-Simulation (*CS only*)
@@ -170,8 +164,6 @@ In the table below, the placement of an `X` indicates a required feature, and a 
 | |Clocked Model-Exchange|3.0||||||X|
 2+|Execution Targets||||||||
 | |Source Code FMUs|1.0|*|*|X|X|||
-| |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X|X|X
-| |Binary FMUs for non-Desktop Platforms (e.g. HiL)|1.0|||X|X|||
 |========
 
 The support for source code FMUs is not strictly necessary for the Basic CS and Sensor profiles but is highly recommended to support the portability of FMUs to new platforms.
