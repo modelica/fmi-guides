@@ -35,24 +35,6 @@ Recommended Features::
   - Source Code FMUs
 
 
-=== Basic HiL & Sensor HiL Profile
-
-This is a basic profile supporting HiL use, including mechatronics and sensor simulation usage.
-This profile assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.
-
-Required Features::
-  - Tunable Parameters
-  - Binary Data Type Input/Output
-  - Binary Data Type Parameters
-  - New Integer Types
-  - Fixed-size Input/Output Arrays
-  - Fixed-size Parameter Arrays
-  - Scheduled Execution Interface
-  - Source Code FMUs
-  - Binary FMUs for Desktop Platforms
-  - Binary FMUs for non-Desktop Platforms (e.g. HiL)
-
-
 === XiL Profile
 
 This is a profile supporting advanced Software-/Hardware-/X-in-the-Loop simulation, allowing for more efficient integration of multi-ECU networks.
