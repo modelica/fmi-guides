@@ -54,15 +54,17 @@ Recommended Features::
   - Scheduled Execution Interface (*SE only*)
 
 
-=== ECU Profile (tbd)
+=== ECU Profile
+
+This is a profile for supporting advanced simulation features for Electronic Control Unis (ECUs) includdin network communication.
 
 (all required and recommended feautures form XiL Profile)
 
 Required Features:: 
-- support of certain layerd standards (LS-BUS)
+- support of layered standard for automotive network communication (LS-BUS)
 
 Recommended Features:: 
-- support of certain layerd standards (LS-XCP)
+- support layered standardx for XCP (LS-XCP)
 
 === Dynamics Profile
 
