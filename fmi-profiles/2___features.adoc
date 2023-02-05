@@ -12,33 +12,33 @@ These feature areas provide the subsections of this chapter.
 
 === Parameter Handling
 
-Tunable Parameters (FMI 2.0)::
+Tunable Parameters::
   Tunable parameters allow the changing of parameters values at discrete steps during the simulation run, not only prior to simulation start-up.
 
 === State Handling
 
-Store/Restore FMU State (FMI 2.0)::
+Store/Restore FMU State::
 FMUs that support fmi2GetFMUState and fmi2SetFMUState allow the implementation to store the current state and reset to that state during a simulation run.
 This allows for more capable co-simulation algorithms: For example, an importer can reset other FMUs to a point in time prior to the current communication time if an event occurred during that time period in some external system or other FMU.
 Note that this flexibility usually incurs some performance hit if used.
 +
 This sub-feature does not entail the ability to store that saved state in a persistent external format and restore from that in a separate simulation run (this requires serialization support).
 
-Serialize/Deserialize FMU State (FMI 2.0)::
+Serialize/Deserialize FMU State::
 This feature provides the ability to serialize a saved FMU state into a format that can be stored on persistent external storage and used in this or a separate simulation run to restore the FMU state to the current one.
 +
 This ability allows, for example, to freeze FMU states after lengthy initialization and stabilization phases and start new simulations directly from that state.
 
 === Data Types
 
-String Inputs/Outputs (FMI 2.0)::
+String Inputs/Outputs::
 The string data type has been part of FMI since 1.0 and is not optional.
 And like all data types, it can be used for all kinds of variables, i.e., parameters and constants, inputs, outputs, etc.
 +
 However, some simulation systems have no concept of string inputs/outputs at runtime, so this feature is not fully supported by all systems nor required for many use cases.
 The presence of this sub-feature indicates that the ability to pass strings at simulation time as inputs and outputs is important for the use case/profile.
 
-Binary Data Type Input/Output (FMI 3.0)::
+Binary Data Type Input/Output::
 FMI 3.0 adds a new binary data type that allows FMUs to transfer complete blocks of binary data into or out of the FMU.
 The binary data is opaque from the point of view of the simulator by default.
 However, FMUs can specify a MIME type for the data, allowing interpretation of the data by simulators if that is wanted/required.
@@ -48,27 +48,27 @@ Other use cases can be simulations of communication bus behavior by exchanging w
 +
 This sub-feature only deals with the use of the binary data type for inputs and outputs.
 
-Binary Data Type Parameters (FMI 3.0)::
+Binary Data Type Parameters::
 This sub-feature represents the ability to use the new binary data type of FMI 3.0 for parameters and constants, not just for inputs and outputs.
 
-New Integer Types (FMI 3.0)::
+New Integer Types::
 FMI 3.0 will offer a full complement of 8, 16, 32, and 64-bit signed and unsigned integer data types, not just the de-facto 32-bit signed integer data type that FMI 2.0 offers.
 
 === Array Input/Output Handling
 
-Fixed-size Arrays (FMI 3.0)::
+Fixed-size Arrays::
 FMI 3.0 offers variables that are native multi-dimensional arrays of the basic data types FMI 3.0 supports.
 This sub-feature contains only the use of arrays of fixed (i.e., at design time) size.
 +
 This sub-feature is only concerned with the use of arrays for inputs and outputs.
 
-Dynamically resizable Arrays (FMI 3.0)::
+Dynamically resizable Arrays::
 This sub-feature comprises the use of dynamically resizable arrays:
 This comprises the resizing of arrays either prior to simulation start at configuration time or during simulation using re-configuration mode.
 +
 This sub-feature is only concerned with the use of arrays for inputs and outputs.
 
-Resizable Arrays with Size-Dependencies (FMI 3.0)::
+Resizable Arrays with Size-Dependencies::
 FMI 3.0 performs array resizing by using special structural parameters that contain the sizes of array dimensions.
 Dependencies of sizes between multiple arrays can be expressed by using the same structural parameter in multiple array definitions, for example, to define matching matrixes for linear equation systems.
 +
@@ -76,18 +76,18 @@ This sub-feature is only concerned with the use of arrays for inputs and outputs
 
 === Array Parameter Handling
 
-Fixed-size Arrays (FMI 3.0)::
+Fixed-size Arrays::
 FMI 3.0 offers variables that are native multi-dimensional arrays of the basic data types FMI 3.0 supports.
 This sub-feature contains only the use of arrays of fixed (i.e., at design time) size.
 +
 This sub-feature is only concerned with the use of arrays for parameters and constants.
 
-Dynamically resizable Arrays (FMI 3.0)::
+Dynamically resizable Arrays::
 This sub-feature comprises the use of dynamically resizable arrays (i.e., resizing of arrays either prior to simulation start at configuration time or during simulation using re-configuration mode).
 +
 This sub-feature is only concerned with the use of arrays for parameters and constants.
 
-Resizable Arrays with Size-Dependencies (FMI 3.0)::
+Resizable Arrays with Size-Dependencies::
 FMI 3.0 performs array resizing by using special structural parameters that contain the sizes of array dimensions.
 Dependencies of sizes between multiple arrays can be expressed by using the same structural parameter in multiple array definitions, for example, to define matching matrixes for linear equation systems.
 +
@@ -95,27 +95,27 @@ This sub-feature is only concerned with the use of arrays for parameters and con
 
 === Calculation Model
 
-Variable Co-Simulation Communication Step Size (FMI 1.0)::
+Variable Co-Simulation Communication Step Size::
 FMI since 1.0 offers the ability of co-simulation FMUs to support variable communication step sizes, where the step size will be adjusted on a step-by-step case by the co-simulation algorithm of the importer.
 This option indicates whether support for variable step sizes by FMUs is deemed important for numerical performance.
 
-State and Output Dependencies (FMI 2.0)::
+State and Output Dependencies::
 FMI 2.0 supports the ability of FMUs to provide information on the dependencies of state derivatives and output variables from inputs and states.
 In other words, the sparsity pattern for Jacobians can be defined.
 This allows simulating stiff FMUs with many states (> 1000 states) since sparse matrix methods can be utilized in the numerical integration method.
 Furthermore, it can be stated whether this dependency is linear (this allows to transform nonlinear algebraic equation systems into linear equation systems when connecting FMUs).
 
-Output Derivatives in Co-Simulation (FMI 2.0)::
+Output Derivatives in Co-Simulation::
 FMI since 2.0 offers the ability of co-simulation FMUs to give access to nth-order output derivatives to enable co-simulation algorithms to interpolate output values between communication steps with higher accuracy.
 
-Directional Derivatives (FMI 2.0)::
+Directional Derivatives::
 FMI 2.0 supports the ability of FMUs to provide directional derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
 Directional derivatives can be computed for continuous-time states and outputs.
 This is useful when connecting FMUs, and the partial derivatives of the connected FMU shall be computed.
 Suppose the exported FMU performs this computation analytically.
 In that case, all numerical algorithms based on these partial derivatives (for example, the numerical integration method or nonlinear algebraic solvers) are more efficient and reliable.
 
-Adjoint Derivatives (FMI 3.0)::
+Adjoint Derivatives::
 FMI 3.0 supports the ability of FMUs to provide adjoint derivatives of state variables and outputs, e.g., in order to construct a partial derivative matrix:
 Adjoint derivatives can be computed for continuous-time states and outputs.
 +
@@ -123,46 +123,46 @@ Adjoint derivatives are beneficial in several contexts:
 For machine learning applications, adjoint derivatives (also called vector gradient products) are used in backpropagation to perform gradient-based optimization of parameters using reverse mode automatic differentiation.
 Similarly adjoint derivatives can also be used for parameter estimation.
 
-Restartable Early Return in Hybrid Co-Simulation (FMI 3.0)::
+Restartable Early Return in Hybrid Co-Simulation::
 FMI 3.0 will offer support for FMUs to return from their fmi3DoStep calculation routine before completing the whole indicated time step.
 This can be used to signal an internal event or discontinuity, allowing the importer to continue the step after this early return.
 +
 This feature allows for more efficient co-simulation algorithms due to the more precise detection of event times, if, e.g., used in combination with resettable FMUs.
 
-Intermediate Output Values in Co-Simulation (FMI 3.0)::
-FMI 3.0 will support the option for FMUs to give access to intermediate output values through a mechanism called intermediate update mode.
+Intermediate Output Values in Co-Simulation::
+FMI 3.0 supports the option for FMUs to give access to intermediate output values through a mechanism called intermediate update mode.
 This feature provides access to values that are generated due to internal integration/calculation steps but would previously not have been visible unless the co-simulation algorithm reduces the communication step size.
 +
 These additional values can be used, for example, for improved interpolation/extrapolation of values or recording of more precise result curves, without incurring the overhead of smaller communication step sizes.
 
-Co-Simulation with Clock Information (FMI 3.0)::
-FMI 3.0 will offer support for clock annotations on variables.
+Co-Simulation with Clock Information::
+FMI 3.0 offers support for clock annotations on variables.
 This feature can be used in co-simulation mode to allow a co-simulation algorithm to dynamically adjust communication step sizes to match multiple internal rates of an FMU to transfer information between FMUs more precisely.
 
-Scheduled Execution Interface (FMI 3.0)::
-FMI 3.0 will offer support for FMUs to allow direct activation of separate time partitions from the importer.
+Scheduled Execution Interface::
+FMI 3.0 offers support for FMUs to allow direct activation of separate time partitions from the importer.
 This interface type makes it possible for importers to interleave calculations of different time partitions of different FMUs efficiently to support, for example, real-time simulation of multiple FMUs in hardware-resource-constrained systems, like HiL systems.
 +
 Note that this interface is different from the co-simulation interface.
 It is recommended that FMUs providing a Scheduled Execution interface also provide a Co-Simulation interface for use in systems that do not require the execution control of Scheduled Execution.
 
-Clocked Model-Exchange (FMI 3.0)::
-FMI 3.0 will support clocked model exchange, where signals are only considered active when their related clocks tick.
+Clocked Model-Exchange::
+FMI 3.0 supports clocked model exchange, where signals are only considered active when their related clocks tick.
 This allows for more precise support for discrete/continuous hybrid systems or systems with multiple non-least-common-denominator clocks/rates.
 
 === Execution Targets
 
-Source Code FMUs (FMI 1.0)::
+Source Code FMUs::
 FMI offers the ability to distribute FMUs that contain C source code as one of its target implementations, which then relies on the portability of the code and the ability of the receiving implementation to compile that code to its target architecture.
 +
 The use of source code implies the usual trade-offs:
 The potential broader portability of the source code is balanced by, for example, potential portability problems in the code, availability of compilers on the target platform, need for code obfuscation to add IP protection.
 On the other hand, this makes the FMU usable on platforms for which the generating party has no available compiler toolchain or cross-compilation support.
 
-Binary FMUs for Desktop Platforms (FMI 1.0)::
+Binary FMUs for Desktop Platforms::
 This sub-feature describes the usual ability to generate FMUs with binary implementations (either dynamically or statically linked libraries) for the typical desktop computing platforms, like Windows/x64 and Linux/x64.
 
-Binary FMUs for non-Desktop Platforms (e.g. HiL) (FMI 1.0)::
+Binary FMUs for non-Desktop Platforms (e.g. HiL)::
 FMI supports the inclusion of multiple binary implementations of an FMU.
 This sub-feature deals with the requirement to generate FMUs that include binary implementations for non-Desktop platforms, like common HiL platforms or other potentially embedded target architectures.
 This is a catch-all feature since the actual requirement will have to be specific for the architectures actually needed.
