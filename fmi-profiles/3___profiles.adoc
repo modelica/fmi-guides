@@ -79,29 +79,29 @@ Required Features::
 
 This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
 
+This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems
+
 Required Features::
   - Tunable Parameters
-  - Store/Restore FMU State
-  - Serialize/Deserialize FMU State
-  - String Inputs/Outputs
-  - Binary Data Type Input/Output
+  - Directional Derivatives (*ME only*)
   - New Integer Types
   - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Resizable Input/Output Arrays with Size-Dependencies
   - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Resizable Parameter Arrays with Size-Dependencies
-  - Variable Co-Simulation Communication Step Size
   - State and Output Dependencies
-  - Output Derivatives in Co-Simulation
-  - Restartable Early Return in Hybrid Co-Simulation
-  - Intermediate Output Values in Co-Simulation
-  - Co-Simulation with Clock Information
   - Binary FMUs for Desktop Platforms
 
 Recommended Features::
-  - Directional Derivatives
+CS specific recommended:: 
+  - Binary Data Type Input/Output
+  - Fixed-size Input/Output Arrays
+  - Resizable Parameter Arrays
+  - Resizable Parameter Arrays with Size-Dependencies
+  - Variable Co-Simulation Communication Step Size  (*CS only*)
+  - Restartable Early Return in Hybrid Co-Simulation (*CS only*)
+  - Output Derivatives in Co-Simulation (*CS only*)
+  - Intermediate Input Values in Co-Simulation (*CS only*)
+  - Directional Derivatives (*CS only*)
+  - Store/Restore FMU State (*CS only*)
 
 
 === Dynamics Controller Profile
