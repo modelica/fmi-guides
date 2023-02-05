@@ -79,8 +79,6 @@ Required Features::
 
 This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
 
-This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems
-
 Required Features::
   - Tunable Parameters
   - Directional Derivatives (*ME only*)
