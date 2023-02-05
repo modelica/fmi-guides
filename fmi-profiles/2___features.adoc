@@ -31,13 +31,6 @@ This ability allows, for example, to freeze FMU states after lengthy initializat
 
 === Data Types
 
-String Inputs/Outputs::
-The string data type has been part of FMI since 1.0 and is not optional.
-And like all data types, it can be used for all kinds of variables, i.e., parameters and constants, inputs, outputs, etc.
-+
-However, some simulation systems have no concept of string inputs/outputs at runtime, so this feature is not fully supported by all systems nor required for many use cases.
-The presence of this sub-feature indicates that the ability to pass strings at simulation time as inputs and outputs is important for the use case/profile.
-
 Binary Data Type Input/Output::
 FMI 3.0 adds a new binary data type that allows FMUs to transfer complete blocks of binary data into or out of the FMU.
 The binary data is opaque from the point of view of the simulator by default.
