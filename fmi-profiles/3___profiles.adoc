@@ -116,17 +116,19 @@ This is a profile that caters to different but overlapping optimization use case
 Required Features::
   - Tunable Parameters
   - Store/Restore FMU State
-  - Serialize/Deserialize FMU State
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Variable Co-Simulation Communication Step Size
   - State and Output Dependencies
-  - Output Derivatives in Co-Simulation
   - Directional Derivatives
   - Adjoint Derivatives
-  - Intermediate Output Values in Co-Simulation
   - Binary FMUs for Desktop Platforms
+  - Serialize/Deserialize FMU State (*CS only*)
+  - Variable Co-Simulation Communication Step Size (*CS only*)
+  - Output Derivatives in Co-Simulation (*CS only*)
+  - Intermediate Output Values in Co-Simulation (*CS only*)
+
+  Recommended Features::
+  - Resizable Parameter Arrays
 
 
 === Feature Overview
