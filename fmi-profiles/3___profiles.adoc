@@ -27,7 +27,7 @@ Required Features::
   - Tunable Parameters
   - Binary Data Type Input/Output
   - Binary Data Type Parameters
-  - Variable Co-Simulation Communication Step Size
+  - Variable Co-Simulation Communication Step Size (*CS only*)
 
 Recommended Features::
   - Source Code FMUs
@@ -70,14 +70,13 @@ This is a profile for high dynamics mechatronic simulation, including variable c
 
 Required Features::
   - Tunable Parameters
-  - Directional Derivatives (*ME only*)
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - State and Output Dependencies
+  - Directional Derivatives (*ME only*)
 
 Recommended Features::
   - Binary Data Type Input/Output
-  - Fixed-size Input/Output Arrays
   - Resizable Parameter Arrays
   - Resizable Parameter Arrays with Size-Dependencies
   - Variable Co-Simulation Communication Step Size  (*CS only*)
@@ -92,7 +91,7 @@ Recommended Features::
 This is a profile for high dynamics mechatronic simulation that includes discrete controller implementations.
 This profile extends the dynamics profile to include model exchange with clocks to allow for efficient handling of tightly coupled sub-systems with reliable support for coupling discrete controller time partitions across FMUs.
 
-(all required and recommended feautures form XiL Profile)
+(all required and recommended feautures form Dynamics Profile)
 
 Required Features::
   - Clocked Model-Exchange (*ME only*)
@@ -110,12 +109,12 @@ This is a profile that caters to different but overlapping optimization use case
 
 Required Features::
   - Tunable Parameters
-  - Store/Restore FMU State
   - Fixed-size Input/Output Arrays
   - Fixed-size Parameter Arrays
   - State and Output Dependencies
   - Directional Derivatives
   - Adjoint Derivatives
+  - Store/Restore FMU State (*CS only*)
   - Serialize/Deserialize FMU State (*CS only*)
   - Variable Co-Simulation Communication Step Size (*CS only*)
   - Output Derivatives in Co-Simulation (*CS only*)
@@ -130,41 +129,41 @@ Required Features::
 In the table below, the placement of an `X` indicates a required feature, and a `*` indicates a recommended feature.
 
 [[feature-matrix]]
-[cols="1h,<3,8*^1"]
+[cols="1h,<3,7*^1"]
 |========
-|Area|Feature|FMI Version|Basic CS Profile|Sensor Profile|Basic HiL & Sensor HiL Profile|SIL ECU Profile|Dynamics Profile|Dynamics Controller Profile|Optimization Profile
+|Area|Feature|Basic CS Profile|Sensor Profile|XiL Profile|ECU Profile|Dynamics Profile|Dynamics Controller Profile|Optimization Profile
 
-2+|Parameter Handling||||||||
-| |Tunable Parameters|2.0|X|X|X|X|X|X|X
-2+|State Handling||||||||
-| |Store/Restore FMU State|2.0||||X|X|X|X
-| |Serialize/Deserialize FMU State|2.0|||||X|X|X
-2+|Data Types||||||||
-| |Binary Data Type Input/Output|3.0||X|X|X|X|X|
-| |Binary Data Type Parameters|3.0||X|X|X|||
-| |New Integer Types|3.0|||X|X|X|X|X
+2+|Parameter Handling|||||||
+| |Tunable Parameters|X|X|X|X|X|X|X|
+2+|State Handling|||||||
+| |Store/Restore FMU State|||*|*|*|X|
+| |Serialize/Deserialize FMU State|||||||X|
+2+|Data Types|||||||
+| |Binary Data Type Input/Output||X|X|*|*||
+| |Binary Data Type Parameters||X|X|X|||
 2+|Array Input/Output Handling||||||||
-| |Fixed-size Arrays|3.0|X||X|X|X|X|X
-| |Dynamically resizable Arrays|3.0|X|||X|X|X|
-| |Resizable Arrays with Size-Dependencies|3.0|||||X|X|
+| |Fixed-size Arrays|X||X|X|X|X|X
+| |Resizable Arrays|||||||
+| |Resizable Arrays with Size-Dependencies|||||||
 2+|Array Parameter Handling||||||||
-| |Fixed-size Arrays|3.0|X||X|X|X|X|X
-| |Dynamically resizable Arrays|3.0|X|||X|X|X|X
-| |Resizable Arrays with Size-Dependencies|3.0|||||X|X|
-2+|Calculation Model||||||||
-| |Variable Co-Simulation Communication Step Size|1.0||X||X|X|X|X
-| |State and Output Dependencies|2.0|||||X|X|X
-| |Output Derivatives in Co-Simulation|2.0|||||X|X|X
-| |Directional Derivatives|2.0|||||*|*|X
-| |Adjoint Derivatives|3.0|||||||X
-| |Restartable Early Return in Hybrid Co-Simulation|3.0|||||X|X|
-| |Intermediate Variable Access|3.0|||||X|X|X
-| |Co-Simulation with Clock Information|3.0||||X|X|X|
-| |Scheduled Execution Interface|3.0|||X|X|||
-| |Clocked Model-Exchange|3.0||||||X|
-2+|Execution Targets||||||||
-| |Source Code FMUs|1.0|*|*|X|X|||
+| |Fixed-size Arrays|X||X|X|X|X|X
+| |Resizable Arrays|*|||X|X|*|*
+| |Resizable Arrays with Size-Dependencies|||||||
+2+|Calculation Model|||||||
+| |Variable Co-Simulation Communication Step Size||X|*|*|X|X|X|
+| |State and Output Dependencies||||X|X|X
+| |Output Derivatives in Co-Simulation|||||*|*|X|
+| |Directional Derivatives|||||*|*|X|
+| |Adjoint Derivatives||||||X|
+| |Restartable Early Return in Hybrid Co-Simulation||||*|*|X|
+| |Intermediate Variable Access||||*|*|X
+| |Co-Simulation with Clock Information||||X|X|X|
+| |Scheduled Execution Interface||||*|||
+| |Clocked Model-Exchange||||||X|
+2+|Execution Targets||||||
+| |Source Code FMUs|*|*|X|X|||
 |========
+
 
 The support for source code FMUs is not strictly necessary for the Basic CS and Sensor profiles but is highly recommended to support the portability of FMUs to new platforms.
 
