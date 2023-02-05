@@ -81,7 +81,6 @@ Required Features::
   - Binary FMUs for Desktop Platforms
 
 Recommended Features::
-CS specific recommended:: 
   - Binary Data Type Input/Output
   - Fixed-size Input/Output Arrays
   - Resizable Parameter Arrays
@@ -93,35 +92,19 @@ CS specific recommended::
   - Directional Derivatives (*CS only*)
   - Store/Restore FMU State (*CS only*)
 
-
 === Dynamics Controller Profile
 
 This is a profile for high dynamics mechatronic simulation that includes discrete controller implementations.
 This profile extends the dynamics profile to include model exchange with clocks to allow for efficient handling of tightly coupled sub-systems with reliable support for coupling discrete controller time partitions across FMUs.
 
+(all required and recommended feautures form XiL Profile)
+
 Required Features::
-  - Tunable Parameters
-  - Store/Restore FMU State
-  - Serialize/Deserialize FMU State
-  - Binary Data Type Input/Output
-  - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Resizable Input/Output Arrays with Size-Dependencies
-  - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Resizable Parameter Arrays with Size-Dependencies
-  - Variable Co-Simulation Communication Step Size
-  - State and Output Dependencies
-  - Output Derivatives in Co-Simulation
-  - Restartable Early Return in Hybrid Co-Simulation
-  - Intermediate Output Values in Co-Simulation
-  - Co-Simulation with Clock Information
-  - Clocked Model-Exchange
-  - Binary FMUs for Desktop Platforms
-
-Recommended Features::
-  - Directional Derivatives
-
+  - Clocked Model-Exchange (*ME only*)
+  - Variable Co-Simulation Communication Step Size (*CS only*)
+  - Restartable Early Return in Hybrid Co-Simulation (*CS only*)
+  - Intermediate Output Values in Co-Simulation  (*CS only*)
+  - Co-Simulation with Clock Information (*CS only*)
 
 === Optimization Profile
 
