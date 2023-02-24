@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.18">
 <title>FMI 3.0 Implementers' Guide</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -589,8 +589,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-222b392f6a49fbeb4bcf4c0d120b2b8ed4d642be,</span>
-<span id="revdate">2022-06-27</span>
+<span id="revnumber">version main-7f6ef479350d06fbdc042eca7e236947acd5b42f,</span>
+<span id="revdate">2023-02-24</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -849,7 +849,7 @@ This allows importing implementations to provide proper feedback to the user.</p
 <p>Exchange of FMUs can be eased tremendously if an option exists to generate FMUs that do not require license mechanisms at the receiving party.</p>
 </div>
 <div class="paragraph">
-<p>If license mechanisms are used for IP protection, alternative approaches can be useful to consider (see, for example, Appendix F IP Protection of the prostep ivip SmartSE Recommendation V2 <a href="#SMARTSEV2">[SMARTSEV2]</a>).</p>
+<p>If license mechanisms are used for IP protection, alternative approaches can be useful to consider (see, for example, Part D IP Protection of the prostep ivip SmartSE Recommendation 2022 PSI 11 V3.0 <a href="#SMARTSEV3">[SMARTSEV3]</a>).</p>
 </div>
 </div>
 </div>
@@ -2166,7 +2166,7 @@ For example, constructing the system Jacobian \({\mathbf{A} = \frac{\partial \ma
 <p><a id="BKF17"></a>[BKF17] Braun W., Kulshreshtha K., Franke R., Walther A., Bachmann B. (2017): <strong>Towards Adjoint and Directional Derivatives in FMI utilizing ADOL-C within OpenModelica</strong>. 12th International Modelica Conference, Prague, 2017. <a href="https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf" class="bare">https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf</a></p>
 </li>
 <li>
-<p><a id="SMARTSEV2"></a>[SMARTSEV2] prostep ivip: <strong>SmartSE Recommendation V2</strong>. April 2018. <a href="https://www.prostep.org/fileadmin/downloads/prostep-ivip-Recommendation_PSI11_SmartSE_V2-0.zip" class="bare">https://www.prostep.org/fileadmin/downloads/prostep-ivip-Recommendation_PSI11_SmartSE_V2-0.zip</a></p>
+<p><a id="SMARTSEV3"></a>[SMARTSEV3] prostep ivip: <strong>SmartSE Recommendation 2022 PSI 11 V3.0</strong>. December 2022. <a href="https://www.prostep.org/fileadmin/downloads/PSI_11_V3_SmartSE_Rec_and_Part_A-I.zip" class="bare">https://www.prostep.org/fileadmin/downloads/PSI_11_V3_SmartSE_Rec_and_Part_A-I.zip</a></p>
 </li>
 <li>
 <p><a id="FMUCC"></a>[FMUCC] Modelica Association: <strong>FMU Compliance Checker</strong>. <a href="https://www.fmi-standard.org/downloads" class="bare">https://www.fmi-standard.org/downloads</a></p>
@@ -2186,7 +2186,7 @@ For example, constructing the system Jacobian \({\mathbf{A} = \frac{\partial \ma
 <script>
 if (!hljs.initHighlighting.called) {
   hljs.initHighlighting.called = true
-  ;[].slice.call(document.querySelectorAll('pre.highlight > code')).forEach(function (el) { hljs.highlightBlock(el) })
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
 }
 </script>
 <script type="text/x-mathjax-config">
