@@ -70,4 +70,4 @@ This allows importing implementations to provide proper feedback to the user.
 
 Exchange of FMUs can be eased tremendously if an option exists to generate FMUs that do not require license mechanisms at the receiving party.
 
-If license mechanisms are used for IP protection, alternative approaches can be useful to consider (see, for example, Appendix F IP Protection of the prostep ivip SmartSE Recommendation V2 <<SMARTSEV2>>).
+If license mechanisms are used for IP protection, alternative approaches can be useful to consider (see, for example, Part D IP Protection of the prostep ivip SmartSE Recommendation 2022 PSI 11 V3.0 <<SMARTSEV3>>).
