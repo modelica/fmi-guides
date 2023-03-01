@@ -1,14 +1,20 @@
 The FMI 3.0 Implementers' Guide is a free resource intended to give non-normative recommendations and guidance to implementers of the Functional Mock-up Interface standard version 3.0.
 All guidance is based on FMI 3.0 unless otherwise noted or applicable.
-This is a development version of the guide that has not been reviewed or finalized in any way.
-All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI 3.0 standard.
+This document is a joint publication by the Modelica Association Project FMI and the prostep ivip SmartSE project.
+It is continually revised based on implementer and user feedback and input.
+All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI 3.0 standard, or any other standard or layered standard.
 https://github.com/modelica/fmi-guides/releases[Releases] and https://github.com/modelica/fmi-guides/issues[issues] can be found on https://github.com/modelica/fmi-guides[github.com/modelica/fmi-guides].
 
 {empty} +
 {empty}
 
-////
-Copyright notice and license information will go here.
-////
+Copyright (C) 2016-2020 prostep ivip project SmartSE and 2021-2023 The Modelica Association Project FMI.
+
+This document is licensed under the Attribution-ShareAlike 4.0 International license.
+The code is released under the 2-Clause BSD License.
+The licenses text can be found in the https://raw.githubusercontent.com/modelica/fmi-guides/main/LICENSE.txt[LICENSE.txt] file that accompanies this distribution.
+
+Attention is drawn to the possibility that some of the elements of this document may be the subject of patent rights.
+Modelica Association and prostep ivip e.V. shall not be held responsible for identifying such patent rights.
 
 {empty}
