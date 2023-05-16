@@ -10,11 +10,11 @@ jobs:
   build-guides:
     name: Build FMI Guides
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: prepare
       run: mkdir build && mkdir build/fmi-guide && mkdir build/fmi-profiles
     - name: build implementers guide
@@ -28,13 +28,13 @@ jobs:
     - name: copy images
       run: tar cf - fmi-guide/images fmi-profiles/images | tar xfC - build
     - name: archive implementers guide
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: FMI-Guide
         path: build/fmi-guide/*
         if-no-files-found: error
     - name: archive FMI profiles
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: FMI-Profiles
         path: build/fmi-profiles/*
@@ -45,7 +45,7 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
     - name: deploy
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      uses: peaceiris/actions-gh-pages@v3.7.0-8
+      uses: peaceiris/actions-gh-pages@v3.9.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: build
