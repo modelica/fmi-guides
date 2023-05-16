@@ -116,7 +116,27 @@ They should provide support for generating FMUs that contain multiple binary imp
 
 Exporting implementations should document supported compilers, their versions, and required compiler flags and settings to compile generated source FMUs for common platforms.
 
-For FMI 3.0, the compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU to allow automated building from source as far as possible.
+For FMI 3.0, the languages, compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU to allow automated building from source as far as possible.
+The following are lists of commonly agreed upon names for languages and compilers, that should be used if no other values are more appropriate:
+
+Languages::
+  C90::: ISO/IEC 9899:1990, which is technically identical to ANSI X3.159-1989 (sometimes termed C89)
+  C95::: ISO/IEC 9899:1990/AMD1:1995, i.e. ISO/IEC 9899:1990 as ammended by Ammendment 1, including wide characters, digraphs, and standard macro `__STDC_VERSION__`
+  C99::: ISO/IEC 9899:1999
+  C11::: ISO/IEC 9899:2011
+  C17::: ISO/IEC 9899:2018
+  
+  C++98::: ISO/IEC 14882:1998
+  C++03::: ISO/IEC 14882:2003
+  C++11::: ISO/IEC 14882:2011
+  C++14::: ISO/IEC 14882:2014
+  C++17::: ISO/IEC 14882:2017
+  C++20::: ISO/IEC 14882:2020
+
+Compilers::
+  VisualC::: Microsoft Visual Studio C/C++ compiler
+  gcc::: GNU Compiler Collection (gcc) C/C++ compiler
+  clang::: CLANG LLVM-based C/C++ compiler
 
 When generating binary FMUs directly, the supported and used compilers, compiler flags, and settings should also be documented.
 This allows users to troubleshoot integration issues when integrating binary FMUs into other environments.
