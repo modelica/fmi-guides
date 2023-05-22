@@ -167,6 +167,12 @@ Furthermore, in case of failure, automatic linking is unlikely to provide user-u
 Note that simple calls to `LoadLibrary` or `LoadLibraryEx` on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons:
 The search path will be based on the location of the importer executable and not the FMU DLL.
 
+Importers should consider using flags like `RTLD_LOCAL` on POSIX platforms with `dlopen`, to avoid symbols from loaded shared objects being resolved against other loaded shared objects (i.e. other FMUs) by accident.
+
+Note that for POSIX platforms, like Linux, `dlclose` is not required to unload a shared object, but it can, as specified in IEEE Std 1003.1-2017 (and earlier).
+In particular, shared objects compiled with GCC without the flag `-fno-gnu-unique`, can be marked as unloadable, and thus will not generally be unloaded upon `dlclose`.
+In many instances shared objects loaded with `RTLD_GLOBAL` cannot unload until all relocations of other objects to symbols in the shared object have been unloaded.
+
 === Interaction between FMU and Importer
 
 The FMU code will run in the process environment that the importer provides.
