@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="generator" content="Asciidoctor 2.0.20">
 <title>FMI 3.0 Implementers' Guide</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -590,8 +590,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-b91a3df7e4a1b21aea3c8c7e84950511c19cdc1a,</span>
-<span id="revdate">2023-05-16</span>
+<span id="revnumber">version main-4ffc46cdd7e6a20e40f31163e867a257ba75f460,</span>
+<span id="revdate">2023-05-22</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -1124,6 +1124,14 @@ Furthermore, in case of failure, automatic linking is unlikely to provide user-u
 <div class="paragraph">
 <p>Note that simple calls to <code>LoadLibrary</code> or <code>LoadLibraryEx</code> on Windows, without specifying the full path to the library are also not going to work in general, for the same reasons:
 The search path will be based on the location of the importer executable and not the FMU DLL.</p>
+</div>
+<div class="paragraph">
+<p>Importers should consider using flags like <code>RTLD_LOCAL</code> on POSIX platforms with <code>dlopen</code>, to avoid symbols from loaded shared objects being resolved against other loaded shared objects (i.e. other FMUs) by accident.</p>
+</div>
+<div class="paragraph">
+<p>Note that for POSIX platforms, like Linux, <code>dlclose</code> is not required to unload a shared object, but it can, as specified in IEEE Std 1003.1-2017 (and earlier).
+In particular, shared objects compiled with GCC without the flag <code>-fno-gnu-unique</code>, can be marked as unloadable, and thus will not generally be unloaded upon <code>dlclose</code>.
+In many instances shared objects loaded with <code>RTLD_GLOBAL</code> cannot unload until all relocations of other objects to symbols in the shared object have been unloaded.</p>
 </div>
 </div>
 <div class="sect2">
