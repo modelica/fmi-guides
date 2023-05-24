@@ -1,0 +1,21 @@
+= FMI LS BUS Implementers' Guide
+:doctype: book
+:imagesdir: images
+:sectnums:
+:sectnumlevels: 5
+:toc: left
+:toc-title: Contents
+:toclevels: 5
+:xrefstyle: short
+:docinfo: shared
+:stylesheet: fmi-guide.css
+:stem: latexmath
+:source-highlighter: highlightjs
+:nofooter:
+:icons: font
+
+include::0___preamble.adoc[]
+
+include::1___introduction.adoc[]
+
+include::A___literature.adoc[]
