@@ -1,3 +1,9 @@
 == Introduction
+This document provides best practice recommendations to implementers of https://modelica.github.io/fmi-ls-bus/main/[FMI Layered Standard for Network Communication].
+The overarching goal of the recommendations is to aid interoperability of implementations and ensure good ease-of-use for the user in employing FMI.
 
-TODO
+This document is intended for simulation tool vendors planning to support FMI Layered Standard for Network Communication in their products, either for creating or simulating such FMUs, or both.
+It assumes a technical audience familiar with the specification documents and tries to give further information and hints in areas where either the relevant specification documents have been found sometimes to be less clear than expected or where user expectations are relevant to implementation choices.
+It also considers errors and bugs encountered in the practical use of existing FMI implementations and guides to avoid common pitfalls.
+
+This document will be maintained and expanded over time as new issues or needs for clarification appear.

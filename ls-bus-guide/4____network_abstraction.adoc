@@ -1,0 +1,150 @@
+== Network Abstraction ("low cut")
+This chapter contains details on common topics of the network abstraction layer.
+
+=== Differences between System Compositions
+The principles of communication is closely linked with the introduced System Compositions.
+Within the `Direct Communication` use case in combination with network abstraction, exactly two FMUs communicate with each other.
+No Bus Simulation is required.
+<<#figure-example-network-simulation-direct>> illustrates this communication, whereby FMU 1 transmits network data to FMU 2.After that, the transmission is directly confirmed by FMU 1 itself, whereby FMU 1 handles that self confirmation internally.
+
+.Direct communication between two FMUs.
+[#figure-example-network-simulation-direct]
+image::principles_of_communication_direct.svg[width=40%, align="center"]
+
+Within `Composition with dedicated Bus Simulation FMU` and `Importer with Integrated Bus Simulation` communication case there exists always a Bus Simulation and two or more FMUs can be connected for communication.
+Bus connections between FMUs are then redirected via the Bus Simulation (FMU).
+This means that the bus simulation model sets the level of accuracy and feature support for the respective bus type.
+
+<<#figure-example-network-simulation-complex>> shows the communication of two FMUs which are connected via a Bus Simulation.
+All in all FMU 1 transmits network data to FMU 2.
+First FMU 1 commits the baud rate to the Bus Simulation.
+This information can be used for timing calculations during the transmission of a message.
+In a second operation FMU 1 transmits network data to the Bus Simulation.
+Inside the Bus Simulation a calculation of the transmission time for the specified network data is done.
+After this the Bus Simulation transmits the network data to FMU 2 and confirms the successful transmission to FMU 1.
+
+.Communication between two FMUs by using a Bus Simulation FMU.
+[#figure-example-network-simulation-complex]
+image::principles_of_communication_complex.svg[width=70%, align="center"]
+
+=== Creating Bus Operations ahead of the next Simulation Step
+#TODO#
+
+=== Data and Time Synchronization
+More detailed network simulations, including bandwidth restrictions, message arbitration and delays are only possible in the use cases `Composition with dedicated Bus Simulation FMU` and `Importer with Integrated Bus Simulation`.
+To provide a a simulation with accurate timing, all FMUs and the Bus Simulation FMU have to be temporally synchronized to the moment when frames shall be exchanged.
+Based on this requirement every stem:[step_{n-1}] already needs to calculate the communication point stem:[CP_{n}] of the next stem:[step_{n}] to exchange frames, whereby stem:[n=0] means the initialization phase of the specified FMU.
+This information will be transported in form of a time-based aperiodic countdown clock.
+
+<<#figure-example-network-simulation>> illustrates the communication process between the two FMUs FMU 1 and FMU 2 by using a Bus Simulation FMU.
+During the initialization phase of FMU 1, it is determined that FMU 1 would like to communicate at stem:[CP_{1,FMU1}=0.1s].
+The same happens for FMU 2, except that stem:[CP_{1,FMU2}=1.1s].
+Both FMUs have thus calculated a communication point stem:[CP_{n}] for the future stem:[step_{1}] in stem:[step_{0}].
+For FMU 1 the time is at stem:[CP_{1,FMU1}=0.1s] and for FMU 2 it is stem:[CP_{1,FMU2}=1.1s].
+The frame to be transmitted is now received by the Bus Simulation FMU at time 0.1 and this calculates a transmission time of 0.008 seconds considering the bits to transfer with respect to the specified baud rate of the bus, so that stem:[CP_{1,Bus FMU}=0.1008s].
+Since the communication time of FMU 1 was already reached at stem:[CP_{1,FMU1}=0.1s], only the two remaining communication points stem:[CP_{1,Bus FMU}=0.1008s] and stem:[CP_{1,FMU2}=1.1s] are relevant.
+Since stem:[CP_{1,Bus FMU}=0.1008s] is closest in the future, this is considered first.
+Thus, at time 0.1008, a confirmation is sent to FMU 1 and the frame to be transmitted is send to FMU 2.
+The last remaining communication point now exists with stem:[CP_{1,FMU2}=1.1s] in which a transmission from FMU 2 to FMU 1 is triggered.
+
+.Example for network simulation with timing behavior.
+[#figure-example-network-simulation]
+image::bus_simulation_example.svg[width=80%, align="center"]
+
+Overall, this means that all FMUs within a simulation system are synchronized at the time of message exchange.
+Within the FMI Co-Simulation (CS) mode, the DoStep() method of an FMU ends with the transmission of exactly one frame.
+
+As already shown in <<#figure-example-network-simulation>>, the filling of the `Tx Data Variable` takes place within the FMI Co-Simulation (CS) mode during the execution of the Step Mode.
+After collecting the data, the Step Mode is exited and the FMI `Event Mode` is entered.
+During the `Event Mode`, the variable values of the `Tx Data Variable` are now exchanged within the entire simulation network.
+The variable values are stored in the `Rx Data Variable` of a recipient and can be used there.
+The exchange of the variable values can take several iterations within the super-dense `Event Mode` time.
+
+<<#figure-example-network-simulation>> shows the exchange of data several times.
+In step 0.1 (1), a transmit operation is exchanged between FMU 1 and the Bus Simulation FMU.
+In step 0.008 (2) the transmit operation between the Bus Simulation FMU and FMU 2 is first exchanged.
+In a further iteration, but in the same `Event Mode`, the confirm operation is exchanged between the Bus Simulation FMU and FMU 1.
+
+The synchronization via a dynamic communication point is only possible if all FMUs and the Bus Simulation FMU supports variable step-size.
+The combination of variable step-size FMUs and fixed step-size will be discussed within <<low-cut-queuing-bus-operations>>.
+
+=== Queuing Bus Operations [[low-cut-queuing-bus-operations]]
+For simplification reasons or if a detail bus simulation is not desired, fixed-step size FMUs can also be used with the network abstraction.
+The primary difference between a fixed-step size FMU and a variable-step size FMU is that the fixed-step size FMU can generate multiple Tx operations during one Step Mode iteration.
+Variable-step size FMUs with respect to `Bus Communication Points`, on the other hand, adjust the length of the Step Mode in such a way that they only generate one Tx operation and synchronize themselves again with the overall network in terms of time afterwards.
+To ensure that fixed-step size FMUs and variable-step size FMUs can be combined without affecting each other, these two groups of FMUs have to be decoupled.
+Variable-step size FMUs can therefore continue to simulate each other with cycle accuracy and are not limited in their range of functions by a fixed step size of the other FMUs.
+This decoupling is realized by queuing Tx/Rx bus operations inside the Bus Simulation as well as queuing Tx bus operations inside Network FMUs.
+
+In general, fixed-step size FMUs shall queue all Tx operations locally within the FMU during each Step Mode execution.
+After exiting Step Mode, all collected Tx operations shall be transferred to the Bus Simulation.
+This can be done sequentially or all Tx operations can be aggregated within one `Tx Data Variable`.
+The Bus Simulation accepts all Tx operations and stores them into a queue.
+The specified queue is now gradually processed by the Bus Simulation and makes all Tx operations available to the other FMUs in the network.
+This is done sequentially with respect to the original order specified by the Network FMU and according to the requirements of the respective bus simulation model.
+If several Tx operations have been combined in one `Tx Data Variable`, the Bus Simulation must recognize them and split them up into individual Tx operations for forwarding.
+The receiving Tx operations of a fixed-step size FMU are also buffered by the Bus Simulation and made available to the fixed-step size FMU after exiting the respective Step Mode.
+The Bus Simulation can provide appropriate queues for all FMUs.
+These are used for fixed-step size FMUs.
+For variable-step size FMUs, which support `Bus Communication Point` handling, only exactly one buffer location is required.
+If the respective bus type uses a Transmit/Confirm pattern the confirmation can be return from the Bus Simulation when the specified Transmit operation is stored in one of the Tx/Rx queues.
+The concrete handling of the confirmation is explicitly specified again for each bus type in the relevant chapter.
+In order for the communication between the FMUs to work as described, an additional communication point of all FMUs shall be set up based on the specified fixed-step size value.
+
+.Combination of two variable-step size FMUs and one fixed-step size FMU.
+[#figure-queuing-bus-operations]
+image::queuing_bus_operations.svg[width=70%, align="center"]
+
+<<#figure-queuing-bus-operations>> shows the combination of two variable-step size FMUs and one fixed-step size FMU.
+The two variable-step size FMUs simulate cycle-accurate through the Bus Simulation according to the rules of using `Bus Communication Points`.
+After the fixed-step size FMU has left its Step Mode stem:[n] Transmit operations are provide to the Bus Simulation.
+It also receives stem:[m] Transmit operations that were buffered by the Bus Simulation while the fixed-step size FMU was in its Step Mode iteration.
+Within the figure the variable-step size FMUs exactly use one buffer location and the fixed-step size FMUs uses as much as are needed.
+However, depending on the chosen simulation step-size, delay effects of the Bus Simulation have to be taken into account.
+This applies in particular to confirm and error operations.
+With a combination of fixed-step size and variable-step size FMUs, there is no guarantee that operations for the fixed-step size FMU can be provided in the semantically correct order or with the necessary time restrictions.
+
+Overall, it shall be ensured that a variable-step size FMU with `Bus Communication Point` handling can also be executed as a fixed-step size FMU.
+
+The noted strategy for the temporal decoupling of the bus simulation is only one possibility.
+Depending on the application, this strategy can be implemented differently.
+
+=== Bus Specific Details
+This chapter contains details on bus-specific topics.
+
+==== CAN, CAN FD, CAN XL
+This chapter contains details on CAN, CAN FD, CAN XL specific topics.
+
+===== Error Handling [[low-cut-can-example-error-handling]]
+This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on `Bus Error` operations.
+Each Network FMU will provide its own Transmit Error Counter (TEC), Receive Error Counter (REC) and current CAN node state.
+The values for TEC and REC will be increased and decreased with respect to the `Error Code`, `Is Sender` and `Error Flag` arguments of a `Bus Error` operation and are inherited from the original CAN error confinement rules.
+Based on the values of TEC and REC, the CAN controller moves in the following state machine:
+
+.CAN node state machine.
+[#figure-can-error-state-machine]
+image::can_error_state_machine.svg[width=60%, align="center"]
+
+This CAN node state machine and the related TEC and REC values have to be included within the Network FMUs.
+`Bus Error` operations shall be directly used to maintain the TEC and REC values.
+The Network FMU shall react on the `Bus Error` operations that the Bus Simulation provides, based on the following rule set:
+
+* When an FMU gets a `Bus Error` operation where the arguments `Is Sender = FALSE` and `Error Flag = SECONDARY_ERROR_FLAG` and also `Error Code != BROKEN_ERROR_FRAME`, the REC shall be increased by 1.
+* When an FMU gets a `Bus Error` operation where the arguments (`Is Sender = FALSE` and `Error Flag = PRIMARY_ERROR_FLAG`) or `Error Code = BROKEN_ERROR_FRAME`, the REC shall be increased by 8.
+* When an FMU gets a `Bus Error` operation where the arguments `Is Sender = TRUE` or `Error Code = BROKEN_ERROR_FRAME`, the TEC shall be increased by 8.
+Exception: `Status =  ERROR_PASSIVE` and `Error Code = ACK_ERROR`.
+* When an FMU provides a `Transmit` operation and receives a `Confirm` operation for it, the TEC shall be decreased by 1 unless it was already 0.
+* When an FMU gets a `Transmit` operation, the REC shall be decreased by 1, if it was between 1 and 127.
+If the REC was 0, it stays 0, and if it was greater than 127, then it will be set to the value between 119 and 127.
+
+A Network FMU communicates its current CAN node state via the `Status` operation by using the following rule set:
+
+* After the initialization of a Network FMU, the current CAN node state shall be set to `ERROR_ACTIVE` and communicate via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `ERROR_PASSIVE` if the value of REC > 127 or TEC > 127 and communicate via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `ERROR_ACTIVE` if the value of REC < 128 and TEC < 128 and communicate via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `BUS_OFF` if the value of TEC > 255 and communicate via `Status` operation to the Bus Simulation.
+* The `BUS_OFF` status shall be set to `ERROR_ACTIVE` again when the Network FMU simulates a controller reset (optional) and has received in total 128 `Transmit` operations or `Bus Error` operations from the network.
+
+If `org.fmi_standard.fmi_ls_bus.WaitForBusNotification` is set to `false`, the `Confirm` operation cannot be directly used as indicator to set the TEC value and will be incorrect under the rules outlined above.
+Also `Bus Error` operations are not available in this scenario, so that the values for TEC and REC automatically remain zero in this case.
+It is recommended to solve the error handling differently in this case or to disabling it completely within the specified Network FMU.
