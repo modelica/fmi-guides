@@ -18,4 +18,10 @@ include::0___preamble.adoc[]
 
 include::1___introduction.adoc[]
 
+include::2___common.adoc[]
+
+include::3____physical_signal_abstraction.adoc[]
+
+include::4____network_abstraction.adoc[]
+
 include::A___literature.adoc[]

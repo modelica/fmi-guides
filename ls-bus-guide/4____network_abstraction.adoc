@@ -1,0 +1,131 @@
+== Network Abstraction ("low cut")
+This chapter contains details on common topics of the network abstraction layer.
+
+=== Differences between System Compositions
+The principles of communication is closely linked with the introduced System Compositions.
+Within the `Direct Communication` use case in combination with network abstraction, exactly two FMUs communicate with each other.
+No Bus Simulation is required.
+<<#figure-example-network-simulation-direct>> illustrates this communication, whereby FMU 1 transmits network data to FMU 2.After that, the transmission is directly confirmed by FMU 1 itself, whereby FMU 1 handles that self confirmation internally.
+
+.Direct communication between two FMUs.
+[#figure-example-network-simulation-direct]
+image::principles_of_communication_direct.svg[width=40%, align="center"]
+
+Within `Composition with dedicated Bus Simulation FMU` and `Importer with Integrated Bus Simulation` communication case there exists always a Bus Simulation and two or more FMUs can be connected for communication.
+Bus connections between FMUs are then redirected via the Bus Simulation (FMU).
+This means that the bus simulation model sets the level of accuracy and feature support for the respective bus type.
+
+<<#figure-example-network-simulation-complex>> shows the communication of two FMUs which are connected via a Bus Simulation.
+All in all FMU 1 transmits network data to FMU 2.
+First FMU 1 commits the baud rate to the Bus Simulation.
+This information can be used for timing calculations during the transmission of a message.
+In a second operation FMU 1 transmits network data to the Bus Simulation.
+Inside the Bus Simulation a calculation of the transmission time for the specified network data is done.
+After this the Bus Simulation transmits the network data to FMU 2 and confirms the successful transmission to FMU 1.
+
+.Communication between two FMUs by using a Bus Simulation FMU.
+[#figure-example-network-simulation-complex]
+image::principles_of_communication_complex.svg[width=70%, align="center"]
+
+=== Creating Bus Operations ahead of the next Simulation Step
+#TODO dSPACE#
+
+=== Data and Time Synchronization
+#TODO dSPACE#
+
+=== Decoupling of Fixed and Variable Step Size FMUs [[low-cut-decoupling-of-fixed-and-variable-step-size-fmus]]
+#TODO dSPACE#
+
+=== CAN, CAN FD, CAN XL
+This chapter contains details on CAN, CAN FD, CAN XL specific topics.
+
+==== Sequence Diagrams [[low-cut-can-sequence-diagrams]]
+This section contains sample sequences to clarify the facts in the CAN, CAN FD, CAN XL part.
+
+===== Transmission [[low-cut-can-example-transmission]]
+<<#figure-can-transmission-acknowledge>> illustrates the two possible results of a `Transmit` operation, whereby the transition from FMU 1 -> FMU 2 represents the successful case and FMU 2 -> FMU 1 represents the unsuccessful case.
+For the second transmission, the Bus Simulation injects a failure of transmission.
+In step (1), a `Transmit` operation will be delivered to the Bus Simulation.
+Within step (2), the `Transmit` operation will transferred to FMU 2, so the transmission was successful.
+Also in step (2), FMU 1 receives a `Confirm` operation, which means the transmission was successful.
+In step (3), FMU 2 wants to transmit network data to FMU 1:
+A `Transmit` operation will be delivered from FMU 2 to the Bus Simulation.
+In step (4), we see that the transmission results in an `Bus Error` operation, because the Bus Simulation injects a failure of transmission.
+Based on the `Bus Error` operation FMU 2 knows that the transmission was not successful.
+Within this `Bus Error` operation, the `Is Sender` argument is set to `TRUE` for FMU 2, because it provides the failing `Transmit` operation.
+Another `Bus Error` operation instance is provided by the Bus Simulation to FMU 1.
+For FMU 1, the `Error Flag` argument is set to `PRIMARY_ERROR_FLAG`, which means that FMU detects the specified transmission error.
+
+.Successful and unsuccessful cases of a CAN transmission.
+[#figure-can-transmission-acknowledge]
+image::can_transmission_acknowledge.svg[width=60%, align="center"]
+
+Normally, transmission failure cannot occur during a simulated bus transmission.
+Most common kinds of errors are used to inject transmission errors, for example using the Bus Simulation FMU, for advanced test scenarios.
+
+===== CAN Arbitration without Buffering [[low-cut-can-example-can-arbitration-without-buffering]]
+<<#figure-can-arbitration-overview>> shows the realization of a CAN arbitration by using the `Arbitration Lost Behavior` option `DISCARD_AND_NOTIFY` within the `Configuration` operation.
+At the beginning, FMU 1 and FMU 2 each send network data at the same time.
+In this situation, an arbitration is necessary to decide which frame should be sent in this case.
+Both frames are transferred to the Bus Simulation.
+Arbitration takes place within the Bus Simulation.
+In the example given, the two frames with CAN ID = 15 and CAN ID = 16 are analyzed and it is decided that CAN ID = 15 wins the arbitration.
+The Bus Simulation then calculates the transmission time for the CAN frame with CAN ID = 15.
+The next time the FMI `Event Mode` is called up for the Bus Simulation, the corresponding CAN frame is transmitted to FMU 2 and FMU 3.
+For CAN ID 16, FMU 2 is informed via an `Arbitration Lost` operation that this frame cannot be sent.
+FMU 1 gets a `Confirm` operation, because the specified frame with CAN ID 15 was successfully transmitted.
+
+.Arbitration of CAN frames within Bus Simulation.
+[#figure-can-arbitration-overview]
+image::can_arbitration_overview.svg[width=80%, align="center"]
+
+===== CAN Arbitration with Buffering [[low-cut-can-example-can-arbitration-with-buffering]]
+<<#figure-can-arbitration-overview-with-buffer>> shows the realization of a CAN arbitration by using the `Arbitration Lost Behavior` option `BUFFER_AND_RETRANSMIT` within the `Configuration` operation.
+At the beginning, FMU 1 and FMU 2 each send network data at the same time.
+In this situation, an arbitration is necessary to decide which frame should be sent in this case.
+Both frames are transferred to the Bus Simulation.
+Arbitration takes place within the Bus Simulation.
+In the example given, the two frames with CAN ID = 15 and CAN ID = 16 are analyzed and it is decided that CAN ID = 15 wins the arbitration.
+The Bus Simulation then calculates the transmission time for the CAN frame with CAN ID = 15.
+The next time the FMI `Event Mode` is called up for the Bus Simulation, the corresponding CAN frame is transmitted to FMU 2 and FMU 3.
+The `Transmit` operation of CAN ID 16 is buffered by the Bus Simulation and will be sent within the next time slot.
+The Bus Simulation does not return an `Arbitration Lost` operation to FMU 2.
+FMU 1 gets a `Confirm` operation, because the specified frame with CAN ID 15 was successfully transmitted.
+
+.Arbitration of CAN frames with buffering within Bus Simulation.
+[#figure-can-arbitration-overview-with-buffer]
+image::can_arbitration_overview_with_buffer.svg[width=80%, align="center"]
+
+==== Realization of CAN Error Handling
+This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on `Bus Error` operations.
+Each Network FMU will provide its own Transmit Error Counter (TEC), Receive Error Counter (REC) and current CAN node state.
+The values for TEC and REC will be increased and decreased with respect to the `Error Code`, `Is Sender` and `Error Flag` arguments of a `Bus Error` operation and are inherited from the original CAN error confinement rules.
+Based on the values of TEC and REC, the CAN controller moves in the following state machine:
+
+.CAN node state machine.
+[#figure-can-error-state-machine]
+image::can_error_state_machine.svg[width=60%, align="center"]
+
+This CAN node state machine and the related TEC and REC values have to be included within the Network FMUs.
+`Bus Error` operations shall be directly used to maintain the TEC and REC values.
+The Network FMU shall react on the `Bus Error` operations that the Bus Simulation provides, based on the following rule set:
+
+* When an FMU gets a `Bus Error` operation where the arguments `Is Sender = FALSE` and `Error Flag = SECONDARY_ERROR_FLAG` and also `Error Code != BROKEN_ERROR_FRAME`, the REC shall be increased by 1.
+* When an FMU gets a `Bus Error` operation where the arguments (`Is Sender = FALSE` and `Error Flag = PRIMARY_ERROR_FLAG`) or `Error Code = BROKEN_ERROR_FRAME`, the REC shall be increased by 8.
+* When an FMU gets a `Bus Error` operation where the arguments `Is Sender = TRUE` or `Error Code = BROKEN_ERROR_FRAME`, the TEC shall be increased by 8.
+Exception: `Status =  ERROR_PASSIVE` and `Error Code = ACK_ERROR`.
+* When an FMU provides a `Transmit` operation and receives a `Confirm` operation for it, the TEC shall be decreased by 1 unless it was already 0.
+* When an FMU gets a `Transmit` operation, the REC shall be decreased by 1, if it was between 1 and 127.
+If the REC was 0, it stays 0, and if it was greater than 127, then it will be set to the value between 119 and 127.
+
+A Network FMU communicates its current CAN node state via the `Status` operation by using the following rule set:
+
+* After the initialization of a Network FMU, the current CAN node state shall be set to `ERROR_ACTIVE` and communicate via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `ERROR_PASSIVE` if the value of REC > 127 or TEC > 127 and communicate via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `ERROR_ACTIVE` if the value of REC < 128 and TEC < 128 and communicate via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `BUS_OFF` if the value of TEC > 255 and communicate via `Status` operation to the Bus Simulation.
+* The `BUS_OFF` status shall be set to `ERROR_ACTIVE` again when the Network FMU simulates a controller reset (optional) and has received in total 128 `Transmit` operations or `Bus Error` operations from the network.
+
+If `org.fmi_standard.fmi_ls_bus.WaitForBusNotification` is set to `false`, the `Confirm` operation cannot be directly used as indicator to set the TEC value and will be incorrect under the rules outlined above.
+Also `Bus Error` operations are not available in this scenario, so that the values for TEC and REC automatically remain zero in this case.
+It is recommended to solve the error handling differently in this case or to disabling it completely within the specified Network FMU.
