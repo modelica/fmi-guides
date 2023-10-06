@@ -7,8 +7,7 @@ CAN specific bus operations from\to dedicated buffer variables.
 
 This header file can be used when creating Network fmi-ls-bus FMUs with CAN busses.
 
-Copyright (C) 2008-2011 MODELISAR consortium,
-              2012-2023 Modelica Association Project "FMI"
+Copyright (C) 2023 Modelica Association Project "FMI"
               All rights reserved.
 
 This file is licensed by the copyright holders under the 2-Clause BSD License
