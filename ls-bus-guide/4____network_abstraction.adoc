@@ -49,7 +49,7 @@ The last remaining `Bus Communication Point` now exists with stem:[CP_{1,FMU2}=1
 image::bus_simulation_example.svg[width=80%, align="center"]
 
 Overall, this means that all FMUs within a simulation system are synchronized at the time of message exchange.
-Within the FMI Co-Simulation (CS) mode, the `DoStep()` method of an FMU ends with the transmission of exactly one frame.
+Within the FMI Co-Simulation (CS) mode, `fmi3DoStep` of an Network FMU ends with the transmission of exactly one frame.
 
 As already shown in <<#figure-example-network-simulation>>, the filling of the `Tx Data Variable` takes place within the FMI Co-Simulation (CS) mode during the execution of the Step Mode.
 After collecting the data, the Step Mode is exited and the FMI `Event Mode` is entered.
@@ -75,6 +75,10 @@ Network communication can also only be initiated by a task.
 Based on this knowledge, a `Bus Communication Point` stem:[CP_{n}] can be set up for each task.
 With the help of further analysis, this procedure can be optimized so that a `Bus Communication Point` is only specified as soon as a task is executed that specifically initiates a network activity.
 If network communication is triggered via a cyclic task, determining the next optimal `Bus Communication Point` is very simple.
+
+.Example for computation of a bus communication point within an Network FMU.
+[#figure-example-bus-communication-point]
+image::bus_communication_point.svg[width=60%, align="center"]
 
 The Bus Simulation must also determine a `Bus Communication Point`.
 The calculation here is based on the configured baudrate and the known length of the frame to be transmitted.
