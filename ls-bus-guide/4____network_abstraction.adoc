@@ -27,11 +27,108 @@ After this the Bus Simulation transmits the network data to FMU 2 and confirms t
 [#figure-example-network-simulation-complex]
 image::principles_of_communication_complex.svg[width=70%, align="center"]
 
-=== Creating Bus Operations ahead of the next Simulation Step
-#TODO dSPACE#
+=== Data and Time Synchronization [[low-cut-data-and-time-synchronization]]
+More detailed network simulations, including bandwidth restrictions, message arbitration and delays are only possible in the use cases `Composition with dedicated Bus Simulation FMU` and `Importer with Integrated Bus Simulation`.
+To provide a simulation with accurate timing, all FMUs and the Bus Simulation have to be temporally synchronized to the moment when frames shall be exchanged.
+Based on this requirement every stem:[step_{n-1}] already needs to calculate the `Bus Communication Point` stem:[CP_{n}] of the next stem:[step_{n}] to exchange frames, whereby stem:[n=0] means the initialization phase of the specified FMU.
+This information will be transported in form of a time-based aperiodic countdown clock.
 
-=== Data and Time Synchronization
-#TODO dSPACE#
+<<#figure-example-network-simulation>> illustrates the communication process between the two FMUs FMU 1 and FMU 2 by using a Bus Simulation.
+During the initialization phase of FMU 1, it is determined that FMU 1 would like to communicate at stem:[CP_{1,FMU1}=0.1s].
+The same happens for FMU 2, except that stem:[CP_{1,FMU2}=1.1s].
+Both FMUs have thus calculated a `Bus Communication Point` stem:[CP_{n}] for the future stem:[step_{1}] in stem:[step_{0}].
+For FMU 1 the time is at stem:[CP_{1,FMU1}=0.1s] and for FMU 2 it is stem:[CP_{1,FMU2}=1.1s].
+The frame to be transmitted is now received by the Bus Simulation at time 0.1 and this calculates a transmission time of 0.008 seconds considering the bits to transfer with respect to the specified baud rate of the bus, so that stem:[CP_{1,Bus}=0.1008s].
+Since the communication time of FMU 1 was already reached at stem:[CP_{1,FMU1}=0.1s], only the two remaining `Bus Communication Points` stem:[CP_{1,Bus}=0.1008s] and stem:[CP_{1,FMU2}=1.1s] are relevant.
+Since stem:[CP_{1,Bus}=0.1008s] is closest in the future, this is considered first.
+Thus, at time 0.1008, a confirmation is sent to FMU 1 and the frame to be transmitted is send to FMU 2.
+The last remaining `Bus Communication Point` now exists with stem:[CP_{1,FMU2}=1.1s] in which a transmission from FMU 2 to FMU 1 is triggered.
+
+.Example for network simulation with timing behavior.
+[#figure-example-network-simulation]
+image::bus_simulation_example.svg[width=80%, align="center"]
+
+Overall, this means that all FMUs within a simulation system are synchronized at the time of message exchange.
+Within the FMI Co-Simulation (CS) mode, the `DoStep()` method of an FMU ends with the transmission of exactly one frame.
+
+As already shown in <<#figure-example-network-simulation>>, the filling of the `Tx Data Variable` takes place within the FMI Co-Simulation (CS) mode during the execution of the Step Mode.
+After collecting the data, the Step Mode is exited and the FMI `Event Mode` is entered.
+During the `Event Mode`, the variable values of the `Tx Data Variable` are now exchanged within the entire simulation network.
+The variable values are stored in the `Rx Data Variable` of a recipient and can be used there.
+The exchange of the variable values can take several iterations within the super-dense `Event Mode` time.
+
+<<#figure-example-network-simulation>> shows the exchange of data several times.
+In step 0.1 (1), a transmit operation is exchanged between FMU 1 and the Bus Simulation.
+In step 0.008 (2) the transmit operation between the Bus Simulation and FMU 2 is first exchanged.
+In a further iteration, but in the same `Event Mode`, the confirm operation is exchanged between the Bus Simulation and FMU 1.
+
+The synchronization via a dynamic `Bus Communication Point` is only possible if all FMUs and the Bus Simulation supports variable step-size.
+The combination of variable step-size FMUs and fixed step-size will be discussed within <<low-cut-queuing-bus-operations>>.
+
+=== Creating Bus Operations ahead of the next Simulation Step
+The general concept of exchanging frames synchronized over the whole simulation system was already presented in <<low-cut-data-and-time-synchronization>>.
+Based on the concept, it is necessary that every stem:[step_{n}] already calculates the `Bus Communication Point` stem:[CP_{n+1}], so that the entire simulation system can be precalculated up to stem:[CP_{n+1}] for exchanging the next network data.
+Calculating this point in time requires internal knowledge of the Network FMU's communication behavior.
+Normally, embedded systems, such as an ECU, use an OS that is based on tasks.
+All tasks are static and their execution time is known in advance.
+Network communication can also only be initiated by a task.
+Based on this knowledge, a `Bus Communication Point` stem:[CP_{n}] can be set up for each task.
+With the help of further analysis, this procedure can be optimized so that a `Bus Communication Point` is only specified as soon as a task is executed that specifically initiates a network activity.
+If network communication is triggered via a cyclic task, determining the next optimal `Bus Communication Point` is very simple.
+
+The Bus Simulation must also determine a `Bus Communication Point`.
+The calculation here is based on the configured baudrate and the known length of the frame to be transmitted.
+Using these two pieces of information, the time at which the frame shall be received by the other Network FMUs of the simulation system can be calculated.
+
+A special case, which must also be taken into account, is the situation when a task sends several frames.
+If several frames are sent within a task, they must first be buffered within the Network FMU.
+Next the first frame will be sent to the Bus Simulation.
+The Network FMU then has to find a suitable time to send the second frame without unnecessary time delay.
+This is possible by setting up a new `Bus Communication Point` after the Network FMU receives confirmation that the first frame was sent successfully.
+
+The content of this chapter shows that determining the next `Bus Communication Point` depends on the given communication behavior of the respective Network FMU and requires internal knowledge about it.
+Therefore, only possible solution strategies can be presented, that helps to find a comprehensive and highly optimized solution when it needs to be implemented.
+
+=== Queuing Bus Operations [[low-cut-queuing-bus-operations]]
+For simplification reasons or if a detail bus simulation is not desired, fixed-step size FMUs can also be used with the network abstraction.
+The primary difference between a fixed-step size FMU and a variable-step size FMU is that the fixed-step size FMU can generate multiple Tx operations during one Step Mode iteration.
+Variable-step size FMUs with respect to `Bus Communication Points`, on the other hand, adjust the length of the Step Mode in such a way that they only generate one Tx operation and synchronize themselves again with the overall network in terms of time afterwards.
+To ensure that fixed-step size FMUs and variable-step size FMUs can be combined without affecting each other, these two groups of FMUs have to be decoupled.
+Variable-step size FMUs can therefore continue to simulate each other with cycle accuracy and are not limited in their range of functions by a fixed step size of the other FMUs.
+This decoupling is realized by queuing Tx/Rx bus operations inside the Bus Simulation as well as queuing Tx bus operations inside Network FMUs.
+
+In general, fixed-step size FMUs shall queue all Tx operations locally within the FMU during each Step Mode execution.
+After exiting Step Mode, all collected Tx operations shall be transferred to the Bus Simulation.
+This can be done sequentially or all Tx operations can be aggregated within one `Tx Data Variable`.
+The Bus Simulation accepts all Tx operations and stores them into a queue.
+The specified queue is now gradually processed by the Bus Simulation and makes all Tx operations available to the other FMUs in the network.
+This is done sequentially with respect to the original order specified by the Network FMU and according to the requirements of the respective bus simulation model.
+If several Tx operations have been combined in one `Tx Data Variable`, the Bus Simulation must recognize them and split them up into individual Tx operations for forwarding.
+The receiving Tx operations of a fixed-step size FMU are also buffered by the Bus Simulation and made available to the fixed-step size FMU after exiting the respective Step Mode.
+The Bus Simulation can provide appropriate queues for all FMUs.
+These are used for fixed-step size FMUs.
+For variable-step size FMUs, which support `Bus Communication Point` handling, only exactly one buffer location is required.
+If the respective bus type uses a Transmit/Confirm pattern the confirmation can be return from the Bus Simulation when the specified Transmit operation is stored in one of the Tx/Rx queues.
+The concrete handling of the confirmation is explicitly specified again for each bus type in the relevant chapter.
+In order for the communication between the FMUs to work as described, an additional communication point of all FMUs shall be set up based on the specified fixed-step size value.
+
+.Combination of two variable-step size FMUs and one fixed-step size FMU.
+[#figure-queuing-bus-operations]
+image::queuing_bus_operations.svg[width=70%, align="center"]
+
+<<#figure-queuing-bus-operations>> shows the combination of two variable-step size FMUs and one fixed-step size FMU.
+The two variable-step size FMUs simulate cycle-accurate through the Bus Simulation according to the rules of using `Bus Communication Points`.
+After the fixed-step size FMU has left its Step Mode stem:[n] Transmit operations are provide to the Bus Simulation.
+It also receives stem:[m] Transmit operations that were buffered by the Bus Simulation while the fixed-step size FMU was in its Step Mode iteration.
+Within the figure the variable-step size FMUs exactly use one buffer location and the fixed-step size FMUs uses as much as are needed.
+However, depending on the chosen simulation step-size, delay effects of the Bus Simulation have to be taken into account.
+This applies in particular to confirm and error operations.
+With a combination of fixed-step size and variable-step size FMUs, there is no guarantee that operations for the fixed-step size FMU can be provided in the semantically correct order or with the necessary time restrictions.
+
+Overall, it shall be ensured that a variable-step size FMU with `Bus Communication Point` handling can also be executed as a fixed-step size FMU.
+
+The noted strategy for the temporal decoupling of the bus simulation is only one possibility.
+Depending on the application, this strategy can be implemented differently.
 
 === Decoupling of Fixed and Variable Step Size FMUs [[low-cut-decoupling-of-fixed-and-variable-step-size-fmus]]
 #TODO dSPACE#
