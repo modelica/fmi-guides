@@ -76,6 +76,10 @@ Based on this knowledge, a `Bus Communication Point` stem:[CP_{n}] can be set up
 With the help of further analysis, this procedure can be optimized so that a `Bus Communication Point` is only specified as soon as a task is executed that specifically initiates a network activity.
 If network communication is triggered via a cyclic task, determining the next optimal `Bus Communication Point` is very simple.
 
+<<figure-example-bus-communication-point>> illustrates the connection between the calculation of the `Bus Communication Point` and the `fmi3GetInterval` function of an FMU Importer.
+During the initialization phase of the FMU, the first `Bus Communication Point` stem:[CP_{n}] is determined.
+The stem:[CP_{n+1}] for the next stem:[step_{n}] is then calculated in each step and communicated to the FMU Importer.
+
 .Example for computation of a bus communication point within an Network FMU.
 [#figure-example-bus-communication-point]
 image::bus_communication_point.svg[width=60%, align="center"]
