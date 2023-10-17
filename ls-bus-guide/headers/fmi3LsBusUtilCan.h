@@ -81,12 +81,6 @@ extern "C"
         {                                                                                               \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length - (DataLength));                     \
             (BufferInfo)->writePos += _op.header.length - (DataLength);                                 \
-            memcpy((BufferInfo)->writePos, &_op, _op.id);                                               \
-            (BufferInfo)->writePos += sizeof(_op.id);                                                   \
-            memcpy((BufferInfo)->writePos, &_op, _op.ide);                                              \
-            (BufferInfo)->writePos += sizeof(_op.ide);                                                  \
-            memcpy((BufferInfo)->writePos, &_op, _op.rtr);                                              \
-            (BufferInfo)->writePos += sizeof(_op.rtr);                                                  \
             memcpy((BufferInfo)->writePos, (Data), (DataLength));                                       \
             (BufferInfo)->writePos += (DataLength);                                                     \
             (BufferInfo)->status = fmi3True;                                                            \
@@ -132,14 +126,6 @@ extern "C"
         {                                                                                                         \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length - (DataLength));                               \
             (BufferInfo)->writePos += _op.header.length - (DataLength);                                           \
-            memcpy((BufferInfo)->writePos, &_op, _op.id);                                                         \
-            (BufferInfo)->writePos += sizeof(_op.id);                                                             \
-            memcpy((BufferInfo)->writePos, &_op, _op.ide);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.ide);                                                            \
-            memcpy((BufferInfo)->writePos, &_op, _op.brs);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.brs);                                                            \
-            memcpy((BufferInfo)->writePos, &_op, _op.esi);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.esi);                                                            \
             memcpy((BufferInfo)->writePos, (Data), (DataLength));                                                 \
             (BufferInfo)->writePos += (DataLength);                                                               \
             (BufferInfo)->status = fmi3True;                                                                      \
@@ -189,18 +175,6 @@ extern "C"
         {                                                                                                         \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length - (DataLength));                               \
             (BufferInfo)->writePos += _op.header.length - (DataLength);                                           \
-            memcpy((BufferInfo)->writePos, &_op, _op.id);                                                         \
-            (BufferInfo)->writePos += sizeof(_op.id);                                                             \
-            memcpy((BufferInfo)->writePos, &_op, _op.ide);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.ide);                                                            \
-            memcpy((BufferInfo)->writePos, &_op, _op.sec);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.sec);                                                            \
-            memcpy((BufferInfo)->writePos, &_op, _op.sdt);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.sdt);                                                            \
-            memcpy((BufferInfo)->writePos, &_op, _op.vcid);                                                       \
-            (BufferInfo)->writePos += sizeof(_op.vcid);                                                           \
-            memcpy((BufferInfo)->writePos, &_op, _op.af);                                                         \
-            (BufferInfo)->writePos += sizeof(_op.af);                                                             \
             memcpy((BufferInfo)->writePos, (Data), (DataLength));                                                 \
             (BufferInfo)->writePos += (DataLength);                                                               \
             (BufferInfo)->status = fmi3True;                                                                      \
@@ -235,8 +209,6 @@ extern "C"
         {                                                                           \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                \
             (BufferInfo)->writePos += _op.header.length;                            \
-            memcpy((BufferInfo)->writePos, &_op, _op.id);                           \
-            (BufferInfo)->writePos += sizeof(_op.id);                               \
             (BufferInfo)->status = fmi3True;                                        \
         }                                                                           \
         else                                                                        \
@@ -271,10 +243,6 @@ extern "C"
         {                                                                                               \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                    \
             (BufferInfo)->writePos += _op.header.length;                                                \
-            memcpy((BufferInfo)->writePos, &_op, _op.parameterType);                                    \
-            (BufferInfo)->writePos += sizeof(_op.parameterType);                                        \
-            memcpy((BufferInfo)->writePos, &_op, _op.baudrate);                                         \
-            (BufferInfo)->writePos += sizeof(_op.baudrate);                                             \
             (BufferInfo)->status = fmi3True;                                                            \
         }                                                                                               \
         else                                                                                            \
@@ -307,11 +275,7 @@ extern "C"
         if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                                         \
         {                                                                                                              \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                                   \
-            (BufferInfo)->writePos += _op.header.length;                                                               \
-            memcpy((BufferInfo)->writePos, &_op, _op.parameterType);                                                   \
-            (BufferInfo)->writePos += sizeof(_op.parameterType);                                                       \
-            memcpy((BufferInfo)->writePos, &_op, _op.baudrate);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.baudrate);                                                            \
+            (BufferInfo)->writePos += _op.header.length;                                                               \                                                          \
             (BufferInfo)->status = fmi3True;                                                                           \
         }                                                                                                              \
         else                                                                                                           \
@@ -345,10 +309,6 @@ extern "C"
         {                                                                                                              \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                                   \
             (BufferInfo)->writePos += _op.header.length;                                                               \
-            memcpy((BufferInfo)->writePos, &_op, _op.parameterType);                                                   \
-            (BufferInfo)->writePos += sizeof(_op.parameterType);                                                       \
-            memcpy((BufferInfo)->writePos, &_op, _op.baudrate);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.baudrate);                                                            \
             (BufferInfo)->status = fmi3True;                                                                           \
         }                                                                                                              \
         else                                                                                                           \
@@ -383,10 +343,6 @@ extern "C"
         {                                                                                                                             \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                                                  \
             (BufferInfo)->writePos += _op.header.length;                                                                              \
-            memcpy((BufferInfo)->writePos, &_op, _op.parameterType);                                                                  \
-            (BufferInfo)->writePos += sizeof(_op.parameterType);                                                                      \
-            memcpy((BufferInfo)->writePos, &_op, _op.arbitrationLostBehavior);                                                        \
-            (BufferInfo)->writePos += sizeof(_op.arbitrationLostBehavior);                                                            \
             (BufferInfo)->status = fmi3True;                                                                                          \
         }                                                                                                                             \
         else                                                                                                                          \
@@ -418,8 +374,6 @@ extern "C"
         {                                                                              \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                   \
             (BufferInfo)->writePos += _op.header.length;                               \
-            memcpy((BufferInfo)->writePos, &_op, _op.id);                              \
-            (BufferInfo)->writePos += sizeof(_op.id);                                  \
             (BufferInfo)->status = fmi3True;                                           \
         }                                                                              \
         else                                                                           \
@@ -459,14 +413,6 @@ extern "C"
         {                                                                                          \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                               \
             (BufferInfo)->writePos += _op.header.length;                                           \
-            memcpy((BufferInfo)->writePos, &_op, _op.id);                                          \
-            (BufferInfo)->writePos += sizeof(_op.id);                                              \
-            memcpy((BufferInfo)->writePos, &_op, _op.errorCode);                                   \
-            (BufferInfo)->writePos += sizeof(_op.errorCode);                                       \
-            memcpy((BufferInfo)->writePos, &_op, _op.errorFlag);                                   \
-            (BufferInfo)->writePos += sizeof(_op.errorFlag);                                       \
-            memcpy((BufferInfo)->writePos, &_op, _op.isSender);                                    \
-            (BufferInfo)->writePos += sizeof(_op.isSender);                                        \
             (BufferInfo)->status = fmi3True;                                                       \
         }                                                                                          \
         else                                                                                       \
@@ -498,8 +444,6 @@ extern "C"
         {                                                                                      \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                           \
             (BufferInfo)->writePos += _op.header.length;                                       \
-            memcpy((BufferInfo)->writePos, &_op, _op.status);                                  \
-            (BufferInfo)->writePos += sizeof(_op.status);                                      \
             (BufferInfo)->status = fmi3True;                                                   \
         }                                                                                      \
         else                                                                                   \
