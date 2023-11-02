@@ -118,13 +118,13 @@ typedef struct
  * \param Pointer to buffer variable.
  * \param Size of the buffer variable.
  */
-#define FMI3_LS_BUS_BUFFER_WRITE(BufferInfo, data, dataLength)           \
+#define FMI3_LS_BUS_BUFFER_WRITE(BufferInfo, Data, DataLength)           \
     do                                                                   \
     {                                                                    \
-        if ((dataLength) <= (BufferInfo)->size)                          \
+        if ((DataLength) <= (BufferInfo)->size)                          \
         {                                                                \
-            memcpy((bufferInfo)->start, (data), (dataLength));           \
-            (bufferInfo)->writePos = (bufferInfo)->start + (dataLength); \
+            memcpy((bufferInfo)->start, (Data), (DataLength));           \
+            (bufferInfo)->writePos = (bufferInfo)->start + (DataLength); \
             (bufferInfo)->readPos = (bufferInfo)->start;                 \
             (bufferInfo)->status = fmi3True;                             \
         }                                                                \
