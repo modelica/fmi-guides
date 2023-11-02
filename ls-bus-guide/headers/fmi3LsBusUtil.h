@@ -39,8 +39,10 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ----------------------------------------------------------------------------
 */
 
-#include "fmi3LsBus.h"
 #include <string.h>
+
+#include "fmi3LsBus.h"
+
 
 #ifdef __cplusplus
 extern "C"
