@@ -153,7 +153,7 @@ typedef struct
 #define FMI3_LS_BUS_READ_NEXT_OPERATION(BufferInfo, Operation)                                                        \
     ((fmi3UInt32)((BufferInfo)->writePos - (BufferInfo)->readPos) > sizeof(fmi3LsBusOperationHeader) &&                           \
      (fmi3UInt32)((BufferInfo)->writePos - (BufferInfo)->readPos) >= ((fmi3LsBusOperationHeader*)(BufferInfo)->readPos)->length)  \
-        ? (Operation = (fmi3LsBusOperationHeader*)(BufferInfo)->readPos, (BufferInfo)->readPos += Operation->length), \
+        ? ((Operation) = (fmi3LsBusOperationHeader*)(BufferInfo)->readPos, (BufferInfo)->readPos += (Operation)->length), \
         fmi3True : fmi3False\
 
 
