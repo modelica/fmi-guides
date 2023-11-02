@@ -71,7 +71,7 @@ extern "C"
                             sizeof(fmi3LsBusCanIde) +                                                   \
                             sizeof(fmi3LsBusCanRtr) +                                                   \
                             sizeof(fmi3LsBusCanDataLength) +                                            \
-                            DataLength;                                                                 \
+                            (DataLength);                                                               \
         _op.id = (ID);                                                                                  \
         _op.ide = (Ide);                                                                                \
         _op.rtr = (Rtr);                                                                                \
@@ -115,7 +115,7 @@ extern "C"
         _op.header.type = FMI3_LS_BUS_CAN_OP_CANFD_TRANSMIT;                                                      \
         _op.header.length = sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanId) + sizeof(fmi3LsBusCanIde) + \
                             sizeof(fmi3LsBusCanBrs) + sizeof(fmi3LsBusCanEsi) + sizeof(fmi3LsBusCanDataLength) +  \
-                            DataLength;                                                                           \
+                            (DataLength);                                                                         \
         _op.id = (ID);                                                                                            \
         _op.ide = (Ide);                                                                                          \
         _op.brs = (Brs);                                                                                          \
