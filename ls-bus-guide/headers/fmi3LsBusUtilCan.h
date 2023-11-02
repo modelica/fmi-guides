@@ -402,7 +402,7 @@ extern "C"
  * \param[in]  Error Flag \ref fmi3LsBusCanErrorFlag.
  * \param[in]  Is Sender \ref fmi3LsBusCanIsSender.
  */
-#define FMI3_LS_BUS_CAN_CREATE_OP_BUS_ERROR(BufferInfo, ErrorCode, ErrorFlag, IsSender)            \
+#define FMI3_LS_BUS_CAN_CREATE_OP_BUS_ERROR(BufferInfo, ID, ErrorCode, ErrorFlag, IsSender)        \
     do                                                                                             \
     {                                                                                              \
         fmi3LsBusCanOperationBusError _op;                                                         \
