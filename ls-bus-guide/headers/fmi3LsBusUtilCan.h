@@ -275,7 +275,7 @@ extern "C"
         if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                                         \
         {                                                                                                              \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                                   \
-            (BufferInfo)->writePos += _op.header.length;                                                               \                                                          \
+            (BufferInfo)->writePos += _op.header.length;                                                               \
             (BufferInfo)->status = fmi3True;                                                                           \
         }                                                                                                              \
         else                                                                                                           \
