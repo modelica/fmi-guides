@@ -77,7 +77,7 @@ extern "C"
         _op.rtr = (Rtr);                                                                                \
                                                                                                         \
         _op.dataLength = (DataLength);                                                                  \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                          \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))              \
         {                                                                                               \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length - (DataLength));                     \
             (BufferInfo)->writePos += _op.header.length - (DataLength);                                 \
@@ -122,7 +122,7 @@ extern "C"
         _op.esi = (Esi);                                                                                          \
                                                                                                                   \
         _op.dataLength = (DataLength);                                                                            \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                                    \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))                        \
         {                                                                                                         \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length - (DataLength));                               \
             (BufferInfo)->writePos += _op.header.length - (DataLength);                                           \
@@ -171,7 +171,7 @@ extern "C"
         _op.af = (Af);                                                                                            \
                                                                                                                   \
         _op.dataLength = (DataLength);                                                                            \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                                    \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))                        \
         {                                                                                                         \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length - (DataLength));                               \
             (BufferInfo)->writePos += _op.header.length - (DataLength);                                           \
@@ -197,25 +197,26 @@ extern "C"
  * \param[in]  Pointer to \ref fmi3LsBusUtilBufferInfo
  * \param[in]  CAN message ID \ref fmi3LsBusCanId.
  */
-#define FMI3_LS_BUS_CAN_CREATE_OP_CONFIRM(BufferInfo, ID)                           \
-    do                                                                              \
-    {                                                                               \
-        fmi3LsBusCanOperationConfirm _op;                                           \
-        _op.header.type = FMI3_LS_BUS_CAN_OP_CONFIRM;                               \
-        _op.header.length = sizeof(fmi3LsBusOperationHeader) +                      \
-                            sizeof(fmi3LsBusCanId);                                 \
-        _op.id = (ID);                                                              \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))      \
-        {                                                                           \
-            memcpy((BufferInfo)->writePos, &_op, _op.header.length);                \
-            (BufferInfo)->writePos += _op.header.length;                            \
-            (BufferInfo)->status = fmi3True;                                        \
-        }                                                                           \
-        else                                                                        \
-        {                                                                           \
-            (BufferInfo)->status = fmi3False;                                       \
-        }                                                                           \
-    }                                                                               \
+#define FMI3_LS_BUS_CAN_CREATE_OP_CONFIRM(BufferInfo, ID)                                  \
+    do                                                                                     \
+    {                                                                                      \
+        fmi3LsBusCanOperationConfirm _op;                                                  \
+        _op.header.type = FMI3_LS_BUS_CAN_OP_CONFIRM;                                      \
+        _op.header.length = sizeof(fmi3LsBusOperationHeader) +                             \
+                            sizeof(fmi3LsBusCanId);                                        \
+        _op.id = (ID);                                                                     \
+                                                                                           \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos)) \
+        {                                                                                  \
+            memcpy((BufferInfo)->writePos, &_op, _op.header.length);                       \
+            (BufferInfo)->writePos += _op.header.length;                                   \
+            (BufferInfo)->status = fmi3True;                                               \
+        }                                                                                  \
+        else                                                                               \
+        {                                                                                  \
+            (BufferInfo)->status = fmi3False;                                              \
+        }                                                                                  \
+    }                                                                                      \
     while (0)
 
 /**
@@ -239,7 +240,8 @@ extern "C"
                             sizeof(fmi3LsBusCanBaudrate);                                               \
         _op.parameterType = FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_CAN_BAUDRATE;                             \
         _op.baudrate = (Baudrate);                                                                      \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                          \
+                                                                                                        \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))              \
         {                                                                                               \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                    \
             (BufferInfo)->writePos += _op.header.length;                                                \
@@ -272,7 +274,8 @@ extern "C"
             sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanConfigParameterType) + sizeof(fmi3LsBusCanBaudrate); \
         _op.parameterType = FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_CANFD_BAUDRATE;                                          \
         _op.baudrate = (Baudrate);                                                                                     \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                                         \
+                                                                                                                       \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))                             \
         {                                                                                                              \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                                   \
             (BufferInfo)->writePos += _op.header.length;                                                               \
@@ -305,7 +308,8 @@ extern "C"
             sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanConfigParameterType) + sizeof(fmi3LsBusCanBaudrate); \
         _op.parameterType = FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_CANXL_BAUDRATE;                                          \
         _op.baudrate = (Baudrate);                                                                                     \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                                         \
+                                                                                                                       \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))                             \
         {                                                                                                              \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                                   \
             (BufferInfo)->writePos += _op.header.length;                                                               \
@@ -339,7 +343,7 @@ extern "C"
         _op.parameterType = FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_ARBITRATION_LOST_BEHAVIOR;                                              \
         _op.arbitrationLostBehavior = (ArbitrationLostBehavior);                                                                      \
                                                                                                                                       \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                                                        \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))                                            \
         {                                                                                                                             \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                                                                  \
             (BufferInfo)->writePos += _op.header.length;                                                                              \
@@ -363,24 +367,25 @@ extern "C"
  * \param[in]  Pointer to \ref fmi3LsBusUtilBufferInfo
  * \param[in]  CAN message ID \ref fmi3LsBusCanId.
  */
-#define FMI3_LS_BUS_CAN_CREATE_OP_ARBITRATION_LOST(BufferInfo, ID)                     \
-    do                                                                                 \
-    {                                                                                  \
-        fmi3LsBusCanOperationArbitrationLost _op;                                      \
-        _op.header.type = FMI3_LS_BUS_CAN_OP_ARBITRATION_LOST;                         \
-        _op.header.length = sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanId); \
-        _op.id = (ID);                                                                 \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))         \
-        {                                                                              \
-            memcpy((BufferInfo)->writePos, &_op, _op.header.length);                   \
-            (BufferInfo)->writePos += _op.header.length;                               \
-            (BufferInfo)->status = fmi3True;                                           \
-        }                                                                              \
-        else                                                                           \
-        {                                                                              \
-            (BufferInfo)->status = fmi3False;                                          \
-        }                                                                              \
-    }                                                                                  \
+#define FMI3_LS_BUS_CAN_CREATE_OP_ARBITRATION_LOST(BufferInfo, ID)                         \
+    do                                                                                     \
+    {                                                                                      \
+        fmi3LsBusCanOperationArbitrationLost _op;                                          \
+        _op.header.type = FMI3_LS_BUS_CAN_OP_ARBITRATION_LOST;                             \
+        _op.header.length = sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanId);     \
+        _op.id = (ID);                                                                     \
+                                                                                           \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos)) \
+        {                                                                                  \
+            memcpy((BufferInfo)->writePos, &_op, _op.header.length);                       \
+            (BufferInfo)->writePos += _op.header.length;                                   \
+            (BufferInfo)->status = fmi3True;                                               \
+        }                                                                                  \
+        else                                                                               \
+        {                                                                                  \
+            (BufferInfo)->status = fmi3False;                                              \
+        }                                                                                  \
+    }                                                                                      \
     while (0)
 
 /**
@@ -409,7 +414,8 @@ extern "C"
         _op.errorCode = (ErrorCode);                                                               \
         _op.errorFlag = (ErrorFlag);                                                               \
         _op.isSender = (IsSender);                                                                 \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                     \
+                                                                                                   \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))         \
         {                                                                                          \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                               \
             (BufferInfo)->writePos += _op.header.length;                                           \
@@ -440,7 +446,8 @@ extern "C"
         _op.header.type = FMI3_LS_BUS_CAN_OP_STATUS;                                           \
         _op.header.length = sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanStatusKind); \
         _op.status = (Status);                                                                 \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))                 \
+                                                                                               \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos))     \
         {                                                                                      \
             memcpy((BufferInfo)->writePos, &_op, _op.header.length);                           \
             (BufferInfo)->writePos += _op.header.length;                                       \
@@ -463,24 +470,24 @@ extern "C"
  *
  * \param[in]  Pointer to \ref fmi3LsBusUtilBufferInfo.
  */
-#define FMI3_LS_BUS_CAN_CREATE_OP_WAKEUP(BufferInfo)                                   \
-    do                                                                                 \
-    {                                                                                  \
-        fmi3LsBusCanOperationWakeup _op;                                               \
-        _op.header.type = FMI3_LS_BUS_CAN_OP_WAKEUP;                                   \
-        _op.header.length = sizeof(fmi3LsBusOperationHeader);                          \
-                                                                                       \
-        if (_op.header.length <= ((BufferInfo)->end - (BufferInfo)->writePos))         \
-        {                                                                              \
-            memcpy((BufferInfo)->writePos, &_op, _op.header.length);                   \
-            (BufferInfo)->writePos += _op.header.length;                               \
-            (BufferInfo)->status = fmi3True;                                           \
-        }                                                                              \
-        else                                                                           \
-        {                                                                              \
-            (BufferInfo)->status = fmi3False;                                          \
-        }                                                                              \
-    }                                                                                  \
+#define FMI3_LS_BUS_CAN_CREATE_OP_WAKEUP(BufferInfo)                                       \
+    do                                                                                     \
+    {                                                                                      \
+        fmi3LsBusCanOperationWakeup _op;                                                   \
+        _op.header.type = FMI3_LS_BUS_CAN_OP_WAKEUP;                                       \
+        _op.header.length = sizeof(fmi3LsBusOperationHeader);                              \
+                                                                                           \
+        if (_op.header.length <= (fmi3UInt32)((BufferInfo)->end - (BufferInfo)->writePos)) \
+        {                                                                                  \
+            memcpy((BufferInfo)->writePos, &_op, _op.header.length);                       \
+            (BufferInfo)->writePos += _op.header.length;                                   \
+            (BufferInfo)->status = fmi3True;                                               \
+        }                                                                                  \
+        else                                                                               \
+        {                                                                                  \
+            (BufferInfo)->status = fmi3False;                                              \
+        }                                                                                  \
+    }                                                                                      \
     while (0)
 
 #ifdef __cplusplus
