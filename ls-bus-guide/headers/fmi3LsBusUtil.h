@@ -159,6 +159,36 @@ typedef struct
         ? ((Operation) = (fmi3LsBusOperationHeader*)(BufferInfo)->readPos, (BufferInfo)->readPos += (Operation)->length),         \
         fmi3True : fmi3False\
 
+ /**
+  * \brief Reads the next bus operation directly from a raw buffer.
+  *
+  *  Example:
+  *  \code
+  *  fmi3SetBinary(..., const size_t valueSizes[], const fmi3Binary values[], ...)
+  *  {
+  *      fmi3LsBusOperationHeader* nextOperation;
+  *      size_t readPos = 0;
+  *      ...
+  *      while (FMI3_LS_BUS_READ_NEXT_OPERATION_DIRECT(values[i], valueSizes[i], readPos, nextOperation))
+  *      {
+  *          ...
+  *      }
+  *  }
+  *  \endcode
+  *
+  * \param[in]     Buffer        Pointer to buffer variable of type fmi3Binary.
+  * \param[in]     BufferLength  The length of the data in the buffer.
+  * \param[in,out] ReadPos       Variable to hold the current read position.
+  * \param[out]    Operation     Pointer of type \ref fmi3LsBusOperationHeader* set by the macro
+  *                              to the address where the next bus operation can be read from.
+  * \return                      fmi3True if a new operation is available, otherwise fmi3False.
+  */
+#define FMI3_LS_BUS_READ_NEXT_OPERATION_DIRECT(Buffer, BufferLength, ReadPos, Operation)                       \
+     (((BufferLength) - (ReadPos)) > sizeof(fmi3LsBusOperationHeader) &&                                       \
+      ((BufferLength) - (ReadPos)) >= ((fmi3LsBusOperationHeader*)((Buffer) + (ReadPos)))->length)             \
+        ? ((Operation) = (fmi3LsBusOperationHeader*)((Buffer) + (ReadPos)), (ReadPos) += (Operation)->length), \
+        fmi3True : fmi3False\
+
 
 #ifdef __cplusplus
 } /* end of extern "C" { */
