@@ -39,8 +39,10 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ----------------------------------------------------------------------------
 */
 
-#include "fmi3LsBus.h"
 #include <string.h>
+
+#include "fmi3LsBus.h"
+
 
 #ifdef __cplusplus
 extern "C"
@@ -48,10 +50,12 @@ extern "C"
 #endif
 
 /**
- * This data type holds information to read and write bus operations to\from
- * a buffer variable via utility maros such as \ref FMI3_LS_BUS_BUFFER_WRITE and
- * \ref FMI3_LS_BUS_READ_NEXT_OPERATION. Variables of this type should be initialized
- * by \ref FMI3_LS_BUS_BUFFER_INFO_INIT and resetted by \ref FMI3_LS_BUS_BUFFER_INFO_RESET.
+ * \brief This data type holds information to read and write bus operations to/from
+ *  a buffer variable via utility macros such as \ref FMI3_LS_BUS_BUFFER_WRITE and
+ *  \ref FMI3_LS_BUS_READ_NEXT_OPERATION.
+ *
+ * Variables of this type should be initialized using \ref FMI3_LS_BUS_BUFFER_INFO_INIT
+ * and reset with \ref FMI3_LS_BUS_BUFFER_INFO_RESET.
  */
 typedef struct
 {
@@ -65,18 +69,20 @@ typedef struct
 
 
 /**
- * \brief Initializes a variable of type \ref fmi3LsBusUtilBufferInfo
- * 
+ * \brief Initializes a variable of type \ref fmi3LsBusUtilBufferInfo.
+ *
  * This macro should be used to initialize variables of type \ref fmi3LsBusUtilBufferInfo.
  *
  * Example:
+ * \code
  * fmi3UInt8 buffer[2048];
  * fmi3LsBusUtilBufferInfo bufferInfo;
  * FMI3_LS_BUS_BUFFER_INFO_INIT(&bufferInfo, buffer, sizeof(buffer));
- * 
- * \param[in] Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
- * \param[in] Pointer to buffer variable.
- * \param[in] Size of the buffer variable.
+ * \endcode
+ *
+ * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
+ * \param[in] Buffer      Pointer to buffer variable.
+ * \param[in] Size        Size of the buffer variable.
  */
 #define FMI3_LS_BUS_BUFFER_INFO_INIT(BufferInfo, Buffer, Size) \
     do                                                         \
@@ -91,14 +97,13 @@ typedef struct
     while (0)
 
 /**
- * \brief Resets a variable of type \ref fmi3LsBusUtilBufferInfo
+ * \brief Resets a variable of type \ref fmi3LsBusUtilBufferInfo.
  *
  * This macro should be used to reset variables of type \ref fmi3LsBusUtilBufferInfo.
- * Read and write positions are set to the buffer start address.  
- * The Variable must be initialize via ref FMI3_LS_BUS_BUFFER_INFO_INIT before 
+ * Read and write positions are set to the buffer start address.
+ * The Variable must have been initialized using \ref FMI3_LS_BUS_BUFFER_INFO_INIT before.
  *
- * 
- * \param Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
+ * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
  */
 #define FMI3_LS_BUS_BUFFER_INFO_RESET(BufferInfo)     \
     do                                                \
@@ -110,19 +115,19 @@ typedef struct
     while (0)
 
 /**
- * \brief Writes data to a buffer variable. Existing data will be overwitten.
+ * \brief Writes data to a buffer variable. Existing data will be overwritten.
  *
- * \param Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
- * \param Pointer to buffer variable.
- * \param Size of the buffer variable.
+ * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
+ * \param[in] Data        Pointer to data to be written.
+ * \param[in] DataLength  Size of the data to be written.
  */
-#define FMI3_LS_BUS_BUFFER_WRITE(BufferInfo, data, dataLength)           \
+#define FMI3_LS_BUS_BUFFER_WRITE(BufferInfo, Data, DataLength)           \
     do                                                                   \
     {                                                                    \
-        if ((dataLength) <= (BufferInfo)->size)                          \
+        if ((DataLength) <= (BufferInfo)->size)                          \
         {                                                                \
-            memcpy((bufferInfo)->start, (data), (dataLength));           \
-            (bufferInfo)->writePos = (bufferInfo)->start + (dataLength); \
+            memcpy((bufferInfo)->start, (Data), (DataLength));           \
+            (bufferInfo)->writePos = (bufferInfo)->start + (DataLength); \
             (bufferInfo)->readPos = (bufferInfo)->start;                 \
             (bufferInfo)->status = fmi3True;                             \
         }                                                                \
@@ -134,24 +139,56 @@ typedef struct
     while (0)
 
 /**
- * \brief Reads next bus operation from buffer.
+ * \brief Reads the next bus operation from a buffer.
  *
  *  Example:
+ *  \code
  *  fmi3LsBusOperationHeader* nextOperation;
- *  while(FMI3_LS_BUS_READ_NEXT_OPERATION(BufferInfo,nextOperation))
+ *  while (FMI3_LS_BUS_READ_NEXT_OPERATION(BufferInfo, nextOperation))
  *  {
  *    ...
  *  }
+ *  \endcode
  * 
- * \param[in]  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
- * \param[out] Pointer of type \ref fmi3LsBusOperationHeader* set by the macro
- *             to the address where the next bus operation can be read from.
- * \return     fmi3True if a new operation is available else fmi3False.  
+ * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
+ * \param[out] Operation  Pointer of type \ref fmi3LsBusOperationHeader* set by the macro
+ *                        to the address where the next bus operation can be read from.
+ * \return                fmi3True if a new operation is available, otherwise fmi3False.
  */
-#define FMI3_LS_BUS_READ_NEXT_OPERATION(BufferInfo, Operation)                                                        \
-    (((BufferInfo)->writePos - (BufferInfo)->readPos) > sizeof(fmi3LsBusOperationHeader) &&                           \
-     ((BufferInfo)->writePos - (BufferInfo)->readPos) >= ((fmi3LsBusOperationHeader*)(BufferInfo)->readPos)->length)  \
-        ? (Operation = (fmi3LsBusOperationHeader*)(BufferInfo)->readPos, (BufferInfo)->readPos += Operation->length), \
+#define FMI3_LS_BUS_READ_NEXT_OPERATION(BufferInfo, Operation)                                                                    \
+    ((fmi3UInt32)((BufferInfo)->writePos - (BufferInfo)->readPos) > sizeof(fmi3LsBusOperationHeader) &&                           \
+     (fmi3UInt32)((BufferInfo)->writePos - (BufferInfo)->readPos) >= ((fmi3LsBusOperationHeader*)(BufferInfo)->readPos)->length)  \
+        ? ((Operation) = (fmi3LsBusOperationHeader*)(BufferInfo)->readPos, (BufferInfo)->readPos += (Operation)->length),         \
+        fmi3True : fmi3False\
+
+ /**
+  * \brief Reads the next bus operation directly from a raw buffer.
+  *
+  *  Example:
+  *  \code
+  *  fmi3SetBinary(..., const size_t valueSizes[], const fmi3Binary values[], ...)
+  *  {
+  *      fmi3LsBusOperationHeader* nextOperation;
+  *      size_t readPos = 0;
+  *      ...
+  *      while (FMI3_LS_BUS_READ_NEXT_OPERATION_DIRECT(values[i], valueSizes[i], readPos, nextOperation))
+  *      {
+  *          ...
+  *      }
+  *  }
+  *  \endcode
+  *
+  * \param[in]     Buffer        Pointer to buffer variable of type fmi3Binary.
+  * \param[in]     BufferLength  The length of the data in the buffer.
+  * \param[in,out] ReadPos       Variable to hold the current read position.
+  * \param[out]    Operation     Pointer of type \ref fmi3LsBusOperationHeader* set by the macro
+  *                              to the address where the next bus operation can be read from.
+  * \return                      fmi3True if a new operation is available, otherwise fmi3False.
+  */
+#define FMI3_LS_BUS_READ_NEXT_OPERATION_DIRECT(Buffer, BufferLength, ReadPos, Operation)                       \
+     (((BufferLength) - (ReadPos)) > sizeof(fmi3LsBusOperationHeader) &&                                       \
+      ((BufferLength) - (ReadPos)) >= ((fmi3LsBusOperationHeader*)((Buffer) + (ReadPos)))->length)             \
+        ? ((Operation) = (fmi3LsBusOperationHeader*)((Buffer) + (ReadPos)), (ReadPos) += (Operation)->length), \
         fmi3True : fmi3False\
 
 
