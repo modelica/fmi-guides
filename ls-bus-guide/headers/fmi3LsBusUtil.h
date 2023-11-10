@@ -156,7 +156,7 @@ typedef struct
  * \return                fmi3True if a new operation is available, otherwise fmi3False.
  */
 #define FMI3_LS_BUS_READ_NEXT_OPERATION(BufferInfo, Operation)                                                                    \
-    ((fmi3UInt32)((BufferInfo)->writePos - (BufferInfo)->readPos) > sizeof(fmi3LsBusOperationHeader) &&                           \
+    ((fmi3UInt32)((BufferInfo)->writePos - (BufferInfo)->readPos) >= sizeof(fmi3LsBusOperationHeader) &&                          \
      (fmi3UInt32)((BufferInfo)->writePos - (BufferInfo)->readPos) >= ((fmi3LsBusOperationHeader*)(BufferInfo)->readPos)->length)  \
         ? ((Operation) = (fmi3LsBusOperationHeader*)(BufferInfo)->readPos, (BufferInfo)->readPos += (Operation)->length),         \
         fmi3True : fmi3False\
@@ -186,7 +186,7 @@ typedef struct
   * \return                      fmi3True if a new operation is available, otherwise fmi3False.
   */
 #define FMI3_LS_BUS_READ_NEXT_OPERATION_DIRECT(Buffer, BufferLength, ReadPos, Operation)                       \
-     (((BufferLength) - (ReadPos)) > sizeof(fmi3LsBusOperationHeader) &&                                       \
+     (((BufferLength) - (ReadPos)) >= sizeof(fmi3LsBusOperationHeader) &&                                      \
       ((BufferLength) - (ReadPos)) >= ((fmi3LsBusOperationHeader*)((Buffer) + (ReadPos)))->length)             \
         ? ((Operation) = (fmi3LsBusOperationHeader*)((Buffer) + (ReadPos)), (ReadPos) += (Operation)->length), \
         fmi3True : fmi3False\
