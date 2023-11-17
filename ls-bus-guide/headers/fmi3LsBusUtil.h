@@ -115,6 +115,30 @@ typedef struct
     while (0)
 
 /**
+ * \brief Checks whether the buffer variable is empty.
+ *
+ * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
+ */
+#define FMI3_LS_BUS_BUFFER_IS_EMPTY(BufferInfo)                          \
+    ((BufferInfo)->writePos == (BufferInfo)->start ? fmi3True : fmi3False)
+
+/**
+ * \brief Returns the start address of the  buffer variable.
+ *
+ * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
+ */
+#define FMI3_LS_BUS_BUFFER_START(BufferInfo)                          \
+    ((BufferInfo)->start)
+
+/**
+ * \brief Returns the actual length of the buffer variable beginning from the start address.
+ *
+ * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
+ */
+#define FMI3_LS_BUS_BUFFER_LENGTH(BufferInfo)                          \
+    ((BufferInfo)->writePos - (BufferInfo)->start)
+
+/**
  * \brief Writes data to a buffer variable. Existing data will be overwritten.
  *
  * \param[in] BufferInfo  Pointer to variable of type \ref fmi3LsBusUtilBufferInfo.
