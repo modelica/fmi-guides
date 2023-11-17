@@ -7,31 +7,47 @@ This chapter contains details on CAN, CAN FD, CAN XL specific topics.
 ==== Getting Started with CAN, CAN FD and CAN XL 
 This section shows the exemplary implementation in conjunction with the provided header files of the fmi-ls-bus layered standard.
 
-===== Provided Header Files
+===== Provided Header Files [[low-cut-can-getting-started-provided-header-files]]
 The layered standard fmi-ls-bus not only contains a textual specification for bus support, but also provides header and utility functions as C code to make creation and use within FMUs as easy as possible.
 The following header files are provided by the standard for this purpose, although their use is not mandatory but optional:
 
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h[fmi3LsBus.h] provides general functions and structures.
 These header file applies to all supported bus types of the layered standard. 
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusCan.h[fmi3LsBusCan.h] provides functions and structures explicit for CAN, CAN FD and CAN XL.
-Primarily, structures are included here that allow the operations specified by the layered standard to be easily created and used.
+Primarily, structures are included here that allow the bus operations specified by the layered standard to be easily created and used.
 * https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtil.h[fmi3LsBusUtil.h] provides common utility functions and structures for all supported bus types.
 * https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] provides CAN, CAN FD and CAN XL explicit utility functions.
 
 ===== General Aspects
-tbd
+Bus operations represent protocol units to be transmitted in the environment of the layered standard based on the https://modelica.github.io/fmi-ls-bus/main/#low-cut-layered-standard-bus-protocol[Layered Standard Bus Protocol].
+All FMI variables required for the exchange are grouped by a defined https://modelica.github.io/fmi-ls-bus/main/#low-cut-bus-terminal[Bus Terminal].
+Bus operations are created and processed within an FMU.
+This can be done either in `Step Mode` or in `Event Mode`.
+For a transfer, all bus operations are serialized together in a `fmi3Binary` https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-rx-data-variables[variable].
+This serialization can be done individually or using the provided <<low-cut-can-getting-started-provided-header-files,header files>>.
+After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized and processed there again inside the receiver.
+
+.Create, process and transfer bus operations.
+[#figure-general-aspects-overview]
+image::create_process_bus_operations.svg[width=60%, align="center"]
+
+The point in time where bus operations are transferred between different FMUss are defined by variable of type `fmi3Clock`.
+For this reason, the exchange of bus operations is always carried out within the `Event Mode`.
+Details about possible entry points regarding the FMI interface will be provided later in this section.
+However, it is important to know that due to the resulting decoupling between the generation, processing and transfer of bus operations, the need for buffer semantics arises.
+This semantics is reflected directly in the structure and handling of the <<low-cut-can-getting-started-provided-header-files,header files>> provided.
 
 ===== Buffer Handling
-The exchange of operations between FMUs takes place via FMI variables of the binary type.
+The exchange of bus operations between FMUs takes place via FMI variables of the `fmi3Binary` type.
 For this reason, appropriate variables must first be set up that represent the content for this exchange.
 The buffer type can be easily initialized in the form of an `fmi3UInt8` array of any size.
-It should be noted that the entire buffer size must of course provide enough space for all produced operations during a `fmi3DoStep`.
+It should be noted that the entire buffer size must of course provide enough space for all created bus operations during a `fmi3DoStep`.
 Due to better accessibility, the buffer variables in our case are declared with global visibility within the FMU.
 
-Since describing and reading operations from a simple array can be quite complicated, the common utility headers provide an `fmi3LsBusUtilBufferInfo` entity.
+Since describing and reading bus operations from a simple array can be quite complicated, the common utility headers provide an `fmi3LsBusUtilBufferInfo` entity.
 This abstraction represents a kind of view of the underlying buffer array and allows simplified access using additionally provided functionality.
 
-The following program code shows the declaration and initialization of a buffer for transmitting (Tx) and receiving (Rx) operations in the form of an array.
+The following program code shows the declaration and initialization of a buffer for transmitting (Tx) and receiving (Rx) bus operations in the form of an array.
 In addition, an `fmi3LsBusUtilBufferInfo` is created for both buffer variables.
 Using `FMI3_LS_BUS_BUFFER_INFO_INIT`, the underlying buffer is coupled to the respective `fmi3LsBusUtilBufferInfo` instance.
 
@@ -47,38 +63,38 @@ fmi3LsBusUtilBufferInfo TxBufferInfoCan;    // <3>
 fmi3LsBusUtilBufferInfo RxBufferInfoCan;
 
 fmi3Instance fmi3InstantiateCoSimulation(...) {
-    FMI3_LS_BUS_BUFFER_INFO_INIT(&TxBufferInfoCan, &TxBufferCan, sizeof(TxBufferCan));    // <4>
-    FMI3_LS_BUS_BUFFER_INFO_INIT(&RxBufferInfoCan, &RxBufferCan, sizeof(RxBufferCan));
+    FMI3_LS_BUS_BUFFER_INFO_INIT(&TxBufferInfoCan, TxBufferCan, sizeof(TxBufferCan));    // <4>
+    FMI3_LS_BUS_BUFFER_INFO_INIT(&RxBufferInfoCan, RxBufferCan, sizeof(RxBufferCan));
 }
 ----
 <1> Necessary include of the fmi3LsBusUtilCan.h header file.
-<2> Declaration and initialization of a Buffer FMI binary variable.
-<3> Declaration of BufferInfo variable instance.
-<4> Coupling of a Buffer and a BufferInfo variable.
+<2> Declaration and initialization of a `fmi3Binary` buffer variable.
+<3> Declaration of `fmi3LsBusUtilBufferInfo` variable instance.
+<4> Coupling of a Buffer and a `fmi3LsBusUtilBufferInfo` variable.
 
 The buffer is always treated by the provided header functionalities using FIFO (First In - First Out) semantics.
-The usage of the BufferInfo variable is discussed further.
+The usage of the `fmi3LsBusUtilBufferInfo` variable is discussed further.
 
 [NOTE]
 .Summary
 ====
-* The transfer of Bus Operations must typically be decoupled from creation and processing    
-* The API provides macros for buffering of Bus Operations in a FIFO manner
+* The transfer of bus operations must typically be decoupled from creation and processing    
+* The API provides macros for buffering of bus operations in a FIFO manner
 ====
 
 ===== Creating Bus Operations
-The header file https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] offers macros for all operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
+The header file https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] offers macros for all bus operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
 The macros are always provided according to the following syntax: `FMI3_LS_BUS_<BusType>_CREATE_OP_<OperationName>`.
 Following these rule, the macro for creating a CAN Transmit operation is `FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT`.
-A macro for creating an operation also provides the direct possibility of adding it to a BufferInfo variable.
+A macro for creating an operation also provides the direct possibility of adding it to a `fmi3LsBusUtilBufferInfo` instance.
 
 The following program code shows how to first define the payload and the ID that should be used in the CAN transmit operation.
-Afterwards, the BufferInfo is reset using `FMI3_LS_BUS_BUFFER_RESET`.
-The reset resets the internal position of the BufferInfo entity, so that it is essentially emptied and written to from the beginning.
-The whole thing is necessary to ensure that operations that have already been transmitted are not transmitted a second time.
-`FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT` now creates a new transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the BufferInfo variable.
-Querying the status of a BufferInfo entity allows you to check whether there is still enough space in the underlying buffer.
-In the last step, `FMI3_LS_BUS_BUFFER_INFO_LENGTH` is used to check whether there are operations in the respective BufferInfo variable that should be transmitted in `EventMode`.
+Afterwards, the `fmi3LsBusUtilBufferInfo` is reset using `FMI3_LS_BUS_BUFFER_RESET`.
+The reset resets the internal position of the `fmi3LsBusUtilBufferInfo` instance, so that it is essentially emptied and written to from the beginning.
+The whole thing is necessary to ensure that bus operations that have already been transmitted are not transmitted a second time.
+`FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT` now creates a new transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the `fmi3LsBusUtilBufferInfo` instance.
+Querying the status of a `fmi3LsBusUtilBufferInfo` instance allows you to check whether there is still enough space in the underlying buffer.
+In the last step, `FMI3_LS_BUS_BUFFER_INFO_LENGTH` is used to check whether there are bus operations in the respective `fmi3LsBusUtilBufferInfo` variable that should be transmitted in `Event Mode`.
 
 [source,c]
 .Creation of a CAN Transmit operation
@@ -108,17 +124,17 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
 ----
 <1> Creation of CAN frame payload.
 <2> Definition of CAN ID of the specified frame.
-<3> Resetting of BufferInfo variable instance.
-<4> Creation of a CAN Transmit operation and adding it to the specified BufferInfo variable.
+<3> Resetting of `fmi3LsBusUtilBufferInfo` variable instance.
+<4> Creation of a CAN Transmit operation and adding it to the specified `fmi3LsBusUtilBufferInfo` variable.
 <5> Verify that free buffer space is available.
-<6> Activate FMI EventMode if needed.
+<6> Activate FMI Event Mode if needed.
 
 According to exactly the same principle, any specified operation can be created using an existing macro.
 
 [NOTE]
 .Summary
 ====
-* Bus Operations can be created by using the provided FMI3_LS_BUS_<BusType>_CREATE_OP_<OperationName> macros
+* Bus operations can be created by using the provided FMI3_LS_BUS_<BusType>_CREATE_OP_<OperationName> macros
 * The CREATE_OP macros are creating a Bus Operation and updating the given buffer in a single step
 ====
 
@@ -133,21 +149,24 @@ Within `fmi3GetClock` shows `TX_CLOCK_REFERENCE` represents the valueReference o
 The usage of the macro `FMI3_LS_BUS_BUFFER_IS_EMPTY` indicates whether there is data to be transferred in the respective buffer.
 If this is the case, the corresponding `Tx_Clock` will tick.
 
+The content of the `fmi3LsBusUtilBufferInfo` instance is provided to the importer via the FMI variable `Tx_Data` via `fmi3GetBinary`.
+The value can be easily passed on to the FMI interface via `FMI3_LS_BUS_BUFFER_START`.
+`FMI3_LS_BUS_BUFFER_LENGTH` can also be used to set the size of the `fmi3Binary` variable.
+
 [source,c]
-.Transmission of operations
+.Transmit Bus Operations via triggered clock
 ----
 #include "fmi3LsBusUtil.h" 
 
-// Example of how to transmit Bus Operations (triggered clock)
 fmi3Status fmi3GetClock(fmi3Instance instance, 
-                         const fmi3ValueReference valueReferences [], 
+                         const fmi3ValueReference valueReferences[], 
                          size_t nValueReferences, 
                          fmi3Clock values[]) {
     ...
     for (size_t i = 0; i < nValueReferences; i++) { 
         if (valueReferences[i] == TX_CLOCK_REFERENCE) {
-            if(!FMI3_LS_BUS_BUFFER_IS_EMPTY(&TxBufferInfoCan)) {
-                *values[i] = fmi3ClockActive;
+            if(!FMI3_LS_BUS_BUFFER_IS_EMPTY(&TxBufferInfoCan)) {    // <1>
+                *values[i] = fmi3ClockActive;                       // <2>
             }
         }
     }
@@ -155,7 +174,7 @@ fmi3Status fmi3GetClock(fmi3Instance instance,
 }
 
 fmi3Status fmi3GetBinary(fmi3Instance instance, 
-                          const fmi3ValueReference valueReferences [], 
+                          const fmi3ValueReference valueReferences[], 
                           size_t nValueReferences, 
                           size_t valueSizes[], 
                           fmi3Binary values[], 
@@ -163,17 +182,19 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
     ...
     for (size_t i = 0; i < nValueReferences; i++) {
         if (valueReferences[i] == TX_DATA_REFERENCE) {
-            *values[i] = FMI3_LS_BUS_BUFFER_START(&TxBufferInfoCan);
-            *valueSizes[i] = FMI3_LS_BUS_BUFFER_LENGTH(&TxBufferInfoCan);
+            *values[i] = FMI3_LS_BUS_BUFFER_START(&TxBufferInfoCan);        // <3>
+            *valueSizes[i] = FMI3_LS_BUS_BUFFER_LENGTH(&TxBufferInfoCan);   // <4>
         }
     }
     ...
 }
 ----
-<1> Creation of CAN frame message.
-<2> Definition of CAN ID of the specified frame.
-<3> Resetting of BufferInfo variable instance.
-<4> Coupling of a Buffer and a BufferInfo variable.
+<1> Verify if bus operations exists for transfer.
+<2> Activate specified `Tx_Clock`.
+<3> Get the start memory address of the buffer.
+<4> Get the size of the buffer.
+
+It should be clear that, depending on the application, the different FMI clock types each offer advantages and disadvantages. See also the https://modelica.github.io/fmi-ls-bus/main/#_selecting_the_type_of_tx_clock[corresponding chapter in the layered standard].
 
 [NOTE]
 .Summary
@@ -182,57 +203,64 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
 ====
 
 ===== Receive of Bus Operations
-* The LS-BUS API provides macros to write received binary data into a given buffer
-* The buffer is updated by the WRITE macro
-* The FMI3_LS_BUS_BUFFER_WRITE can be called repeatedly
+The operation-receiving FMU gets the bus operations via a `fmi3Binary` variable.
+This variable can be transformed back into a `fmi3LsBusUtilBufferInfo` instance.
+With the help of this transformation, the bus operations to be processed can be easily accessed.
+`FMI3_LS_BUS_BUFFER_WRITE` can be used for transformation.
+
+The code snipped below shows its use within the `fmi3SetBinary` function, which an FMU importer calls when setting the `fmi3Binary` variables.
 
 [source,c]
+.Receiving Bus Operations
 ----
 #include "fmi3LsBusUtil.h" 
 
-// Example of how to receive Bus Operations
-fmi3Status fmi3SetBinary (fmi3Instance instance,
-                          const fmi3ValueReference valueReferences [], 
+fmi3Status fmi3SetBinary(fmi3Instance instance,
+                          const fmi3ValueReference valueReferences[], 
                           size_t nValueReferences, 
                           const size_t valueSize, 
                           const fmi3Binary value, ...) {
     ...
     for (size_t i = 0; i < nValueReferences; i++) {
         if (valueReferences[i] == RX_DATA_REFERENCE) {    
-            FMI3_LS_BUS_BUFFER_WRITE(&RXBufferInfoCan, value[i], valueSize [i]);
+            FMI3_LS_BUS_BUFFER_WRITE(&RXBufferInfoCan, value[i], valueSize[i]); // <1>
         }
     }
     ...
 }
 ----
-<1> Creation of CAN frame message.
-<2> Definition of CAN ID of the specified frame.
-<3> Resetting of BufferInfo variable instance.
-<4> Coupling of a Buffer and a BufferInfo variable.
+<1> Building a `fmi3LsBusUtilBufferInfo` instance basing on received bus operations.
 
+[NOTE]
+.Summary
+====
+* The LS-BUS API provides macros to write received binary data into a given buffer
+* The buffer is updated by the `FMI3_LS_BUS_BUFFER_WRITE` macro
+* The `FMI3_LS_BUS_BUFFER_WRITE` can be called repeatedly
+====
 
+===== Processing of Bus Operations
+Depending on the application, the received bus operations can easily be processed within the FMU within an `fmi3DoStep`.
+This procedure allows very simple implementation, especially when using FMU in a fixed step size way.
+It should be clear at this point that this simple implementation is compromised by https://modelica.github.io/fmi-ls-bus/main/#_selecting_the_type_of_tx_clock[limitations in bus simulation].
 
-
-===== Processing of Bus Operations in Step Mode
-
-* Received Bus Operations can be processed by usage of the FMI3_LS_BUS_READ_NEXT_OPERATION macro
-* FMI3_LS_BUS_BUFFER_INFO_RESET allows to reset the buffer after processing
-
+In this case, the `FMI3_LS_BUS_READ_NEXT_OPERATION` macro can be used so that all received bus operations are deserialized one after the other into the correct operation structure within `fmi3DoStep`.
+After this they can be handled.
 
 [source,c]
+.Processing received Bus Operations in `fmi3DoStep`
 ----
-// Example how to processed received Bus Operations
 #include "fmi3LsBusUtilCan.h"
 
-fmi3Status fmi3DoStep (...) {
+fmi3Status fmi3DoStep(...) {
     fmi3LsBusOperationHeader* hdr;
     ...
     /* Processing of received bus operations */
-    while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RxBufferInfoCan, hdr)){    
-        switch (hdr->type)
+    while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RxBufferInfoCan, hdr)){     // <1>
+        switch (hdr->type)                                              // <2>
         {
             case FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT:
-                fmi3LsBusCanOperationCanTransmit* receivedTransmitOp 
+                fmi3LsBusCanOperationCanTransmit* receivedTransmitOp    // <3>
                     = (fmi3LsBusCanOperationCanTransmit*) hdr;
             ...
         }
@@ -243,25 +271,20 @@ fmi3Status fmi3DoStep (...) {
     }
 }
 ----
-<1> Creation of CAN frame message.
-<2> Definition of CAN ID of the specified frame.
-<3> Resetting of BufferInfo variable instance.
-<4> Coupling of a Buffer and a BufferInfo variable.
+<1> Reading the next operation from the `fmi3LsBusUtilBufferInfo` instance.
+<2> Decide which kind of operation needs to be handled.
+<3> Casting into the concrete operation underlying structure.
 
-
-===== Processing of Bus Operations in Event Mode
-
-* Received Bus Operations can be processed by usage of the FMI3_LS_BUS_READ_NEXT_OPERATION macro
-* FMI3_LS_BUS_BUFFER_INFO_RESET allows to reset the buffer after processing
-
+A https://modelica.github.io/fmi-ls-bus/main/#low-cut-variables[more fine-grained bus simulation] enables the processing of the bus operations within the `Event Mode`.
+This makes it possible to react directly to the receipt of new bus operations using the `Rx_Clock`.
 
 [source,c]
+.Processing received Bus Operations in `Event Mode`
 ----
-// Example of how to processed received Bus Operations in Event Mode
 #include "fmi3LsBusUtilCan.h"
 
-fmi3Status fmi3SetClock (fmi3Instance instance,
-                         const fmi3ValueReference valueReference [], 
+fmi3Status fmi3SetClock(fmi3Instance instance,
+                         const fmi3ValueReference valueReference[], 
                          size_t nValueReferences, 
                          const fmi3clock values[]) {
     fmi3LsBusOperationHeader* hdr;
@@ -269,32 +292,39 @@ fmi3Status fmi3SetClock (fmi3Instance instance,
     for (size_t i = 0; i < nValueReferences; i++) {
         if (valueReferences[i] == RX_CLOCK_REFERENCE && values[i] == fmi3ClockActive) { 
             /* Processing of received bus operations */
-            while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RXBufferInfoCan, hdr))
+            while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RXBufferInfoCan, hdr))    // <1>
             {
-                switch (hdr->type)
+                switch (hdr->type)                                            // <2>
                 {
                     case FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT:
-                        fmi3LsBusCanOperationCanTransmit receivedTransmitOp 
+                        fmi3LsBusCanOperationCanTransmit receivedTransmitOp   // <3>
                             = (fmi3LsBusCanOperationCanTransmit*) hdr;
                 ...
                 }
             }
             
-            /* Reset read\write positions */
+            /* Reset read/write positions */
             FMI3_LS_BUS_BUFFER_INFO_RESET(&RxBufferInfoCan);
         }
     }
     ...
 }
 ----
-<1> Creation of CAN frame payload.
-<2> Definition of CAN ID of the specified frame.
-<3> Resetting of BufferInfo variable instance.
-<4> Coupling of a Buffer and a BufferInfo variable.
+<1> Reading the next operation from the `fmi3LsBusUtilBufferInfo` instance.
+<2> Decide which kind of operation needs to be handled.
+<3> Casting into the concrete operation underlying structure.
+
+Depending on the specified application scenario, it should always check which access matches best.
+
+[NOTE]
+.Summary
+====
+* Received bus operations can be processed by usage of the FMI3_LS_BUS_READ_NEXT_OPERATION macro
+* FMI3_LS_BUS_BUFFER_INFO_RESET allows to reset the buffer after processing
+====
 
 ===== Examples
-
-reference to example fmus with description...
+#TODO#
 
 ==== Sequence Diagrams [[low-cut-can-sequence-diagrams]]
 This section contains sample sequences to clarify the facts in the CAN, CAN FD, CAN XL part.
