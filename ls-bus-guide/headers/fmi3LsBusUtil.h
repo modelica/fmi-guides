@@ -126,14 +126,14 @@ typedef struct
     {                                                                    \
         if ((DataLength) <= (BufferInfo)->size)                          \
         {                                                                \
-            memcpy((bufferInfo)->start, (Data), (DataLength));           \
-            (bufferInfo)->writePos = (bufferInfo)->start + (DataLength); \
-            (bufferInfo)->readPos = (bufferInfo)->start;                 \
-            (bufferInfo)->status = fmi3True;                             \
+            memcpy((BufferInfo)->start, (Data), (DataLength));           \
+            (BufferInfo)->writePos = (BufferInfo)->start + (DataLength); \
+            (BufferInfo)->readPos = (BufferInfo)->start;                 \
+            (BufferInfo)->status = fmi3True;                             \
         }                                                                \
         else                                                             \
         {                                                                \
-            (bufferInfo)->status = fmi3False;                            \
+            (BufferInfo)->status = fmi3False;                            \
         }                                                                \
     }                                                                    \
     while (0)
