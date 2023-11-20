@@ -223,7 +223,7 @@ fmi3Status fmi3SetBinary(fmi3Instance instance,
     ...
     for (size_t i = 0; i < nValueReferences; i++) {
         if (valueReferences[i] == RX_DATA_REFERENCE) {    
-            FMI3_LS_BUS_BUFFER_WRITE(&RXBufferInfoCan, value[i], valueSize[i]); // <1>
+            FMI3_LS_BUS_BUFFER_WRITE(&RxBufferInfoCan, value[i], valueSize[i]); // <1>
         }
     }
     ...
@@ -266,7 +266,7 @@ fmi3Status fmi3DoStep(...) {
         }
 
         /* Reset read/write positions */
-        FMI3_LS_BUS_BUFFER_INFO_RESET(&RXBufferInfoCan);
+        FMI3_LS_BUS_BUFFER_INFO_RESET(&RxBufferInfoCan);
         ...
     }
 }
@@ -292,7 +292,7 @@ fmi3Status fmi3SetClock(fmi3Instance instance,
     for (size_t i = 0; i < nValueReferences; i++) {
         if (valueReferences[i] == RX_CLOCK_REFERENCE && values[i] == fmi3ClockActive) { 
             /* Processing of received bus operations */
-            while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RXBufferInfoCan, hdr))    // <1>
+            while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RxBufferInfoCan, hdr))    // <1>
             {
                 switch (hdr->type)                                            // <2>
                 {
