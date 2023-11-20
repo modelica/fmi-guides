@@ -144,12 +144,12 @@ Within the layered standard, the https://modelica.github.io/fmi-ls-bus/main/#low
 The https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-triggered-clock-variables[simplest case represents] a `triggered` clock as `Tx_Clock` that basically allows to signal events when returning from `fmi3DoStep`.
 
 The program code below schematically illustrates an implementation.
-`fmi3GetClock` is called by the importer after `fmi3DoStep` has completed or ended prematurely.
+`fmi3GetClock` is called by the FMU importer after `fmi3DoStep` has completed or ended prematurely.
 Within `fmi3GetClock` shows `TX_CLOCK_REFERENCE` represents the valueReference of the respective `Tx_Clock`.
 The usage of the macro `FMI3_LS_BUS_BUFFER_IS_EMPTY` indicates whether there is data to be transferred in the respective buffer.
 If this is the case, the corresponding `Tx_Clock` will tick.
 
-The content of the `fmi3LsBusUtilBufferInfo` instance is provided to the importer via the FMI variable `Tx_Data` via `fmi3GetBinary`.
+The content of the `fmi3LsBusUtilBufferInfo` instance is provided to the FMU importer via the FMI variable `Tx_Data` via `fmi3GetBinary`.
 The value can be easily passed on to the FMI interface via `FMI3_LS_BUS_BUFFER_START`.
 `FMI3_LS_BUS_BUFFER_LENGTH` can also be used to set the size of the `fmi3Binary` variable.
 
@@ -314,6 +314,7 @@ fmi3Status fmi3SetClock(fmi3Instance instance,
 <2> Decide which kind of operation needs to be handled.
 <3> Casting into the concrete operation underlying structure.
 
+This example assumes that the FMU importer calls `fmi3SetBinary` before `fmi3SetClock`.
 Depending on the specified application scenario, it should always check which access matches best.
 
 [NOTE]
