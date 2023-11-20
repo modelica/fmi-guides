@@ -194,7 +194,7 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
 <3> Get the start memory address of the buffer.
 <4> Get the size of the buffer.
 
-It should be clear that, depending on the application, the different FMI clock types each offer advantages and disadvantages. See also the https://modelica.github.io/fmi-ls-bus/main/#_selecting_the_type_of_tx_clock[corresponding chapter in the layered standard].
+It should be clear that, depending on the application, the different FMI clock types each offer advantages and disadvantages. See also the https://modelica.github.io/fmi-ls-bus/main/#low-cut-selecting-tx-variables[corresponding chapter in the layered standard].
 
 [NOTE]
 .Summary
@@ -242,7 +242,7 @@ fmi3Status fmi3SetBinary(fmi3Instance instance,
 ===== Processing of Bus Operations
 Depending on the application, the received bus operations can easily be processed within the FMU within an `fmi3DoStep`.
 This procedure allows very simple implementation, especially when using FMU in a fixed step size way.
-It should be clear at this point that this simple implementation is compromised by https://modelica.github.io/fmi-ls-bus/main/#_selecting_the_type_of_tx_clock[limitations in bus simulation].
+It should be clear at this point that this simple implementation is compromised by https://modelica.github.io/fmi-ls-bus/main/#low-cut-selecting-tx-variables[limitations in bus simulation].
 
 In this case, the `FMI3_LS_BUS_READ_NEXT_OPERATION` macro can be used so that all received bus operations are deserialized one after the other into the correct operation structure within `fmi3DoStep`.
 After this they can be handled.
