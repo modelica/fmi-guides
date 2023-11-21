@@ -158,11 +158,11 @@ extern "C"
 #define FMI3_LS_BUS_CAN_CREATE_OP_CAN_XL_TRANSMIT(BufferInfo, ID, Ide, Sec, Sdt, VcId, Af, DataLength, Data)      \
     do                                                                                                            \
     {                                                                                                             \
-        fmi3LsBusCanOperationCanXLTransmit _op;                                                                   \
+        fmi3LsBusCanOperationCanXlTransmit _op;                                                                   \
         _op.header.type = FMI3_LS_BUS_CAN_OP_CANXL_TRANSMIT;                                                      \
         _op.header.length = sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanId) + sizeof(fmi3LsBusCanIde) + \
                             sizeof(fmi3LsBusCanSec) + sizeof(fmi3LsBusCanSdt) + sizeof(fmi3LsBusCanVcId) +        \
-                            sizeof(fmi3LsBusCanVcId) + sizeof(fmi3LsBusCanDataLength) + (DataLength);             \
+                            sizeof(fmi3LsBusCanAf) + sizeof(fmi3LsBusCanDataLength) + (DataLength);             \
         _op.id = (ID);                                                                                            \
         _op.ide = (Ide);                                                                                          \
         _op.sec = (Sec);                                                                                          \
