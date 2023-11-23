@@ -31,16 +31,16 @@ After the contents of the binary variables have been transferred to another FMU 
 [#figure-general-aspects-overview]
 image::create_process_bus_operations.svg[width=60%, align="center"]
 
-The point in time where Bus Operations are transferred between different FMUss are defined by variable of type `fmi3Clock`.
+The point in time where Bus Operations are transferred between different FMUs is defined by the usage of `fmi3Clock` variables.
 For this reason, the exchange of Bus Operations is always carried out within the `Event Mode`.
 Details about possible entry points regarding the FMI interface will be provided later in this section.
 However, it is important to know that due to the resulting decoupling between the generation, processing and transfer of Bus Operations, the need for buffer semantics arises.
 This semantics is reflected directly in the structure and handling of the <<low-cut-can-getting-started-provided-header-files,header files>> provided.
 
 ===== Buffer Handling
-The exchange of Bus Operations between FMUs takes place via FMI variables of the `fmi3Binary` type.
-For this reason, appropriate variables must first be set up that represent the content for this exchange.
-The buffer type can be easily initialized in the form of an `fmi3UInt8` array of any size.
+For exchanging Bus Operations between FMUs variables of type `fmi3Binary` type are used.
+For this reason, appropriate variables must first be set up within the implementation that represent the content for this exchange.
+The buffer variable can be easily initialized in the form of an `fmi3UInt8` array of any size.
 It should be noted that the entire buffer size must of course provide enough space for all created Bus Operations during a `fmi3DoStep`.
 Due to better accessibility, the buffer variables in our case are declared with global visibility within the FMU.
 
@@ -67,7 +67,7 @@ fmi3Instance fmi3InstantiateCoSimulation(...) {
     FMI3_LS_BUS_BUFFER_INFO_INIT(&RxBufferInfoCan, RxBufferCan, sizeof(RxBufferCan));
 }
 ----
-<1> Necessary include of the fmi3LsBusUtilCan.h header file.
+<1> Necessary include of the fmi3LsBusUtil.h header file.
 <2> Declaration and initialization of a `fmi3Binary` buffer variable.
 <3> Declaration of `fmi3LsBusUtilBufferInfo` variable instance.
 <4> Coupling of a Buffer and a `fmi3LsBusUtilBufferInfo` variable.
@@ -88,18 +88,18 @@ The macros are always provided according to the following syntax: `FMI3_LS_BUS_<
 Following these rule, the macro for creating a CAN Transmit operation is `FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT`.
 A macro for creating an operation also provides the direct possibility of adding it to a `fmi3LsBusUtilBufferInfo` instance.
 
-The following program code shows how to first define the payload and the ID that should be used in the CAN transmit operation.
-Afterwards, the `fmi3LsBusUtilBufferInfo` is reset using `FMI3_LS_BUS_BUFFER_RESET`.
-The reset resets the internal position of the `fmi3LsBusUtilBufferInfo` instance, so that it is essentially emptied and written to from the beginning.
+The following program code shows how to first define the payload and the ID that should be used in the CAN Transmit operation.
+Afterwards, the `fmi3LsBusUtilBufferInfo` is reset by using `FMI3_LS_BUS_BUFFER_RESET`.
+`FMI3_LS_BUS_BUFFER_RESET` sets the internal position of the `fmi3LsBusUtilBufferInfo` instance to zero, so that it is essentially emptied and written from the beginning.
 The whole thing is necessary to ensure that Bus Operations that have already been transmitted are not transmitted a second time.
-`FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT` now creates a new transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the `fmi3LsBusUtilBufferInfo` instance.
+`FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT` now creates a new CAN Transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the `fmi3LsBusUtilBufferInfo` instance.
 Querying the status of a `fmi3LsBusUtilBufferInfo` instance allows you to check whether there is still enough space in the underlying buffer.
 In the last step, `FMI3_LS_BUS_BUFFER_INFO_LENGTH` is used to check whether there are Bus Operations in the respective `fmi3LsBusUtilBufferInfo` variable that should be transmitted in `Event Mode`.
 
 [source,c]
 .Creation of a CAN Transmit operation
 ----
-#include "fmi3LsBusUtilCan.h" 
+#include "mi3LsBusUtilCan.h" 
 
 fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) { 
     fmi3UInt8 msg[] = "Hey guys";   // <1>
@@ -111,7 +111,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
     /* Create a CAN Transmit operation to be send */
     FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&TxBufferInfoCan, msgId, <options>, sizeof(msg), msg);    // <4>
 
-    if(!TxBufferInfoCan->status){   // <5>
+    if(!TxBufferInfoCan.status){   // <5>
         /* Error: No free buffer space available */
     }
 
@@ -127,7 +127,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
 <3> Resetting of `fmi3LsBusUtilBufferInfo` variable instance.
 <4> Creation of a CAN Transmit operation and adding it to the specified `fmi3LsBusUtilBufferInfo` variable.
 <5> Verify that free buffer space is available.
-<6> Activate FMI Event Mode if needed.
+<6> Activate `Event Mode` if needed.
 
 According to exactly the same principle, any specified operation can be created using an existing macro.
 
@@ -145,19 +145,17 @@ The https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-triggered-clock-varia
 
 The program code below schematically illustrates an implementation.
 `fmi3GetClock` is called by the FMU importer after `fmi3DoStep` has completed or ended prematurely.
-Within `fmi3GetClock` shows `TX_CLOCK_REFERENCE` represents the valueReference of the respective `Tx_Clock`.
+Within `fmi3GetClock`, `TX_CLOCK_REFERENCE` represents the valueReference of the respective `Tx_Clock`.
 The usage of the macro `FMI3_LS_BUS_BUFFER_IS_EMPTY` indicates whether there is data to be transferred in the respective buffer.
 If this is the case, the corresponding `Tx_Clock` will tick.
 
-The content of the `fmi3LsBusUtilBufferInfo` instance is provided to the FMU importer via the FMI variable `Tx_Data` via `fmi3GetBinary`.
-The value can be easily passed on to the FMI interface via `FMI3_LS_BUS_BUFFER_START`.
+The content of the `fmi3LsBusUtilBufferInfo` instance is provided to the FMU importer via `fmi3GetBinary`.
+The value can be easily passed on to the FMI interface by using the `FMI3_LS_BUS_BUFFER_START` macro.
 `FMI3_LS_BUS_BUFFER_LENGTH` can also be used to set the size of the `fmi3Binary` variable.
 
 [source,c]
 .Transmit Bus Operations via triggered clock
 ----
-#include "fmi3LsBusUtil.h" 
-
 fmi3Status fmi3GetClock(fmi3Instance instance, 
                          const fmi3ValueReference valueReferences[], 
                          size_t nValueReferences, 
@@ -191,8 +189,8 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
 ----
 <1> Verify if Bus Operations exists for transfer.
 <2> Activate specified `Tx_Clock`.
-<3> Get the start memory address of the buffer.
-<4> Get the size of the buffer.
+<3> Get the start memory address of the buffer, by using `fmi3LsBusUtilBufferInfo` instance.
+<4> Get the size of the buffer, by using `fmi3LsBusUtilBufferInfo` instance.
 
 It should be clear that, depending on the application, the different FMI clock types each offer advantages and disadvantages. See also the https://modelica.github.io/fmi-ls-bus/main/#low-cut-selecting-tx-variables[corresponding chapter in the layered standard].
 
@@ -203,17 +201,35 @@ It should be clear that, depending on the application, the different FMI clock t
 ====
 
 ===== Receive of Bus Operations
+The indication whether new operations are pending within the `Rx_Data` variable is done via the `Rx_Clock`.
+This clock ticks as soon as new data is available.
 The operation-receiving FMU gets the Bus Operations via a `fmi3Binary` variable.
 This variable can be transformed back into a `fmi3LsBusUtilBufferInfo` instance.
 With the help of this transformation, the Bus Operations to be processed can be easily accessed.
 `FMI3_LS_BUS_BUFFER_WRITE` can be used for transformation.
 
-The code snipped below shows its use within the `fmi3SetBinary` function, which an FMU importer calls when setting the `fmi3Binary` variables.
+The code snipped below shows its use within the `fmi3SetClock` and `fmi3SetBinary` functions, which an FMU importer calls when setting the concrete `Rx_Data` variable.
 
 [source,c]
 .Receiving Bus Operations
 ----
-#include "fmi3LsBusUtil.h" 
+fmi3Clock RxClock;
+fmi3UInt8 RxBufferCan[2048];
+fmi3LsBusUtilBufferInfo RxBufferInfoCan;
+
+fmi3Status fmi3SetClock(fmi3Instance instance,
+                         const fmi3ValueReference valueReference[], 
+                         size_t nValueReferences, 
+                         const fmi3clock values[]) {
+    ...
+    for (size_t i = 0; i < nValueReferences; i++) {
+        if (valueReferences[i] == RX_CLOCK_REFERENCE && values[i] == fmi3ClockActive) { // <1>
+            /* Set an indicator that clock ticked and new Bus Operations arrived */
+            RxClock = values[i]; // <2>
+        }
+    }
+    ...
+}
 
 fmi3Status fmi3SetBinary(fmi3Instance instance,
                           const fmi3ValueReference valueReferences[], 
@@ -223,13 +239,15 @@ fmi3Status fmi3SetBinary(fmi3Instance instance,
     ...
     for (size_t i = 0; i < nValueReferences; i++) {
         if (valueReferences[i] == RX_DATA_REFERENCE) {    
-            FMI3_LS_BUS_BUFFER_WRITE(&RxBufferInfoCan, value[i], valueSize[i]); // <1>
+            FMI3_LS_BUS_BUFFER_WRITE(&RxBufferInfoCan, value[i], valueSize[i]); // <3>
         }
     }
     ...
 }
 ----
-<1> Building a `fmi3LsBusUtilBufferInfo` instance basing on received Bus Operations.
+<1> Verify that `Rx_Clock` ticked.
+<2> Park information for global access within other FMI interface functions.
+<3> Building a `fmi3LsBusUtilBufferInfo` instance basing on received Bus Operations.
 
 [NOTE]
 .Summary
@@ -240,88 +258,50 @@ fmi3Status fmi3SetBinary(fmi3Instance instance,
 ====
 
 ===== Processing of Bus Operations
-Depending on the application, the received Bus Operations can easily be processed within the FMU within an `fmi3DoStep`.
-This procedure allows very simple implementation, especially when using FMU in a fixed step size way.
-It should be clear at this point that this simple implementation is compromised by https://modelica.github.io/fmi-ls-bus/main/#low-cut-selecting-tx-variables[limitations in bus simulation].
-
-In this case, the `FMI3_LS_BUS_READ_NEXT_OPERATION` macro can be used so that all received Bus Operations are deserialized one after the other into the correct operation structure within `fmi3DoStep`.
+The Bus Operations must now be processed on the receiving side.
+A suitable place for implementation represents `fmi3UpdateDiscreteStates`.
+In this case, the `FMI3_LS_BUS_READ_NEXT_OPERATION` macro can be used so that all received Bus Operations are deserialized one after the other into the correct operation structure.
 After this they can be handled.
 
 [source,c]
-.Processing received Bus Operations in `fmi3DoStep`
+.Processing received Bus Operations.
 ----
-#include "fmi3LsBusUtilCan.h"
-
-fmi3Status fmi3DoStep(...) {
+fmi3Status fmi3UpdateDiscreteStates(...)
+{
     fmi3LsBusOperationHeader* hdr;
     ...
-    /* Processing of received Bus Operations */
-    while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RxBufferInfoCan, hdr)){     // <1>
-        switch (hdr->type)                                              // <2>
+    if (fmi3ClockActive == RxClock) {
+        /* Processing of received Bus Operations */
+        while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RxBufferInfoCan, hdr))    // <1>
         {
-            case FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT:
-                fmi3LsBusCanOperationCanTransmit* receivedTransmitOp    // <3>
-                    = (fmi3LsBusCanOperationCanTransmit*) hdr;
+            switch (hdr->type)                                            // <2>
+            {
+                case FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT:
+                    fmi3LsBusCanOperationCanTransmit receivedTransmitOp   // <3>
+                        = (fmi3LsBusCanOperationCanTransmit*) hdr;
             ...
+            }
         }
+        
+        /* Reset clock */
+        RxClock = fmi3ClockInactive;
 
         /* Reset read/write positions */
         FMI3_LS_BUS_BUFFER_INFO_RESET(&RxBufferInfoCan);
-        ...
     }
+    ...
 }
+
 ----
 <1> Reading the next operation from the `fmi3LsBusUtilBufferInfo` instance.
 <2> Decide which kind of operation needs to be handled.
 <3> Casting into the concrete operation underlying structure.
-
-A https://modelica.github.io/fmi-ls-bus/main/#low-cut-variables[more fine-grained bus simulation] enables the processing of the Bus Operations within the `Event Mode`.
-This makes it possible to react directly to the receipt of new Bus Operations using the `Rx_Clock`.
-
-[source,c]
-.Processing received Bus Operations in `Event Mode`
-----
-#include "fmi3LsBusUtilCan.h"
-
-fmi3Status fmi3SetClock(fmi3Instance instance,
-                         const fmi3ValueReference valueReference[], 
-                         size_t nValueReferences, 
-                         const fmi3clock values[]) {
-    fmi3LsBusOperationHeader* hdr;
-    ...
-    for (size_t i = 0; i < nValueReferences; i++) {
-        if (valueReferences[i] == RX_CLOCK_REFERENCE && values[i] == fmi3ClockActive) { 
-            /* Processing of received Bus Operations */
-            while (FMI3_LS_BUS_READ_NEXT_OPERATION(&RxBufferInfoCan, hdr))    // <1>
-            {
-                switch (hdr->type)                                            // <2>
-                {
-                    case FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT:
-                        fmi3LsBusCanOperationCanTransmit receivedTransmitOp   // <3>
-                            = (fmi3LsBusCanOperationCanTransmit*) hdr;
-                ...
-                }
-            }
-            
-            /* Reset read/write positions */
-            FMI3_LS_BUS_BUFFER_INFO_RESET(&RxBufferInfoCan);
-        }
-    }
-    ...
-}
-----
-<1> Reading the next operation from the `fmi3LsBusUtilBufferInfo` instance.
-<2> Decide which kind of operation needs to be handled.
-<3> Casting into the concrete operation underlying structure.
-
-This example assumes that the FMU importer calls `fmi3SetBinary` before `fmi3SetClock`.
-Depending on the specified application scenario, it should always check which access matches best.
 
 [NOTE]
 .Summary
 ====
 * Received Bus Operations can be processed by usage of the FMI3_LS_BUS_READ_NEXT_OPERATION macro
-* FMI3_LS_BUS_BUFFER_INFO_RESET allows to reset the buffer after processing
+* FMI3_LS_BUS_BUFFER_INFO_RESET allows to reset the `fmi3LsBusUtilBufferInfo` instance after processing
 ====
 
 ===== Examples
