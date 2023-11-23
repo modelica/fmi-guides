@@ -297,6 +297,8 @@ fmi3Status fmi3UpdateDiscreteStates(...)
 <2> Decide which kind of operation needs to be handled.
 <3> Casting into the concrete operation underlying structure.
 
+Please note that using `fmi3UpdateDiscreteStates` requires that the capability flag `providesEvaluateDiscreteStates = "true"` be set within the `modelDescription.xml`.
+
 [NOTE]
 .Summary
 ====
