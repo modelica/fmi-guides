@@ -86,7 +86,7 @@ The further usage of the `fmi3LsBusUtilBufferInfo` variable is discussed later.
 The header file https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] offers macros for all Bus Operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
 The macros are always provided according to the following syntax: `FMI3_LS_BUS_<BusType>_CREATE_OP_<OperationName>`.
 Following these rule, the macro for creating a CAN Transmit operation is `FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT`.
-A macro for creating an operation also provides the direct possibility of adding it to a `fmi3LsBusUtilBufferInfo` instance.
+A macro for creating an operation also commits it to a buffer described by an `fmi3LsBusUtilBufferInfo` instance.
 
 The following program code shows how to first define the payload and the ID that should be used in the CAN Transmit operation.
 Afterwards, the `fmi3LsBusUtilBufferInfo` is reset by using `FMI3_LS_BUS_BUFFER_RESET`.
@@ -144,7 +144,7 @@ Within the layered standard, the https://modelica.github.io/fmi-ls-bus/main/#low
 The https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-triggered-clock-variables[simplest case represents] a `triggered` clock as `Tx_Clock` that basically allows to signal events when returning from `fmi3DoStep`.
 
 The program code below schematically illustrates an implementation.
-`fmi3GetClock` is called by the FMU importer after `fmi3DoStep` has completed or ended prematurely.
+`fmi3GetClock` is called by the FMU importer in `Event Mode` after `fmi3DoStep` has completed or ended prematurely.
 Within `fmi3GetClock`, `TX_CLOCK_REFERENCE` represents the valueReference of the respective `Tx_Clock`.
 The usage of the macro `FMI3_LS_BUS_BUFFER_IS_EMPTY` indicates whether there is data to be transferred in the respective buffer.
 If this is the case, the corresponding `Tx_Clock` will tick.
@@ -191,6 +191,8 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
 <2> Activate specified `Tx_Clock`.
 <3> Get the start memory address of the buffer, by using `fmi3LsBusUtilBufferInfo` instance.
 <4> Get the size of the buffer, by using `fmi3LsBusUtilBufferInfo` instance.
+
+Note that in theory, the `fmi3GetClock` may only return `fmi3ClockActive` once per clock activation.
 
 It should be clear that, depending on the application, the different FMI clock types each offer advantages and disadvantages. See also the https://modelica.github.io/fmi-ls-bus/main/#low-cut-selecting-tx-variables[corresponding chapter in the layered standard].
 
@@ -294,8 +296,6 @@ fmi3Status fmi3UpdateDiscreteStates(...)
 <1> Reading the next operation from the `fmi3LsBusUtilBufferInfo` instance.
 <2> Decide which kind of operation needs to be handled.
 <3> Casting into the concrete operation underlying structure.
-
-Please note that using `fmi3UpdateDiscreteStates` requires that the capability flag `providesEvaluateDiscreteStates = "true"` be set within the `modelDescription.xml`.
 
 [NOTE]
 .Summary
