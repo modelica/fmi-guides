@@ -233,7 +233,7 @@ extern "C"
 #define FMI3_LS_BUS_CAN_CREATE_OP_CONFIGURATION_CAN_BAUDRATE(BufferInfo, BaudRate)                      \
     do                                                                                                  \
     {                                                                                                   \
-        fmi3LsBusOperationCanConfiguration _op;                                                         \
+        fmi3LsBusCanOperationConfiguration _op;                                                         \
         _op.header.type = FMI3_LS_BUS_CAN_OP_CONFIGURATION;                                             \
         _op.header.length = sizeof(fmi3LsBusOperationHeader) +                                          \
                             sizeof(fmi3LsBusCanConfigParameterType) +                                   \
@@ -336,7 +336,7 @@ extern "C"
 #define FMI3_LS_BUS_CAN_CREATE_OP_CONFIGURATION_ARBITRATION_LOST_BEHAVIOR(BufferInfo, ArbitrationLostBehavior)                        \
     do                                                                                                                                \
     {                                                                                                                                 \
-        fmi3LsBusOperationCanConfiguration _op;                                                                                       \
+        fmi3LsBusCanOperationConfiguration _op;                                                                                       \
         _op.header.type = FMI3_LS_BUS_CAN_OP_CONFIGURATION;                                                                           \
         _op.header.length =                                                                                                           \
             sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanConfigParameterType) + sizeof(fmi3LsBusCanArbitrationLostBehavior); \
@@ -406,7 +406,7 @@ extern "C"
     do                                                                                             \
     {                                                                                              \
         fmi3LsBusCanOperationBusError _op;                                                         \
-        _op.header.type = FMI3_LS_BUS_CAN_OP_CAN_BUS_ERROR;                                        \
+        _op.header.type = FMI3_LS_BUS_CAN_OP_BUS_ERROR;                                        \
         _op.header.length = sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanId) +            \
            sizeof(fmi3LsBusCanErrorCode) + sizeof(fmi3LsBusCanErrorFlag) +                         \
            sizeof(fmi3LsBusCanIsSender);                                                           \
