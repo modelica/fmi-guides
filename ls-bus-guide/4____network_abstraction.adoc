@@ -99,7 +99,7 @@ In the last step, `FMI3_LS_BUS_BUFFER_INFO_LENGTH` is used to check whether ther
 [source,c]
 .Creation of a CAN Transmit operation
 ----
-#include "mi3LsBusUtilCan.h" 
+#include "Fmi3LsBusUtilCan.h" 
 
 fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) { 
     fmi3UInt8 msg[] = "Hey guys";   // <1>
