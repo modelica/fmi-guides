@@ -204,9 +204,7 @@ It should be clear that, depending on the application, the different FMI clock t
 The indication whether new operations are pending within the `Rx_Data` variable is done via the `Rx_Clock`.
 This clock ticks as soon as new data is available.
 The operation-receiving FMU gets the Bus Operations via a `fmi3Binary` variable.
-This variable can be transformed back into a `fmi3LsBusUtilBufferInfo` instance.
-With the help of this transformation, the Bus Operations to be processed can be easily accessed.
-`FMI3_LS_BUS_BUFFER_WRITE` can be used for transformation.
+The contents of this variable may then be copied into a buffer described by an `fmi3LsBusUtilBufferInfo` instance using `FMI3_LS_BUS_BUFFER_WRITE`.
 
 The code snipped below shows its use within the `fmi3SetClock` and `fmi3SetBinary` functions, which an FMU importer calls when setting the concrete `Rx_Data` variable.
 
