@@ -129,7 +129,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
 <5> Verify that free buffer space is available.
 <6> Activate `Event Mode` if needed.
 
-According to exactly the same principle, any specified operation can be created using an existing macro.
+According to the same principles, any specified operation can be created using the corresponding macro.
 
 [NOTE]
 .Summary
