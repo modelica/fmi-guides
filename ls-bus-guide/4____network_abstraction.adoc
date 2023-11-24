@@ -42,7 +42,7 @@ For exchanging Bus Operations between FMUs variables of type `fmi3Binary` type a
 For this reason, appropriate variables must first be set up within the implementation that represent the content for this exchange.
 The buffer variable can be easily initialized in the form of an `fmi3UInt8` array of any size.
 It should be noted that the entire buffer size must of course provide enough space for all created Bus Operations during a `fmi3DoStep`.
-Due to better accessibility, the buffer variables in our case are declared with global visibility within the FMU.
+To simplify our example, the buffers are declared as global variables within the FMU.
 
 Since describing and reading Bus Operations from a simple array can be quite complicated, the common utility headers provide an `fmi3LsBusUtilBufferInfo` entity.
 This abstraction represents a kind of view of the underlying buffer array and allows simplified access using additionally provided functionality.
