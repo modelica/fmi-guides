@@ -73,7 +73,7 @@ fmi3Instance fmi3InstantiateCoSimulation(...) {
 <4> Coupling of a Buffer and a `fmi3LsBusUtilBufferInfo` variable.
 
 The buffer is always treated by the provided header functionalities using FIFO (First In - First Out) semantics.
-The usage of the `fmi3LsBusUtilBufferInfo` variable is discussed further.
+The further usage of the `fmi3LsBusUtilBufferInfo` variable is discussed later.
 
 [NOTE]
 .Summary
