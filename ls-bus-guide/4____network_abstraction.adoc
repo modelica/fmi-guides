@@ -24,7 +24,7 @@ All FMI variables required for the exchange are grouped by a defined https://mod
 Bus Operations are created and processed within an FMU.
 This can be done either in `Step Mode` or in `Event Mode`.
 For a transfer, all Bus Operations are serialized together in a `fmi3Binary` https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-rx-data-variables[variable].
-This serialization can be done individually or using the provided <<low-cut-can-getting-started-provided-header-files,header files>>.
+This serialization can be done using the provided <<low-cut-can-getting-started-provided-header-files,header files>> or using a custom approach.
 After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized and processed there again inside the receiver.
 
 .Create, process and transfer Bus Operations.
