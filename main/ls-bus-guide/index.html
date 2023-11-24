@@ -586,7 +586,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI LS BUS Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-e1bf3afebe2bcc4e7c5e3143e558a90debac876f,</span>
+<span id="revnumber">version main-9cf955fb686c03a707afb80bc7aed7785be651c2,</span>
 <span id="revdate">2023-11-24</span>
 </div>
 <div id="toc" class="toc2">
@@ -597,20 +597,28 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_physical_signal_abstraction_high_cut">3. Physical Signal Abstraction ("high cut")</a></li>
 <li><a href="#_network_abstraction_low_cut">4. Network Abstraction ("low cut")</a>
 <ul class="sectlevel2">
-<li><a href="#_differences_between_system_compositions">4.1. Differences between System Compositions</a></li>
-<li><a href="#_creating_bus_operations_ahead_of_the_next_simulation_step">4.2. Creating Bus Operations ahead of the next Simulation Step</a></li>
-<li><a href="#_data_and_time_synchronization">4.3. Data and Time Synchronization</a></li>
-<li><a href="#low-cut-decoupling-of-fixed-and-variable-step-size-fmus">4.4. Decoupling of Fixed and Variable Step Size FMUs</a></li>
-<li><a href="#_can_can_fd_can_xl">4.5. CAN, CAN FD, CAN XL</a>
+<li><a href="#_can_can_fd_can_xl">4.1. CAN, CAN FD, CAN XL</a>
 <ul class="sectlevel3">
-<li><a href="#low-cut-can-sequence-diagrams">4.5.1. Sequence Diagrams</a>
+<li><a href="#_getting_started_with_can_can_fd_and_can_xl">4.1.1. Getting Started with CAN, CAN FD and CAN XL</a>
 <ul class="sectlevel4">
-<li><a href="#low-cut-can-example-transmission">4.5.1.1. Transmission</a></li>
-<li><a href="#low-cut-can-example-can-arbitration-without-buffering">4.5.1.2. CAN Arbitration without Buffering</a></li>
-<li><a href="#low-cut-can-example-can-arbitration-with-buffering">4.5.1.3. CAN Arbitration with Buffering</a></li>
+<li><a href="#low-cut-can-getting-started-provided-header-files">4.1.1.1. Provided Header Files</a></li>
+<li><a href="#_general_aspects">4.1.1.2. General Aspects</a></li>
+<li><a href="#_buffer_handling">4.1.1.3. Buffer Handling</a></li>
+<li><a href="#_creating_bus_operations">4.1.1.4. Creating Bus Operations</a></li>
+<li><a href="#_transmit_of_bus_operations">4.1.1.5. Transmit of Bus Operations</a></li>
+<li><a href="#_receive_of_bus_operations">4.1.1.6. Receive of Bus Operations</a></li>
+<li><a href="#_processing_of_bus_operations">4.1.1.7. Processing of Bus Operations</a></li>
+<li><a href="#_examples">4.1.1.8. Examples</a></li>
 </ul>
 </li>
-<li><a href="#_realization_of_can_error_handling">4.5.2. Realization of CAN Error Handling</a></li>
+<li><a href="#low-cut-can-sequence-diagrams">4.1.2. Sequence Diagrams</a>
+<ul class="sectlevel4">
+<li><a href="#low-cut-can-example-transmission">4.1.2.1. Transmission</a></li>
+<li><a href="#low-cut-can-example-can-arbitration-without-buffering">4.1.2.2. CAN Arbitration without Buffering</a></li>
+<li><a href="#low-cut-can-example-can-arbitration-with-buffering">4.1.2.3. CAN Arbitration with Buffering</a></li>
+</ul>
+</li>
+<li><a href="#_realization_of_can_error_handling">4.1.3. Realization of CAN Error Handling</a></li>
 </ul>
 </li>
 </ul>
@@ -689,72 +697,527 @@ It also considers errors and bugs encountered in the practical use of existing F
 <p>This chapter contains details on common topics of the network abstraction layer.</p>
 </div>
 <div class="sect2">
-<h3 id="_differences_between_system_compositions">4.1. Differences between System Compositions</h3>
-<div class="paragraph">
-<p>The principles of communication is closely linked with the introduced System Compositions.
-Within the <code>Direct Communication</code> use case in combination with network abstraction, exactly two FMUs communicate with each other.
-No Bus Simulation is required.
-<a href="#figure-example-network-simulation-direct">Figure 1</a> illustrates this communication, whereby FMU 1 transmits network data to FMU 2.After that, the transmission is directly confirmed by FMU 1 itself, whereby FMU 1 handles that self confirmation internally.</p>
-</div>
-<div id="figure-example-network-simulation-direct" class="imageblock text-center">
-<div class="content">
-<img src="images/principles_of_communication_direct.svg" alt="principles of communication direct" width="40%">
-</div>
-<div class="title">Figure 1. Direct communication between two FMUs.</div>
-</div>
-<div class="paragraph">
-<p>Within <code>Composition with dedicated Bus Simulation FMU</code> and <code>Importer with Integrated Bus Simulation</code> communication case there exists always a Bus Simulation and two or more FMUs can be connected for communication.
-Bus connections between FMUs are then redirected via the Bus Simulation (FMU).
-This means that the bus simulation model sets the level of accuracy and feature support for the respective bus type.</p>
-</div>
-<div class="paragraph">
-<p><a href="#figure-example-network-simulation-complex">Figure 2</a> shows the communication of two FMUs which are connected via a Bus Simulation.
-All in all FMU 1 transmits network data to FMU 2.
-First FMU 1 commits the baud rate to the Bus Simulation.
-This information can be used for timing calculations during the transmission of a message.
-In a second operation FMU 1 transmits network data to the Bus Simulation.
-Inside the Bus Simulation a calculation of the transmission time for the specified network data is done.
-After this the Bus Simulation transmits the network data to FMU 2 and confirms the successful transmission to FMU 1.</p>
-</div>
-<div id="figure-example-network-simulation-complex" class="imageblock text-center">
-<div class="content">
-<img src="images/principles_of_communication_complex.svg" alt="principles of communication complex" width="70%">
-</div>
-<div class="title">Figure 2. Communication between two FMUs by using a Bus Simulation FMU.</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_creating_bus_operations_ahead_of_the_next_simulation_step">4.2. Creating Bus Operations ahead of the next Simulation Step</h3>
-<div class="paragraph">
-<p><mark>TODO dSPACE</mark></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_data_and_time_synchronization">4.3. Data and Time Synchronization</h3>
-<div class="paragraph">
-<p><mark>TODO dSPACE</mark></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="low-cut-decoupling-of-fixed-and-variable-step-size-fmus">4.4. Decoupling of Fixed and Variable Step Size FMUs</h3>
-<div class="paragraph">
-<p><mark>TODO dSPACE</mark></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_can_can_fd_can_xl">4.5. CAN, CAN FD, CAN XL</h3>
+<h3 id="_can_can_fd_can_xl">4.1. CAN, CAN FD, CAN XL</h3>
 <div class="paragraph">
 <p>This chapter contains details on CAN, CAN FD, CAN XL specific topics.</p>
 </div>
 <div class="sect3">
-<h4 id="low-cut-can-sequence-diagrams">4.5.1. Sequence Diagrams</h4>
+<h4 id="_getting_started_with_can_can_fd_and_can_xl">4.1.1. Getting Started with CAN, CAN FD and CAN XL</h4>
+<div class="paragraph">
+<p>This section shows the exemplary implementation in conjunction with the provided header files of the fmi-ls-bus layered standard.</p>
+</div>
+<div class="sect4">
+<h5 id="low-cut-can-getting-started-provided-header-files">4.1.1.1. Provided Header Files</h5>
+<div class="paragraph">
+<p>The layered standard fmi-ls-bus not only contains a textual specification for bus support, but also provides header and utility functions as C code to make creation and use within FMUs as easy as possible.
+The following header files are provided by the standard for this purpose, although their use is not mandatory but optional:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h">fmi3LsBus.h</a> provides general functions and structures.
+These header file applies to all supported bus types of the layered standard.</p>
+</li>
+<li>
+<p><a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusCan.h">fmi3LsBusCan.h</a> provides functions and structures explicit for CAN, CAN FD and CAN XL.
+Primarily, structures are included here that allow the Bus Operations specified by the layered standard to be easily created and used.</p>
+</li>
+<li>
+<p><a href="https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtil.h">fmi3LsBusUtil.h</a> provides common utility functions and structures for all supported bus types.</p>
+</li>
+<li>
+<p><a href="https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h">fmi3LsBusUtilCan.h</a> provides CAN, CAN FD and CAN XL explicit utility functions.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_general_aspects">4.1.1.2. General Aspects</h5>
+<div class="paragraph">
+<p>Bus Operations represent protocol units to be transmitted in the environment of the layered standard based on the <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-layered-standard-bus-protocol">Layered Standard Bus Protocol</a>.
+All FMI variables required for the exchange are grouped by a defined <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-bus-terminal">Bus Terminal</a>.
+Bus Operations are created and processed within an FMU.
+This can be done either in <code>Step Mode</code> or in <code>Event Mode</code>.
+For a transfer, all Bus Operations are serialized together in a <code>fmi3Binary</code> <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-rx-data-variables">variable</a>.
+This serialization can be done using the provided <a href="#low-cut-can-getting-started-provided-header-files">header files</a> or using a custom approach.
+After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized and processed there again inside the receiver.</p>
+</div>
+<div id="figure-general-aspects-overview" class="imageblock text-center">
+<div class="content">
+<img src="images/create_process_bus_operations.svg" alt="create process bus operations" width="60%">
+</div>
+<div class="title">Figure 1. Create, process and transfer Bus Operations.</div>
+</div>
+<div class="paragraph">
+<p>The point in time where Bus Operations are transferred between different FMUs is defined by the usage of <code>fmi3Clock</code> variables.
+For this reason, the exchange of Bus Operations is always carried out within the <code>Event Mode</code>.
+Details about possible entry points regarding the FMI interface will be provided later in this section.
+However, it is important to know that due to the resulting decoupling between the generation, processing and transfer of Bus Operations, the need for buffer semantics arises.
+This semantics is reflected directly in the structure and handling of the <a href="#low-cut-can-getting-started-provided-header-files">header files</a> provided.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_buffer_handling">4.1.1.3. Buffer Handling</h5>
+<div class="paragraph">
+<p>For exchanging Bus Operations between FMUs variables of type <code>fmi3Binary</code> type are used.
+For this reason, appropriate variables must first be set up within the implementation that represent the content for this exchange.
+The buffer variable can be easily initialized in the form of an <code>fmi3UInt8</code> array of any size.
+It should be noted that the entire buffer size must of course provide enough space for all created Bus Operations during a <code>fmi3DoStep</code>.
+To simplify our example, the buffers are declared as global variables within the FMU.</p>
+</div>
+<div class="paragraph">
+<p>Since describing and reading Bus Operations from a simple array can be quite complicated, the common utility headers provide an <code>fmi3LsBusUtilBufferInfo</code> entity.
+This abstraction represents a kind of view of the underlying buffer array and allows simplified access using additionally provided functionality.</p>
+</div>
+<div class="paragraph">
+<p>The following program code shows the declaration and initialization of a buffer for transmitting (Tx) and receiving (Rx) Bus Operations in the form of an array.
+In addition, an <code>fmi3LsBusUtilBufferInfo</code> is created for both buffer variables.
+Using <code>FMI3_LS_BUS_BUFFER_INFO_INIT</code>, the underlying buffer is coupled to the respective <code>fmi3LsBusUtilBufferInfo</code> instance.</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting up buffering and fmi3LsBusUtilBufferInfo instance</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">#include "fmi3PlatformTypes.h"
+#include "fmi3LsBusUtil.h"      <i class="conum" data-value="1"></i><b>(1)</b>
+
+fmi3UInt8 TxBufferCan[2048];    <i class="conum" data-value="2"></i><b>(2)</b>
+fmi3UInt8 RxBufferCan[2048];
+fmi3LsBusUtilBufferInfo TxBufferInfoCan;    <i class="conum" data-value="3"></i><b>(3)</b>
+fmi3LsBusUtilBufferInfo RxBufferInfoCan;
+
+fmi3Instance fmi3InstantiateCoSimulation(...) {
+    FMI3_LS_BUS_BUFFER_INFO_INIT(&amp;TxBufferInfoCan, TxBufferCan, sizeof(TxBufferCan));    <i class="conum" data-value="4"></i><b>(4)</b>
+    FMI3_LS_BUS_BUFFER_INFO_INIT(&amp;RxBufferInfoCan, RxBufferCan, sizeof(RxBufferCan));
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Necessary include of the fmi3LsBusUtil.h header file.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Declaration and initialization of a <code>fmi3Binary</code> buffer variable.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Declaration of <code>fmi3LsBusUtilBufferInfo</code> variable instance.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Coupling of a Buffer and a <code>fmi3LsBusUtilBufferInfo</code> variable.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The buffer is always treated by the provided header functionalities using FIFO (First In - First Out) semantics.
+The further usage of the <code>fmi3LsBusUtilBufferInfo</code> variable is discussed later.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The transfer of Bus Operations must typically be decoupled from creation and processing</p>
+</li>
+<li>
+<p>The API provides macros for buffering of Bus Operations in a FIFO manner</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_creating_bus_operations">4.1.1.4. Creating Bus Operations</h5>
+<div class="paragraph">
+<p>The header file <a href="https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h">fmi3LsBusUtilCan.h</a> offers macros for all Bus Operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
+The macros are always provided according to the following syntax: <code>FMI3_LS_BUS_&lt;BusType&gt;_CREATE_OP_&lt;OperationName&gt;</code>.
+Following these rule, the macro for creating a CAN Transmit operation is <code>FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT</code>.
+A macro for creating an operation also commits it to a buffer described by an <code>fmi3LsBusUtilBufferInfo</code> instance.</p>
+</div>
+<div class="paragraph">
+<p>The following program code shows how to first define the payload and the ID that should be used in the CAN Transmit operation.
+Afterwards, the <code>fmi3LsBusUtilBufferInfo</code> is reset by using <code>FMI3_LS_BUS_BUFFER_RESET</code>.
+<code>FMI3_LS_BUS_BUFFER_RESET</code> sets the internal position of the <code>fmi3LsBusUtilBufferInfo</code> instance to zero, so that it is essentially emptied and written from the beginning.
+The whole thing is necessary to ensure that Bus Operations that have already been transmitted are not transmitted a second time.
+<code>FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT</code> now creates a new CAN Transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the <code>fmi3LsBusUtilBufferInfo</code> instance.
+Querying the status of a <code>fmi3LsBusUtilBufferInfo</code> instance allows you to check whether there is still enough space in the underlying buffer.
+In the last step, <code>FMI3_LS_BUS_BUFFER_INFO_LENGTH</code> is used to check whether there are Bus Operations in the respective <code>fmi3LsBusUtilBufferInfo</code> variable that should be transmitted in <code>Event Mode</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">Creation of a CAN Transmit operation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">#include "Fmi3LsBusUtilCan.h"
+
+fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
+    fmi3UInt8 msg[] = "Hey guys";   <i class="conum" data-value="1"></i><b>(1)</b>
+    fmi3LsBusCanId msgId = 42;      <i class="conum" data-value="2"></i><b>(2)</b>
+
+    /* Reset read/write positions of the BufferInfo variable */
+    FMI3_LS_BUS_BUFFER_RESET(&amp;TxBufferInfoCan);    <i class="conum" data-value="3"></i><b>(3)</b>
+
+    /* Create a CAN Transmit operation to be send */
+    FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&amp;TxBufferInfoCan, msgId, &lt;options&gt;, sizeof(msg), msg);    <i class="conum" data-value="4"></i><b>(4)</b>
+
+    if(!TxBufferInfoCan.status){   <i class="conum" data-value="5"></i><b>(5)</b>
+        /* Error: No free buffer space available */
+    }
+
+    ...
+
+    if(FMI3_LS_BUS_BUFFER_INFO_LENGTH(&amp;TxBufferInfoCan) &gt; 0){
+        *eventHandlingNeeded = fmi3True;    <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Creation of CAN frame payload.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Definition of CAN ID of the specified frame.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Resetting of <code>fmi3LsBusUtilBufferInfo</code> variable instance.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Creation of a CAN Transmit operation and adding it to the specified <code>fmi3LsBusUtilBufferInfo</code> variable.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Verify that free buffer space is available.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Activate <code>Event Mode</code> if needed.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>According to the same principles, any specified operation can be created using the corresponding macro.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Bus Operations can be created by using the provided FMI3_LS_BUS_&lt;BusType&gt;_CREATE_OP_&lt;OperationName&gt; macros</p>
+</li>
+<li>
+<p>The CREATE_OP macros are creating a Bus Operation and updating the given buffer in a single step</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_transmit_of_bus_operations">4.1.1.5. Transmit of Bus Operations</h5>
+<div class="paragraph">
+<p>Within the layered standard, the <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-variables">connection</a> between the data to be exchanged (<code>TX_Data</code> and <code>Rx_Data</code>) and the time of exchange
+(<code>Tx_Clock</code> and <code>Rx_Clock</code>) has been well defined.
+The <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-triggered-clock-variables">simplest case represents</a> a <code>triggered</code> clock as <code>Tx_Clock</code> that basically allows to signal events when returning from <code>fmi3DoStep</code>.</p>
+</div>
+<div class="paragraph">
+<p>The program code below schematically illustrates an implementation.
+<code>fmi3GetClock</code> is called by the FMU importer in <code>Event Mode</code> after <code>fmi3DoStep</code> has completed or ended prematurely.
+Within <code>fmi3GetClock</code>, <code>TX_CLOCK_REFERENCE</code> represents the valueReference of the respective <code>Tx_Clock</code>.
+The usage of the macro <code>FMI3_LS_BUS_BUFFER_IS_EMPTY</code> indicates whether there is data to be transferred in the respective buffer.
+If this is the case, the corresponding <code>Tx_Clock</code> will tick.</p>
+</div>
+<div class="paragraph">
+<p>The content of the <code>fmi3LsBusUtilBufferInfo</code> instance is provided to the FMU importer via <code>fmi3GetBinary</code>.
+The value can be easily passed on to the FMI interface by using the <code>FMI3_LS_BUS_BUFFER_START</code> macro.
+<code>FMI3_LS_BUS_BUFFER_LENGTH</code> can also be used to set the size of the <code>fmi3Binary</code> variable.</p>
+</div>
+<div class="listingblock">
+<div class="title">Transmit Bus Operations via triggered clock</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">fmi3Status fmi3GetClock(fmi3Instance instance,
+                         const fmi3ValueReference valueReferences[],
+                         size_t nValueReferences,
+                         fmi3Clock values[]) {
+    ...
+    for (size_t i = 0; i &lt; nValueReferences; i++) {
+        if (valueReferences[i] == TX_CLOCK_REFERENCE) {
+            if(!FMI3_LS_BUS_BUFFER_IS_EMPTY(&amp;TxBufferInfoCan)) {    <i class="conum" data-value="1"></i><b>(1)</b>
+                *values[i] = fmi3ClockActive;                       <i class="conum" data-value="2"></i><b>(2)</b>
+            }
+        }
+    }
+    ...
+}
+
+fmi3Status fmi3GetBinary(fmi3Instance instance,
+                          const fmi3ValueReference valueReferences[],
+                          size_t nValueReferences,
+                          size_t valueSizes[],
+                          fmi3Binary values[],
+                          size_t nValues) {
+    ...
+    for (size_t i = 0; i &lt; nValueReferences; i++) {
+        if (valueReferences[i] == TX_DATA_REFERENCE) {
+            *values[i] = FMI3_LS_BUS_BUFFER_START(&amp;TxBufferInfoCan);        <i class="conum" data-value="3"></i><b>(3)</b>
+            *valueSizes[i] = FMI3_LS_BUS_BUFFER_LENGTH(&amp;TxBufferInfoCan);   <i class="conum" data-value="4"></i><b>(4)</b>
+        }
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Verify if Bus Operations exists for transfer.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Activate specified <code>Tx_Clock</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Get the start memory address of the buffer, by using <code>fmi3LsBusUtilBufferInfo</code> instance.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Get the size of the buffer, by using <code>fmi3LsBusUtilBufferInfo</code> instance.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note that in theory, the <code>fmi3GetClock</code> may only return <code>fmi3ClockActive</code> once per clock activation.</p>
+</div>
+<div class="paragraph">
+<p>It should be clear that, depending on the application, the different FMI clock types each offer advantages and disadvantages. See also the <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-selecting-tx-variables">corresponding chapter in the layered standard</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The LS-BUS C API provides macros to get the START address and LENGTH of the buffer which can be used in the context of <code>fmi3GetClock</code> and <code>fmi3GetBinary</code></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_receive_of_bus_operations">4.1.1.6. Receive of Bus Operations</h5>
+<div class="paragraph">
+<p>The indication whether new operations are pending within the <code>Rx_Data</code> variable is done via the <code>Rx_Clock</code>.
+This clock ticks as soon as new data is available.
+The operation-receiving FMU gets the Bus Operations via a <code>fmi3Binary</code> variable.
+The contents of this variable may then be copied into a buffer described by an <code>fmi3LsBusUtilBufferInfo</code> instance using <code>FMI3_LS_BUS_BUFFER_WRITE</code>.</p>
+</div>
+<div class="paragraph">
+<p>The code snipped below shows its use within the <code>fmi3SetClock</code> and <code>fmi3SetBinary</code> functions, which an FMU importer calls when setting the concrete <code>Rx_Data</code> variable.</p>
+</div>
+<div class="listingblock">
+<div class="title">Receiving Bus Operations</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">fmi3Clock RxClock;
+fmi3UInt8 RxBufferCan[2048];
+fmi3LsBusUtilBufferInfo RxBufferInfoCan;
+
+fmi3Status fmi3SetClock(fmi3Instance instance,
+                         const fmi3ValueReference valueReference[],
+                         size_t nValueReferences,
+                         const fmi3clock values[]) {
+    ...
+    for (size_t i = 0; i &lt; nValueReferences; i++) {
+        if (valueReferences[i] == RX_CLOCK_REFERENCE &amp;&amp; values[i] == fmi3ClockActive) { <i class="conum" data-value="1"></i><b>(1)</b>
+            /* Set an indicator that clock ticked and new Bus Operations arrived */
+            RxClock = values[i]; <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+    }
+    ...
+}
+
+fmi3Status fmi3SetBinary(fmi3Instance instance,
+                          const fmi3ValueReference valueReferences[],
+                          size_t nValueReferences,
+                          const size_t valueSize,
+                          const fmi3Binary value, ...) {
+    ...
+    for (size_t i = 0; i &lt; nValueReferences; i++) {
+        if (valueReferences[i] == RX_DATA_REFERENCE) {
+            FMI3_LS_BUS_BUFFER_WRITE(&amp;RxBufferInfoCan, value[i], valueSize[i]); <i class="conum" data-value="3"></i><b>(3)</b>
+        }
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Verify that <code>Rx_Clock</code> ticked.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Park information for global access within other FMI interface functions.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Building a <code>fmi3LsBusUtilBufferInfo</code> instance basing on received Bus Operations.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The LS-BUS API provides macros to write received binary data into a given buffer</p>
+</li>
+<li>
+<p>The buffer is updated by the <code>FMI3_LS_BUS_BUFFER_WRITE</code> macro</p>
+</li>
+<li>
+<p>The <code>FMI3_LS_BUS_BUFFER_WRITE</code> can be called repeatedly</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_processing_of_bus_operations">4.1.1.7. Processing of Bus Operations</h5>
+<div class="paragraph">
+<p>The Bus Operations must now be processed on the receiving side.
+A suitable place for implementation represents <code>fmi3UpdateDiscreteStates</code>.
+In this case, the <code>FMI3_LS_BUS_READ_NEXT_OPERATION</code> macro can be used so that all received Bus Operations are deserialized one after the other into the correct operation structure.
+After this they can be handled.</p>
+</div>
+<div class="listingblock">
+<div class="title">Processing received Bus Operations.</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">fmi3Status fmi3UpdateDiscreteStates(...)
+{
+    fmi3LsBusOperationHeader* hdr;
+    ...
+    if (fmi3ClockActive == RxClock) {
+        /* Processing of received Bus Operations */
+        while (FMI3_LS_BUS_READ_NEXT_OPERATION(&amp;RxBufferInfoCan, hdr))    <i class="conum" data-value="1"></i><b>(1)</b>
+        {
+            switch (hdr-&gt;type)                                            <i class="conum" data-value="2"></i><b>(2)</b>
+            {
+                case FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT:
+                    fmi3LsBusCanOperationCanTransmit receivedTransmitOp   <i class="conum" data-value="3"></i><b>(3)</b>
+                        = (fmi3LsBusCanOperationCanTransmit*) hdr;
+            ...
+            }
+        }
+
+        /* Reset clock */
+        RxClock = fmi3ClockInactive;
+
+        /* Reset read/write positions */
+        FMI3_LS_BUS_BUFFER_INFO_RESET(&amp;RxBufferInfoCan);
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Reading the next operation from the <code>fmi3LsBusUtilBufferInfo</code> instance.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Decide which kind of operation needs to be handled.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Casting into the concrete operation underlying structure.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Received Bus Operations can be processed by usage of the FMI3_LS_BUS_READ_NEXT_OPERATION macro</p>
+</li>
+<li>
+<p>FMI3_LS_BUS_BUFFER_INFO_RESET allows to reset the <code>fmi3LsBusUtilBufferInfo</code> instance after processing</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_examples">4.1.1.8. Examples</h5>
+<div class="paragraph">
+<p><mark>TODO</mark></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="low-cut-can-sequence-diagrams">4.1.2. Sequence Diagrams</h4>
 <div class="paragraph">
 <p>This section contains sample sequences to clarify the facts in the CAN, CAN FD, CAN XL part.</p>
 </div>
 <div class="sect4">
-<h5 id="low-cut-can-example-transmission">4.5.1.1. Transmission</h5>
+<h5 id="low-cut-can-example-transmission">4.1.2.1. Transmission</h5>
 <div class="paragraph">
-<p><a href="#figure-can-transmission-acknowledge">Figure 3</a> illustrates the two possible results of a <code>Transmit</code> operation, whereby the transition from FMU 1 &#8594; FMU 2 represents the successful case and FMU 2 &#8594; FMU 1 represents the unsuccessful case.
+<p><a href="#figure-can-transmission-acknowledge">Figure 2</a> illustrates the two possible results of a <code>Transmit</code> operation, whereby the transition from FMU 1 &#8594; FMU 2 represents the successful case and FMU 2 &#8594; FMU 1 represents the unsuccessful case.
 For the second transmission, the Bus Simulation injects a failure of transmission.
 In step (1), a <code>Transmit</code> operation will be delivered to the Bus Simulation.
 Within step (2), the <code>Transmit</code> operation will transferred to FMU 2, so the transmission was successful.
@@ -771,7 +1234,7 @@ For FMU 1, the <code>Error Flag</code> argument is set to <code>PRIMARY_ERROR_FL
 <div class="content">
 <img src="images/can_transmission_acknowledge.svg" alt="can transmission acknowledge" width="60%">
 </div>
-<div class="title">Figure 3. Successful and unsuccessful cases of a CAN transmission.</div>
+<div class="title">Figure 2. Successful and unsuccessful cases of a CAN transmission.</div>
 </div>
 <div class="paragraph">
 <p>Normally, transmission failure cannot occur during a simulated bus transmission.
@@ -779,9 +1242,9 @@ Most common kinds of errors are used to inject transmission errors, for example 
 </div>
 </div>
 <div class="sect4">
-<h5 id="low-cut-can-example-can-arbitration-without-buffering">4.5.1.2. CAN Arbitration without Buffering</h5>
+<h5 id="low-cut-can-example-can-arbitration-without-buffering">4.1.2.2. CAN Arbitration without Buffering</h5>
 <div class="paragraph">
-<p><a href="#figure-can-arbitration-overview">Figure 4</a> shows the realization of a CAN arbitration by using the <code>Arbitration Lost Behavior</code> option <code>DISCARD_AND_NOTIFY</code> within the <code>Configuration</code> operation.
+<p><a href="#figure-can-arbitration-overview">Figure 3</a> shows the realization of a CAN arbitration by using the <code>Arbitration Lost Behavior</code> option <code>DISCARD_AND_NOTIFY</code> within the <code>Configuration</code> operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
 In this situation, an arbitration is necessary to decide which frame should be sent in this case.
 Both frames are transferred to the Bus Simulation.
@@ -796,13 +1259,13 @@ FMU 1 gets a <code>Confirm</code> operation, because the specified frame with CA
 <div class="content">
 <img src="images/can_arbitration_overview.svg" alt="can arbitration overview" width="80%">
 </div>
-<div class="title">Figure 4. Arbitration of CAN frames within Bus Simulation.</div>
+<div class="title">Figure 3. Arbitration of CAN frames within Bus Simulation.</div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="low-cut-can-example-can-arbitration-with-buffering">4.5.1.3. CAN Arbitration with Buffering</h5>
+<h5 id="low-cut-can-example-can-arbitration-with-buffering">4.1.2.3. CAN Arbitration with Buffering</h5>
 <div class="paragraph">
-<p><a href="#figure-can-arbitration-overview-with-buffer">Figure 5</a> shows the realization of a CAN arbitration by using the <code>Arbitration Lost Behavior</code> option <code>BUFFER_AND_RETRANSMIT</code> within the <code>Configuration</code> operation.
+<p><a href="#figure-can-arbitration-overview-with-buffer">Figure 4</a> shows the realization of a CAN arbitration by using the <code>Arbitration Lost Behavior</code> option <code>BUFFER_AND_RETRANSMIT</code> within the <code>Configuration</code> operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
 In this situation, an arbitration is necessary to decide which frame should be sent in this case.
 Both frames are transferred to the Bus Simulation.
@@ -818,12 +1281,12 @@ FMU 1 gets a <code>Confirm</code> operation, because the specified frame with CA
 <div class="content">
 <img src="images/can_arbitration_overview_with_buffer.svg" alt="can arbitration overview with buffer" width="80%">
 </div>
-<div class="title">Figure 5. Arbitration of CAN frames with buffering within Bus Simulation.</div>
+<div class="title">Figure 4. Arbitration of CAN frames with buffering within Bus Simulation.</div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_realization_of_can_error_handling">4.5.2. Realization of CAN Error Handling</h4>
+<h4 id="_realization_of_can_error_handling">4.1.3. Realization of CAN Error Handling</h4>
 <div class="paragraph">
 <p>This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on <code>Bus Error</code> operations.
 Each Network FMU will provide its own Transmit Error Counter (TEC), Receive Error Counter (REC) and current CAN node state.
@@ -834,7 +1297,7 @@ Based on the values of TEC and REC, the CAN controller moves in the following st
 <div class="content">
 <img src="images/can_error_state_machine.svg" alt="can error state machine" width="60%">
 </div>
-<div class="title">Figure 6. CAN node state machine.</div>
+<div class="title">Figure 5. CAN node state machine.</div>
 </div>
 <div class="paragraph">
 <p>This CAN node state machine and the related TEC and REC values have to be included within the Network FMUs.
