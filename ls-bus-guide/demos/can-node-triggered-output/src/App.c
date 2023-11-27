@@ -86,7 +86,7 @@ bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targ
                       instance->App->NextTransmitTime);
 
         // Create a CAN transmit operation
-        FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&instance->App->TxBufferInfo, id, 0, 0, sizeof data, data);
+        FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&instance->App->TxBufferInfo, id, FMI3_LS_BUS_FALSE, FMI3_LS_BUS_FALSE, sizeof data, data);
 
         // Check that operation was created successfully
         if (!instance->App->TxBufferInfo.status)
@@ -134,7 +134,7 @@ void App_UpdateDiscreteStates(FmuInstance* instance)
             else if (operation->type == FMI3_LS_BUS_CAN_OP_CONFIGURATION ||
                      operation->type == FMI3_LS_BUS_CAN_OP_STATUS ||
                      operation->type == FMI3_LS_BUS_CAN_OP_CONFIRM ||
-                     operation->type == FMI3_LS_BUS_CAN_OP_CAN_BUS_ERROR ||
+                     operation->type == FMI3_LS_BUS_CAN_OP_BUS_ERROR ||
                      operation->type == FMI3_LS_BUS_CAN_OP_ARBITRATION_LOST)
             {
                 // Ignore
