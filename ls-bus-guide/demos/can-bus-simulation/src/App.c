@@ -234,7 +234,7 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
                 }
                 else if (operation->type == FMI3_LS_BUS_CAN_OP_CONFIGURATION)
                 {
-                    const fmi3LsBusOperationCanConfiguration* configOp = (fmi3LsBusOperationCanConfiguration*)operation;
+                    const fmi3LsBusCanOperationConfiguration* configOp = (fmi3LsBusCanOperationConfiguration*)operation;
                     if (configOp->parameterType == FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_CAN_BAUDRATE)
                     {
                         LogFmuMessage(instance, fmi3OK, "Info",
