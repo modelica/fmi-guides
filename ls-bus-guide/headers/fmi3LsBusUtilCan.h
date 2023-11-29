@@ -268,7 +268,7 @@ extern "C"
 #define FMI3_LS_BUS_CAN_CREATE_OP_CONFIGURATION_CAN_FD_BAUDRATE(BufferInfo, BaudRate)                                  \
     do                                                                                                                 \
     {                                                                                                                  \
-        fmi3LsBusOperationCanConfiguration _op;                                                                        \
+        fmi3LsBusCanOperationConfiguration _op;                                                                        \
         _op.header.type = FMI3_LS_BUS_CAN_OP_CONFIGURATION;                                                            \
         _op.header.length =                                                                                            \
             sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanConfigParameterType) + sizeof(fmi3LsBusCanBaudrate); \
@@ -302,7 +302,7 @@ extern "C"
 #define FMI3_LS_BUS_CAN_CREATE_OP_CONFIGURATION_CAN_XL_BAUDRATE(BufferInfo, BaudRate)                                  \
     do                                                                                                                 \
     {                                                                                                                  \
-        fmi3LsBusOperationCanConfiguration _op;                                                                        \
+        fmi3LsBusCanOperationConfiguration _op;                                                                        \
         _op.header.type = FMI3_LS_BUS_CAN_OP_CONFIGURATION;                                                            \
         _op.header.length =                                                                                            \
             sizeof(fmi3LsBusOperationHeader) + sizeof(fmi3LsBusCanConfigParameterType) + sizeof(fmi3LsBusCanBaudrate); \
