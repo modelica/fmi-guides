@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiBuildDescription fmiVersion="3.0"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/modelica/fmi-standard/v3.0.1/schema/fmi3BuildDescription.xsd">
+  <BuildConfiguration modelIdentifier="DemoCanNodeTriggeredOutput">
+    <SourceFileSet language="C99">
+      <SourceFile name="App.c"/>
+      <SourceFile name="Fmu.c"/>
+      <SourceFile name="Logging.c"/>
+    </SourceFileSet>
+  </BuildConfiguration>
+</fmiBuildDescription>

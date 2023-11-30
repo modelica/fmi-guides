@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription
+    fmiVersion="3.0"
+    modelName="DemoCanBusSimulation"
+    instantiationToken=""
+    variableNamingConvention="structured"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/modelica/fmi-standard/v3.0.1/schema/fmi3ModelDescription.xsd">
+
+  <CoSimulation
+      modelIdentifier="DemoCanBusSimulation"
+      needsExecutionTool="false"
+      canGetAndSetFMUState="false"
+      canSerializeFMUState="false"
+      canHandleVariableCommunicationStepSize="true"
+      canBeInstantiatedOnlyOncePerProcess="false"
+      providesIntermediateUpdate="false"
+      canReturnEarlyAfterIntermediateUpdate="false"
+      providesEvaluateDiscreteStates="true"
+      hasEventMode="true">
+  </CoSimulation>
+
+  <LogCategories>
+    <Category name="logStatusDiscard"
+              description="Log messages when returning fmi3Discard status from any function." />
+    <Category name="logStatusError"
+              description="Log messages when returning fmi3Error status from any function." />
+
+    <Category name="Trace"
+            description="Trace log messages." />
+    <Category name="Info"
+              description="Info log messages." />
+    <Category name="Warning"
+              description="Warning log messages." />
+    <Category name="Error"
+              description="Error log messages." />
+  </LogCategories>
+
+  <DefaultExperiment
+      startTime="0"
+      stepSize="0.001" />
+
+  <ModelVariables>
+    <Float64 name="time" valueReference="1024" causality="independent" variability="continuous" description="Simulation time" />
+
+    <Binary name="Node1::Rx_Data"
+        valueReference="0"
+        causality="input"
+        variability="discrete"
+        initial="exact"
+        maxSize="2048"
+        clocks="2"
+        mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
+        <Dimension start="1" />
+        <Start value="" />
+    </Binary>
+
+    <Binary name="Node1::Tx_Data"
+        valueReference="1"
+        causality="output"
+        variability="discrete"
+        initial="calculated"
+        maxSize="2048"
+        clocks="3"
+        mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
+    </Binary>
+
+    <Clock name="Node1::Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
+    <Clock name="Node1::Tx_Clock" valueReference="3" causality="input" intervalVariability="countdown" />
+
+    <Binary name="Node2::Rx_Data"
+            valueReference="4"
+            causality="input"
+            variability="discrete"
+            initial="exact"
+            maxSize="2048"
+            clocks="6"
+            mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
+      <Dimension start="1" />
+      <Start value="" />
+    </Binary>
+
+    <Binary name="Node2::Tx_Data"
+            valueReference="5"
+            causality="output"
+            variability="discrete"
+            initial="calculated"
+            maxSize="2048"
+            clocks="7"
+            mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
+    </Binary>
+
+    <Clock name="Node2::Rx_Clock" valueReference="6" causality="input" intervalVariability="triggered" />
+    <Clock name="Node2::Tx_Clock" valueReference="7" causality="input" intervalVariability="countdown" />
+  </ModelVariables>
+
+  <ModelStructure>
+    <Output valueReference="1" dependencies="3" />
+    <Output valueReference="5" dependencies="7" />
+  </ModelStructure>
+</fmiModelDescription>
