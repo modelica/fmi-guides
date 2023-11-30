@@ -369,7 +369,7 @@ FMU 1 gets a `Confirm` operation, because the specified frame with CAN ID 15 was
 [#figure-can-arbitration-overview-with-buffer]
 image::can_arbitration_overview_with_buffer.svg[width=80%, align="center"]
 
-==== Realization of CAN Error Handling
+==== Realization of CAN Error Handling [[low-cut-can-realization-of-can-error-handling]]
 This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on `Bus Error` operations.
 Each Network FMU will provide its own Transmit Error Counter (TEC), Receive Error Counter (REC) and current CAN node state.
 The values for TEC and REC will be increased and decreased with respect to the `Error Code`, `Is Sender` and `Error Flag` arguments of a `Bus Error` operation and are inherited from the original CAN error confinement rules.
