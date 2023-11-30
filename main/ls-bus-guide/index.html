@@ -586,7 +586,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI LS BUS Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-9aa7479b0b03f75819e689a2f9f1d5edc93ed6b1,</span>
+<span id="revnumber">version main-e93712f4b992067c4c562f498093c21069308dba,</span>
 <span id="revdate">2023-11-30</span>
 </div>
 <div id="toc" class="toc2">
@@ -608,17 +608,17 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_transmit_of_bus_operations">4.1.1.5. Transmit of Bus Operations</a></li>
 <li><a href="#_receive_of_bus_operations">4.1.1.6. Receive of Bus Operations</a></li>
 <li><a href="#_processing_of_bus_operations">4.1.1.7. Processing of Bus Operations</a></li>
-<li><a href="#_examples">4.1.1.8. Examples</a></li>
 </ul>
 </li>
-<li><a href="#low-cut-can-sequence-diagrams">4.1.2. Sequence Diagrams</a>
+<li><a href="#low-cut-can-demos">4.1.2. Demos</a></li>
+<li><a href="#low-cut-can-sequence-diagrams">4.1.3. Sequence Diagrams</a>
 <ul class="sectlevel4">
-<li><a href="#low-cut-can-example-transmission">4.1.2.1. Transmission</a></li>
-<li><a href="#low-cut-can-example-can-arbitration-without-buffering">4.1.2.2. CAN Arbitration without Buffering</a></li>
-<li><a href="#low-cut-can-example-can-arbitration-with-buffering">4.1.2.3. CAN Arbitration with Buffering</a></li>
+<li><a href="#low-cut-can-example-transmission">4.1.3.1. Transmission</a></li>
+<li><a href="#low-cut-can-example-can-arbitration-without-buffering">4.1.3.2. CAN Arbitration without Buffering</a></li>
+<li><a href="#low-cut-can-example-can-arbitration-with-buffering">4.1.3.3. CAN Arbitration with Buffering</a></li>
 </ul>
 </li>
-<li><a href="#_realization_of_can_error_handling">4.1.3. Realization of CAN Error Handling</a></li>
+<li><a href="#_realization_of_can_error_handling">4.1.4. Realization of CAN Error Handling</a></li>
 </ul>
 </li>
 </ul>
@@ -1202,20 +1202,31 @@ After this they can be handled.</p>
 </table>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_examples">4.1.1.8. Examples</h5>
-<div class="paragraph">
-<p><mark>TODO</mark></p>
 </div>
+<div class="sect3">
+<h4 id="low-cut-can-demos">4.1.2. Demos</h4>
+<div class="paragraph">
+<p>The following list contains demos, which illustrate both the Bus Simulation as such and Network FMUs of various designs:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="./demos/can-bus-simulation">CAN Bus Simulation</a>: Represents an exemplary Bus Simulation FMU for CAN.
+This Bus Simulation can be used in combination with the other Network FMUs, listed behind this point.</p>
+</li>
+<li>
+<p><a href="./demos/can-node-triggered-output">CAN Triggered Output</a>: This demo Network FMU shows sending and receiving multiple CAN Transmit operations using <code>triggered</code> output clocks.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
-<h4 id="low-cut-can-sequence-diagrams">4.1.2. Sequence Diagrams</h4>
+<h4 id="low-cut-can-sequence-diagrams">4.1.3. Sequence Diagrams</h4>
 <div class="paragraph">
 <p>This section contains sample sequences to clarify the facts in the CAN, CAN FD, CAN XL part.</p>
 </div>
 <div class="sect4">
-<h5 id="low-cut-can-example-transmission">4.1.2.1. Transmission</h5>
+<h5 id="low-cut-can-example-transmission">4.1.3.1. Transmission</h5>
 <div class="paragraph">
 <p><a href="#figure-can-transmission-acknowledge">Figure 2</a> illustrates the two possible results of a <code>Transmit</code> operation, whereby the transition from FMU 1 &#8594; FMU 2 represents the successful case and FMU 2 &#8594; FMU 1 represents the unsuccessful case.
 For the second transmission, the Bus Simulation injects a failure of transmission.
@@ -1242,7 +1253,7 @@ Most common kinds of errors are used to inject transmission errors, for example 
 </div>
 </div>
 <div class="sect4">
-<h5 id="low-cut-can-example-can-arbitration-without-buffering">4.1.2.2. CAN Arbitration without Buffering</h5>
+<h5 id="low-cut-can-example-can-arbitration-without-buffering">4.1.3.2. CAN Arbitration without Buffering</h5>
 <div class="paragraph">
 <p><a href="#figure-can-arbitration-overview">Figure 3</a> shows the realization of a CAN arbitration by using the <code>Arbitration Lost Behavior</code> option <code>DISCARD_AND_NOTIFY</code> within the <code>Configuration</code> operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
@@ -1263,7 +1274,7 @@ FMU 1 gets a <code>Confirm</code> operation, because the specified frame with CA
 </div>
 </div>
 <div class="sect4">
-<h5 id="low-cut-can-example-can-arbitration-with-buffering">4.1.2.3. CAN Arbitration with Buffering</h5>
+<h5 id="low-cut-can-example-can-arbitration-with-buffering">4.1.3.3. CAN Arbitration with Buffering</h5>
 <div class="paragraph">
 <p><a href="#figure-can-arbitration-overview-with-buffer">Figure 4</a> shows the realization of a CAN arbitration by using the <code>Arbitration Lost Behavior</code> option <code>BUFFER_AND_RETRANSMIT</code> within the <code>Configuration</code> operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
@@ -1286,7 +1297,7 @@ FMU 1 gets a <code>Confirm</code> operation, because the specified frame with CA
 </div>
 </div>
 <div class="sect3">
-<h4 id="_realization_of_can_error_handling">4.1.3. Realization of CAN Error Handling</h4>
+<h4 id="_realization_of_can_error_handling">4.1.4. Realization of CAN Error Handling</h4>
 <div class="paragraph">
 <p>This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on <code>Bus Error</code> operations.
 Each Network FMU will provide its own Transmit Error Counter (TEC), Receive Error Counter (REC) and current CAN node state.
