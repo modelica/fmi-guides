@@ -5,4 +5,4 @@
 		fmi-ls:fmi-ls-version="1.0.0"
 		fmi-ls:fmi-ls-description="Layered Standard for the simulation of bus communication on a signal or network abstraction based level."
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../Fmi3LsBus/schemas/fmi3LayeredStandardBusManifest.xsd"/>
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/modelica/fmi-ls-bus/473bd5b80730c47373bf41f1c31d44f50de82dd0/schema/fmi3LayeredStandardBusManifest.xsd"/>
