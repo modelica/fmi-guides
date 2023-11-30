@@ -307,10 +307,10 @@ fmi3Status fmi3UpdateDiscreteStates(...)
 ==== Demos [[low-cut-can-demos]]
 The following list contains demos, which illustrate both the Bus Simulation as such and Network FMUs of various designs:
 
-* link:./demos/can-bus-simulation[CAN Bus Simulation]: Represents an exemplary Bus Simulation FMU for CAN.
+* https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/can-bus-simulation[CAN Bus Simulation]: Represents an exemplary Bus Simulation FMU for CAN.
 This Bus Simulation can be used in combination with the other Network FMUs, listed behind this point. 
 
-* link:./demos/can-node-triggered-output[CAN Triggered Output]: This demo Network FMU shows sending and receiving multiple CAN Transmit operations using `triggered` output clocks.
+* https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/can-node-triggered-output[CAN Triggered Output]: This demo Network FMU shows sending and receiving multiple CAN Transmit operations using `triggered` output clocks.
 
 ==== Sequence Diagrams [[low-cut-can-sequence-diagrams]]
 This section contains sample sequences to clarify the facts in the CAN, CAN FD, CAN XL part.
