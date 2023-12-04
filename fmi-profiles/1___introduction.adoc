@@ -12,8 +12,8 @@ Where harmonization of feature profiles can be achieved across a sufficiently la
 If vendors start advertising their profile support, this also makes it much easier to ascertain support of required options by users.
 Additionally, these profiles can be used to display feature support concisely in comparison tables, like those present on the FMI standard website.
 
-A questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features.
-Based on the feedback from industry participants, a consolidated set of initial FMI feature profiles was derived and disseminated internally.
+A questionnaire was circulated in the prostep ivip SmartSE project to elicit initial use case profiles and required features. 
+Based on the feedback from industry participants, a consolidated set of initial FMI feature profiles was derived and disseminated internally. 
 After discussion within the SmartSE project and more comprehensive discussion inside the Modelica Association Project FMI, the projects adopted this document's set of FMI Feature Profiles for joint publication.
 
 The FMI Feature Profiles provide an initial set of consolidated FMI feature profiles and short descriptions of the corresponding use cases.
