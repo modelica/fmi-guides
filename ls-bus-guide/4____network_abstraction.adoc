@@ -93,12 +93,12 @@ Following these rule, the macro for creating a CAN Transmit operation is `FMI3_L
 A macro for creating an operation also assigns it to a buffer described by an `fmi3LsBusUtilBufferInfo` instance.
 
 The following program code shows how to first define the payload and the ID that should be used in the CAN Transmit operation.
-Afterwards, the `fmi3LsBusUtilBufferInfo` is reset by using `FMI3_LS_BUS_BUFFER_RESET`.
-`FMI3_LS_BUS_BUFFER_RESET` sets the internal position of the `fmi3LsBusUtilBufferInfo` instance to zero, so that it is essentially emptied and written from the beginning.
+Afterwards, the `fmi3LsBusUtilBufferInfo` is reset by using `FMI3_LS_BUS_BUFFER_INFO_RESET`.
+`FMI3_LS_BUS_BUFFER_INFO_RESET` sets the internal position of the `fmi3LsBusUtilBufferInfo` instance to zero, so that it is essentially emptied and written from the beginning.
 This is necessary to ensure that Bus Operations that have already been transmitted are not transmitted again.
 `FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT` now creates a new CAN Transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the `fmi3LsBusUtilBufferInfo` instance.
 Querying the status of a `fmi3LsBusUtilBufferInfo` instance allows you to check whether there is still enough space in the underlying buffer.
-In the last step, `FMI3_LS_BUS_BUFFER_INFO_LENGTH` is used to check whether there are Bus Operations in the respective `fmi3LsBusUtilBufferInfo` variable that should be transmitted in `Event Mode`.
+In the last step, `FMI3_LS_BUS_BUFFER_LENGTH` is used to check whether there are Bus Operations in the respective `fmi3LsBusUtilBufferInfo` variable that should be transmitted in `Event Mode`.
 
 [source,c]
 .Creation of a CAN Transmit operation
@@ -110,7 +110,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
     fmi3LsBusCanId msgId = 42;      // <2>
 
     /* Reset read/write positions of the BufferInfo variable */
-    FMI3_LS_BUS_BUFFER_RESET(&TxBufferInfoCan);    // <3>
+    FMI3_LS_BUS_BUFFER_INFO_RESET(&TxBufferInfoCan);    // <3>
 
     /* Create a CAN Transmit operation to be send */
     FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&TxBufferInfoCan, msgId, <options>, sizeof(msg), msg);    // <4>
@@ -121,7 +121,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
 
     ...
 
-    if(FMI3_LS_BUS_BUFFER_INFO_LENGTH(&TxBufferInfoCan) > 0){
+    if(FMI3_LS_BUS_BUFFER_LENGTH(&TxBufferInfoCan) > 0){
         *eventHandlingNeeded = fmi3True;    // <6>
     }
 }
