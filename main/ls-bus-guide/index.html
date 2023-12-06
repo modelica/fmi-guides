@@ -586,7 +586,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI LS BUS Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-98001fcfedce66682fa6a7cb3b5557def5ed84e7,</span>
+<span id="revnumber">version main-ed7864a545b0c66a447d2e028a2595d7dcc13c85,</span>
 <span id="revdate">2023-12-06</span>
 </div>
 <div id="toc" class="toc2">
@@ -852,12 +852,12 @@ A macro for creating an operation also assigns it to a buffer described by an <c
 </div>
 <div class="paragraph">
 <p>The following program code shows how to first define the payload and the ID that should be used in the CAN Transmit operation.
-Afterwards, the <code>fmi3LsBusUtilBufferInfo</code> is reset by using <code>FMI3_LS_BUS_BUFFER_RESET</code>.
-<code>FMI3_LS_BUS_BUFFER_RESET</code> sets the internal position of the <code>fmi3LsBusUtilBufferInfo</code> instance to zero, so that it is essentially emptied and written from the beginning.
+Afterwards, the <code>fmi3LsBusUtilBufferInfo</code> is reset by using <code>FMI3_LS_BUS_BUFFER_INFO_RESET</code>.
+<code>FMI3_LS_BUS_BUFFER_INFO_RESET</code> sets the internal position of the <code>fmi3LsBusUtilBufferInfo</code> instance to zero, so that it is essentially emptied and written from the beginning.
 This is necessary to ensure that Bus Operations that have already been transmitted are not transmitted again.
 <code>FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT</code> now creates a new CAN Transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the <code>fmi3LsBusUtilBufferInfo</code> instance.
 Querying the status of a <code>fmi3LsBusUtilBufferInfo</code> instance allows you to check whether there is still enough space in the underlying buffer.
-In the last step, <code>FMI3_LS_BUS_BUFFER_INFO_LENGTH</code> is used to check whether there are Bus Operations in the respective <code>fmi3LsBusUtilBufferInfo</code> variable that should be transmitted in <code>Event Mode</code>.</p>
+In the last step, <code>FMI3_LS_BUS_BUFFER_LENGTH</code> is used to check whether there are Bus Operations in the respective <code>fmi3LsBusUtilBufferInfo</code> variable that should be transmitted in <code>Event Mode</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">Creation of a CAN Transmit operation</div>
@@ -869,7 +869,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
     fmi3LsBusCanId msgId = 42;      <i class="conum" data-value="2"></i><b>(2)</b>
 
     /* Reset read/write positions of the BufferInfo variable */
-    FMI3_LS_BUS_BUFFER_RESET(&amp;TxBufferInfoCan);    <i class="conum" data-value="3"></i><b>(3)</b>
+    FMI3_LS_BUS_BUFFER_INFO_RESET(&amp;TxBufferInfoCan);    <i class="conum" data-value="3"></i><b>(3)</b>
 
     /* Create a CAN Transmit operation to be send */
     FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&amp;TxBufferInfoCan, msgId, &lt;options&gt;, sizeof(msg), msg);    <i class="conum" data-value="4"></i><b>(4)</b>
@@ -880,7 +880,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
 
     ...
 
-    if(FMI3_LS_BUS_BUFFER_INFO_LENGTH(&amp;TxBufferInfoCan) &gt; 0){
+    if(FMI3_LS_BUS_BUFFER_LENGTH(&amp;TxBufferInfoCan) &gt; 0){
         *eventHandlingNeeded = fmi3True;    <i class="conum" data-value="6"></i><b>(6)</b>
     }
 }</code></pre>
