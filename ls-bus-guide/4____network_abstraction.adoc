@@ -8,15 +8,19 @@ This chapter contains details on CAN, CAN FD, CAN XL specific topics.
 This section shows the exemplary implementation in conjunction with the provided header files of the fmi-ls-bus layered standard.
 
 ===== Provided Header Files [[low-cut-can-getting-started-provided-header-files]]
-The layered standard fmi-ls-bus not only contains a textual specification for bus support, but also provides header and utility functions as C code to make creation and use within FMUs as easy as possible.
-The following header files are provided by the standard for this purpose, although their use is not mandatory but optional:
+Besides the textual specification for FMUs with bus support, the fmi-ls-bus layered standard also provides a C API to make the creation of FMUs with bus support as easy and generalized as possible.
+The standard differentiates between two groups of files within the C API: Mandatory and optional files.
 
-* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h[fmi3LsBus.h] provides general functions and structures.
-These header file applies to all supported bus types of the layered standard. 
-* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusCan.h[fmi3LsBusCan.h] provides functions and structures explicit for CAN, CAN FD and CAN XL.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h[fmi3LsBus.h] provides general macros, types and structures of common Bus Operations.
+These header file applies to all supported bus types of the layered standard.
+The usage of this file is mandatory.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusCan.h[fmi3LsBusCan.h] provides macros, types and structures of Bus Operations explicit for CAN, CAN FD and CAN XL.
 Primarily, structures are included here that allow the Bus Operations specified by the layered standard to be easily created and used.
-* https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtil.h[fmi3LsBusUtil.h] provides common utility functions and structures for all supported bus types.
-* https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] provides CAN, CAN FD and CAN XL explicit utility functions.
+The usage of this file is mandatory.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtil.h[fmi3LsBusUtil.h] provides common utility macros and structures for all supported bus types.
+The usage of this file is optional.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] provides CAN, CAN FD and CAN XL explicit utility macros.
+The usage of this file is optional
 
 ===== General Aspects
 Bus Operations represent protocol units to be transmitted in the environment of the layered standard based on the https://modelica.github.io/fmi-ls-bus/main/#low-cut-layered-standard-bus-protocol[Layered Standard Bus Protocol].
