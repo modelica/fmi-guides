@@ -9,8 +9,8 @@ FMU_PATH = Path('DemoCanBusSimulation.fmu')
 
 # Repository to fetch the LS-BUS headers from
 LS_BUS_REPO = 'modelica/fmi-ls-bus'
-LS_BUS_REV = '473bd5b80730c47373bf41f1c31d44f50de82dd0'
-LS_BUS_HEADERS = [ 'fmi3LsBus.h', 'fmi3LsBusCan.h' ]
+LS_BUS_REV = '4680d63c0705fbf9076f97128e913f464b442f53'
+LS_BUS_HEADERS = [ 'fmi3LsBus.h', 'fmi3LsBusCan.h', 'fmi3LsBusUtil.h', 'fmi3LsBusUtilCan.h' ]
 
 
 def main():
@@ -22,10 +22,6 @@ def main():
         for ls_bus_header in LS_BUS_HEADERS:
             with urllib.request.urlopen(f'https://raw.githubusercontent.com/{LS_BUS_REPO}/{LS_BUS_REV}/headers/{ls_bus_header}') as f:
                 fmu.writestr(f'sources/{ls_bus_header}', f.read())
-
-        # Add LS-BUS utility headers
-        for file in (demo_dir.parent.parent / 'headers').iterdir():
-            fmu.write(file, f'sources/{file.name}')
 
         # Add source files
         for file in (demo_dir / 'src').iterdir():
