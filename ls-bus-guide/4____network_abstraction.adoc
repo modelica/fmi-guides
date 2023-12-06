@@ -8,11 +8,11 @@ This chapter contains details on CAN, CAN FD, CAN XL specific topics.
 This section shows the exemplary implementation in conjunction with the provided header files of the fmi-ls-bus layered standard.
 
 ===== Provided Header Files [[low-cut-can-getting-started-provided-header-files]]
-Besides the textual specification for FMUs with bus support, the fmi-ls-bus layered standard also provides a C API to make the creation of FMUs with bus support as easy and generalized as possible.
+Besides the textual specification for FMUs with bus support, the Layered Standard for Network Communication also provides a C API to make the creation of FMUs with bus support as easy and generalized as possible.
 The standard differentiates between two groups of files within the C API: Mandatory and optional files.
 
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h[fmi3LsBus.h] provides general macros, types and structures of common Bus Operations.
-These header file applies to all supported bus types of the layered standard.
+This header file applies to all supported bus types of the layered standard.
 The usage of this file is mandatory.
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusCan.h[fmi3LsBusCan.h] provides macros, types and structures of Bus Operations explicit for CAN, CAN FD and CAN XL.
 Primarily, structures are included here that allow the Bus Operations specified by the layered standard to be easily created and used.
@@ -20,7 +20,7 @@ The usage of this file is mandatory.
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtil.h[fmi3LsBusUtil.h] provides common utility macros and structures for all supported bus types.
 The usage of this file is optional.
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] provides CAN, CAN FD and CAN XL explicit utility macros.
-The usage of this file is optional
+The usage of this file is optional.
 
 ===== General Aspects
 Bus Operations represent protocol units to be transmitted in the environment of the layered standard based on the https://modelica.github.io/fmi-ls-bus/main/#low-cut-layered-standard-bus-protocol[Layered Standard Bus Protocol].
@@ -29,7 +29,7 @@ Bus Operations are created and processed within an FMU.
 This can be done either in `Step Mode` or in `Event Mode`.
 For a transfer, all Bus Operations are serialized together in a `fmi3Binary` https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-rx-data-variables[variable].
 This serialization can be done using the provided <<low-cut-can-getting-started-provided-header-files,header files>> or using a custom approach.
-After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized and processed there again inside the receiver.
+After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized again and then processed inside the receiver.
 
 .Create, process and transfer Bus Operations.
 [#figure-general-aspects-overview]
@@ -42,7 +42,7 @@ However, it is important to know that due to the resulting decoupling between th
 This semantics is reflected directly in the structure and handling of the <<low-cut-can-getting-started-provided-header-files,header files>> provided.
 
 ===== Buffer Handling
-For exchanging Bus Operations between FMUs variables of type `fmi3Binary` type are used.
+For exchanging Bus Operations between FMUs, variables of type `fmi3Binary` type are used.
 For this reason, appropriate variables must first be set up within the implementation that represent the content for this exchange.
 The buffer variable can be easily initialized in the form of an `fmi3UInt8` array of any size.
 It should be noted that the entire buffer size must of course provide enough space for all created Bus Operations during a `fmi3DoStep`.
@@ -51,7 +51,7 @@ To simplify our example, the buffers are declared as global variables within the
 Since describing and reading Bus Operations from a simple array can be quite complicated, the common utility headers provide an `fmi3LsBusUtilBufferInfo` entity.
 This abstraction represents a kind of view of the underlying buffer array and allows simplified access using additionally provided functionality.
 
-The following program code shows the declaration and initialization of a buffer for transmitting (Tx) and receiving (Rx) Bus Operations in the form of an array.
+The following program code shows the definition and initialization of a buffer for transmitting (Tx) and receiving (Rx) Bus Operations in the form of an array.
 In addition, an `fmi3LsBusUtilBufferInfo` is created for both buffer variables.
 Using `FMI3_LS_BUS_BUFFER_INFO_INIT`, the underlying buffer is coupled to the respective `fmi3LsBusUtilBufferInfo` instance.
 
@@ -72,8 +72,8 @@ fmi3Instance fmi3InstantiateCoSimulation(...) {
 }
 ----
 <1> Necessary include of the fmi3LsBusUtil.h header file.
-<2> Declaration and initialization of a `fmi3Binary` buffer variable.
-<3> Declaration of `fmi3LsBusUtilBufferInfo` variable instance.
+<2> Definition and initialization of a `fmi3Binary` buffer variable.
+<3> Definition of `fmi3LsBusUtilBufferInfo` variable instance.
 <4> Coupling of a Buffer and a `fmi3LsBusUtilBufferInfo` variable.
 
 The buffer is always treated by the provided header functionalities using FIFO (First In - First Out) semantics.
@@ -90,12 +90,12 @@ The further usage of the `fmi3LsBusUtilBufferInfo` variable is discussed later.
 The header file https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilCan.h] offers macros for all Bus Operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
 The macros are always provided according to the following syntax: `FMI3_LS_BUS_<BusType>_CREATE_OP_<OperationName>`.
 Following these rule, the macro for creating a CAN Transmit operation is `FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT`.
-A macro for creating an operation also commits it to a buffer described by an `fmi3LsBusUtilBufferInfo` instance.
+A macro for creating an operation also assigns it to a buffer described by an `fmi3LsBusUtilBufferInfo` instance.
 
 The following program code shows how to first define the payload and the ID that should be used in the CAN Transmit operation.
 Afterwards, the `fmi3LsBusUtilBufferInfo` is reset by using `FMI3_LS_BUS_BUFFER_RESET`.
 `FMI3_LS_BUS_BUFFER_RESET` sets the internal position of the `fmi3LsBusUtilBufferInfo` instance to zero, so that it is essentially emptied and written from the beginning.
-The whole thing is necessary to ensure that Bus Operations that have already been transmitted are not transmitted a second time.
+This is necessary to ensure that Bus Operations that have already been transmitted are not transmitted again.
 `FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT` now creates a new CAN Transmit operation with the associated parameters such as CAN ID and payload and adds them directly to the `fmi3LsBusUtilBufferInfo` instance.
 Querying the status of a `fmi3LsBusUtilBufferInfo` instance allows you to check whether there is still enough space in the underlying buffer.
 In the last step, `FMI3_LS_BUS_BUFFER_INFO_LENGTH` is used to check whether there are Bus Operations in the respective `fmi3LsBusUtilBufferInfo` variable that should be transmitted in `Event Mode`.
@@ -131,7 +131,7 @@ fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
 <3> Resetting of `fmi3LsBusUtilBufferInfo` variable instance.
 <4> Creation of a CAN Transmit operation and adding it to the specified `fmi3LsBusUtilBufferInfo` variable.
 <5> Verify that free buffer space is available.
-<6> Activate `Event Mode` if needed.
+<6> Signal that `Event Mode` is needed.
 
 According to the same principles, any specified operation can be created using the corresponding macro.
 
@@ -142,14 +142,14 @@ According to the same principles, any specified operation can be created using t
 * The CREATE_OP macros are creating a Bus Operation and updating the given buffer in a single step
 ====
 
-===== Transmit of Bus Operations
+===== Transmitting Bus Operations
 Within the layered standard, the https://modelica.github.io/fmi-ls-bus/main/#low-cut-variables[connection] between the data to be exchanged (`TX_Data` and `Rx_Data`) and the time of exchange 
 (`Tx_Clock` and `Rx_Clock`) has been well defined.
-The https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-triggered-clock-variables[simplest case represents] a `triggered` clock as `Tx_Clock` that basically allows to signal events when returning from `fmi3DoStep`.
+The https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-triggered-clock-variables[simplest case] represents a `triggered` `Tx_Clock` that basically allows to signal events when returning from `fmi3DoStep`.
 
 The program code below schematically illustrates an implementation.
 `fmi3GetClock` is called by the FMU importer in `Event Mode` after `fmi3DoStep` has completed or ended prematurely.
-Within `fmi3GetClock`, `TX_CLOCK_REFERENCE` represents the valueReference of the respective `Tx_Clock`.
+Within `fmi3GetClock`, `TX_CLOCK_REFERENCE` represents the `valueReference` of the respective `Tx_Clock`.
 The usage of the macro `FMI3_LS_BUS_BUFFER_IS_EMPTY` indicates whether there is data to be transferred in the respective buffer.
 If this is the case, the corresponding `Tx_Clock` will tick.
 
@@ -191,12 +191,12 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
     ...
 }
 ----
-<1> Verify if Bus Operations exists for transfer.
+<1> Verify if Bus Operations exist for transfer.
 <2> Activate specified `Tx_Clock`.
 <3> Get the start memory address of the buffer, by using `fmi3LsBusUtilBufferInfo` instance.
 <4> Get the size of the buffer, by using `fmi3LsBusUtilBufferInfo` instance.
 
-Note that in theory, the `fmi3GetClock` may only return `fmi3ClockActive` once per clock activation.
+Note that, according to the FMI 3.0 standard, `fmi3GetClock` only returns `fmi3ClockActive` once per clock activation.
 
 It should be clear that, depending on the application, the different FMI clock types each offer advantages and disadvantages. See also the https://modelica.github.io/fmi-ls-bus/main/#low-cut-selecting-tx-variables[corresponding chapter in the layered standard].
 
@@ -206,13 +206,13 @@ It should be clear that, depending on the application, the different FMI clock t
 * The LS-BUS C API provides macros to get the START address and LENGTH of the buffer which can be used in the context of `fmi3GetClock` and `fmi3GetBinary`
 ====
 
-===== Receive of Bus Operations
+===== Receiving Bus Operations
 The indication whether new operations are pending within the `Rx_Data` variable is done via the `Rx_Clock`.
 This clock ticks as soon as new data is available.
-The operation-receiving FMU gets the Bus Operations via a `fmi3Binary` variable.
+The operation-receiving FMU gets the Bus Operations via an `fmi3Binary` variable.
 The contents of this variable may then be copied into a buffer described by an `fmi3LsBusUtilBufferInfo` instance using `FMI3_LS_BUS_BUFFER_WRITE`.
 
-The code snipped below shows its use within the `fmi3SetClock` and `fmi3SetBinary` functions, which an FMU importer calls when setting the concrete `Rx_Data` variable.
+The code snipped below shows its usage within the `fmi3SetClock` and `fmi3SetBinary` functions, which an FMU importer calls when setting the concrete `Rx_Data` variable.
 
 [source,c]
 .Receiving Bus Operations
@@ -242,16 +242,16 @@ fmi3Status fmi3SetBinary(fmi3Instance instance,
                           const fmi3Binary value, ...) {
     ...
     for (size_t i = 0; i < nValueReferences; i++) {
-        if (valueReferences[i] == RX_DATA_REFERENCE) {    
+        if (valueReferences[i] == RX_DATA_REFERENCE && RxClock == fmi3ClockActive) {    
             FMI3_LS_BUS_BUFFER_WRITE(&RxBufferInfoCan, value[i], valueSize[i]); // <3>
         }
     }
     ...
 }
 ----
-<1> Verify that `Rx_Clock` ticked.
-<2> Park information for global access within other FMI interface functions.
-<3> Building a `fmi3LsBusUtilBufferInfo` instance basing on received Bus Operations.
+<1> Check if `Rx_Clock` has ticked.
+<2> Store the information for global access within other FMI interface functions.
+<3> Create an `fmi3LsBusUtilBufferInfo` instance based on received Bus Operations.
 
 [NOTE]
 .Summary
@@ -264,8 +264,8 @@ fmi3Status fmi3SetBinary(fmi3Instance instance,
 ===== Processing of Bus Operations
 The Bus Operations must now be processed on the receiving side.
 A suitable place for implementation represents `fmi3UpdateDiscreteStates`.
-In this case, the `FMI3_LS_BUS_READ_NEXT_OPERATION` macro can be used so that all received Bus Operations are deserialized one after the other into the correct operation structure.
-After this they can be handled.
+In this case, the `FMI3_LS_BUS_READ_NEXT_OPERATION` macro can be used to successively deserialize all received Bus Operations into the correct operation structure.
+After this, they can be further processed.
 
 [source,c]
 .Processing received Bus Operations.
@@ -281,7 +281,7 @@ fmi3Status fmi3UpdateDiscreteStates(...)
             switch (hdr->type)                                            // <2>
             {
                 case FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT:
-                    fmi3LsBusCanOperationCanTransmit receivedTransmitOp   // <3>
+                    fmi3LsBusCanOperationCanTransmit *receivedTransmitOp   // <3>
                         = (fmi3LsBusCanOperationCanTransmit*) hdr;
             ...
             }
@@ -297,60 +297,59 @@ fmi3Status fmi3UpdateDiscreteStates(...)
 }
 
 ----
-<1> Reading the next operation from the `fmi3LsBusUtilBufferInfo` instance.
+<1> Read the next operation from the `fmi3LsBusUtilBufferInfo` instance.
 <2> Decide which kind of operation needs to be handled.
-<3> Casting into the concrete operation underlying structure.
+<3> Cast to the specific operation structure.
 
 [NOTE]
 .Summary
 ====
-* Received Bus Operations can be processed by usage of the FMI3_LS_BUS_READ_NEXT_OPERATION macro
-* FMI3_LS_BUS_BUFFER_INFO_RESET allows to reset the `fmi3LsBusUtilBufferInfo` instance after processing
+* Received Bus Operations can be processed by using the `FMI3_LS_BUS_READ_NEXT_OPERATION` macro
+* `FMI3_LS_BUS_BUFFER_INFO_RESET` allows to reset the `fmi3LsBusUtilBufferInfo` instance after processing
 ====
 
 ==== Demos [[low-cut-can-demos]]
 The following list contains demos, which illustrate both the Bus Simulation as such and Network FMUs of various designs:
 
 * https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/can-bus-simulation[CAN Bus Simulation]: Represents an exemplary Bus Simulation FMU for CAN.
-This Bus Simulation can be used in combination with the other Network FMUs, listed behind this point. 
+This Bus Simulation can be used in combination with the other Network FMUs listed below. 
 
-* https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/can-node-triggered-output[CAN Triggered Output]: This demo Network FMU shows sending and receiving multiple CAN Transmit operations using `triggered` output clocks.
+* https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/can-node-triggered-output[CAN Triggered Output]: This demo Network FMU demonstrates sending and receiving multiple CAN Transmit operations using `triggered` output clocks.
 
 ==== Sequence Diagrams [[low-cut-can-sequence-diagrams]]
 This section contains sample sequences to clarify the facts in the CAN, CAN FD, CAN XL part.
 
 ===== Transmission [[low-cut-can-example-transmission]]
 <<#figure-can-transmission-acknowledge>> illustrates the two possible results of a `Transmit` operation, whereby the transition from FMU 1 -> FMU 2 represents the successful case and FMU 2 -> FMU 1 represents the unsuccessful case.
-For the second transmission, the Bus Simulation injects a failure of transmission.
-In step (1), a `Transmit` operation will be delivered to the Bus Simulation.
-Within step (2), the `Transmit` operation will transferred to FMU 2, so the transmission was successful.
-Also in step (2), FMU 1 receives a `Confirm` operation, which means the transmission was successful.
+For the second transmission, the Bus Simulation injects a transmission error.
+In step (1), a `Transmit` operation is delivered to the Bus Simulation.
+In step (2), the `Transmit` operation is successfully transferred to FMU 2.
+In the same step, the Bus Simulation announces the success to FMU 1 via `Confirm` operation.
 In step (3), FMU 2 wants to transmit network data to FMU 1:
-A `Transmit` operation will be delivered from FMU 2 to the Bus Simulation.
-In step (4), we see that the transmission results in an `Bus Error` operation, because the Bus Simulation injects a failure of transmission.
-Based on the `Bus Error` operation FMU 2 knows that the transmission was not successful.
-Within this `Bus Error` operation, the `Is Sender` argument is set to `TRUE` for FMU 2, because it provides the failing `Transmit` operation.
+A `Transmit` operation is delivered from FMU 2 to the Bus Simulation.
+In step (4), the Bus Simulation intentionally injects a transmission error, which results in a `Bus Error` operation being sent to both Network FMUs.
+The `Bus Error` operation signals FMU 2 that its transmission attempt was not successful.
+Within this `Bus Error` operation, the `Is Sender` argument is set to `TRUE` for FMU 2, because it initiated the failing `Transmit` operation.
 Another `Bus Error` operation instance is provided by the Bus Simulation to FMU 1.
-For FMU 1, the `Error Flag` argument is set to `PRIMARY_ERROR_FLAG`, which means that FMU detects the specified transmission error.
+For FMU 1, the `Error Flag` argument is set to `PRIMARY_ERROR_FLAG`, which means that FMU 1 detects the specified transmission error.
 
 .Successful and unsuccessful cases of a CAN transmission.
 [#figure-can-transmission-acknowledge]
 image::can_transmission_acknowledge.svg[width=60%, align="center"]
 
-Normally, transmission failure cannot occur during a simulated bus transmission.
-Most common kinds of errors are used to inject transmission errors, for example using the Bus Simulation FMU, for advanced test scenarios.
+Normally, transmission failures cannot occur during a simulated bus transmission.
+For advanced testing scenarios, common bus errors are used to inject transmission errors, e.g., by the Bus Simulation FMU.
 
 ===== CAN Arbitration without Buffering [[low-cut-can-example-can-arbitration-without-buffering]]
 <<#figure-can-arbitration-overview>> shows the realization of a CAN arbitration by using the `Arbitration Lost Behavior` option `DISCARD_AND_NOTIFY` within the `Configuration` operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
 In this situation, an arbitration is necessary to decide which frame should be sent in this case.
-Both frames are transferred to the Bus Simulation.
-Arbitration takes place within the Bus Simulation.
+Both frames are transferred to the Bus Simulation, where the arbitration is performed.
 In the example given, the two frames with CAN ID = 15 and CAN ID = 16 are analyzed and it is decided that CAN ID = 15 wins the arbitration.
 The Bus Simulation then calculates the transmission time for the CAN frame with CAN ID = 15.
-The next time the FMI `Event Mode` is called up for the Bus Simulation, the corresponding CAN frame is transmitted to FMU 2 and FMU 3.
-For CAN ID 16, FMU 2 is informed via an `Arbitration Lost` operation that this frame cannot be sent.
-FMU 1 gets a `Confirm` operation, because the specified frame with CAN ID 15 was successfully transmitted.
+The next time the FMI `Event Mode` is called for the Bus Simulation, the corresponding CAN frame is transmitted to FMU 2 and FMU 3.
+For CAN ID 16, FMU 2 is informed via an `Arbitration Lost` operation that this frame could not be sent.
+FMU 1 receives a `Confirm` operation, because the specified frame with CAN ID 15 was successfully transmitted.
 
 .Arbitration of CAN frames within Bus Simulation.
 [#figure-can-arbitration-overview]
@@ -360,11 +359,10 @@ image::can_arbitration_overview.svg[width=80%, align="center"]
 <<#figure-can-arbitration-overview-with-buffer>> shows the realization of a CAN arbitration by using the `Arbitration Lost Behavior` option `BUFFER_AND_RETRANSMIT` within the `Configuration` operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
 In this situation, an arbitration is necessary to decide which frame should be sent in this case.
-Both frames are transferred to the Bus Simulation.
-Arbitration takes place within the Bus Simulation.
+Both frames are transferred to the Bus Simulation, where the arbitration is performed.
 In the example given, the two frames with CAN ID = 15 and CAN ID = 16 are analyzed and it is decided that CAN ID = 15 wins the arbitration.
 The Bus Simulation then calculates the transmission time for the CAN frame with CAN ID = 15.
-The next time the FMI `Event Mode` is called up for the Bus Simulation, the corresponding CAN frame is transmitted to FMU 2 and FMU 3.
+The next time the FMI `Event Mode` is called for the Bus Simulation, the corresponding CAN frame is transmitted to FMU 2 and FMU 3.
 The `Transmit` operation of CAN ID 16 is buffered by the Bus Simulation and will be sent within the next time slot.
 The Bus Simulation does not return an `Arbitration Lost` operation to FMU 2.
 FMU 1 gets a `Confirm` operation, because the specified frame with CAN ID 15 was successfully transmitted.
@@ -375,34 +373,35 @@ image::can_arbitration_overview_with_buffer.svg[width=80%, align="center"]
 
 ==== Realization of CAN Error Handling [[low-cut-can-realization-of-can-error-handling]]
 This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on `Bus Error` operations.
-Each Network FMU will provide its own Transmit Error Counter (TEC), Receive Error Counter (REC) and current CAN node state.
-The values for TEC and REC will be increased and decreased with respect to the `Error Code`, `Is Sender` and `Error Flag` arguments of a `Bus Error` operation and are inherited from the original CAN error confinement rules.
+According to the original CAN error confinement rules, each Network FMU provides its own Transmit Error Counter (TEC), Receive Error Counter (REC) and current CAN node state.
+The values for TEC and REC will be increased and decreased with respect to the `Error Code`, `Is Sender` and `Error Flag` arguments of a `Bus Error` operation.
 Based on the values of TEC and REC, the CAN controller moves in the following state machine:
 
 .CAN node state machine.
 [#figure-can-error-state-machine]
 image::can_error_state_machine.svg[width=60%, align="center"]
 
-This CAN node state machine and the related TEC and REC values have to be included within the Network FMUs.
+This CAN node state machine and the related TEC and REC values have to be implemented in the Network FMUs.
 `Bus Error` operations shall be directly used to maintain the TEC and REC values.
 The Network FMU shall react on the `Bus Error` operations that the Bus Simulation provides, based on the following rule set:
 
-* When an FMU gets a `Bus Error` operation where the arguments `Is Sender = FALSE` and `Error Flag = SECONDARY_ERROR_FLAG` and also `Error Code != BROKEN_ERROR_FRAME`, the REC shall be increased by 1.
-* When an FMU gets a `Bus Error` operation where the arguments (`Is Sender = FALSE` and `Error Flag = PRIMARY_ERROR_FLAG`) or `Error Code = BROKEN_ERROR_FRAME`, the REC shall be increased by 8.
-* When an FMU gets a `Bus Error` operation where the arguments `Is Sender = TRUE` or `Error Code = BROKEN_ERROR_FRAME`, the TEC shall be increased by 8.
+* When an FMU receives a `Bus Error` operation where the arguments `Is Sender = FALSE` and `Error Flag = SECONDARY_ERROR_FLAG` and also `Error Code != BROKEN_ERROR_FRAME`, REC shall be increased by 1.
+* When an FMU receives a `Bus Error` operation where the arguments (`Is Sender = FALSE` and `Error Flag = PRIMARY_ERROR_FLAG`) or `Error Code = BROKEN_ERROR_FRAME`, REC shall be increased by 8.
+* When an FMU receives a `Bus Error` operation where the arguments `Is Sender = TRUE` or `Error Code = BROKEN_ERROR_FRAME`, TEC shall be increased by 8.
 Exception: `Status =  ERROR_PASSIVE` and `Error Code = ACK_ERROR`.
-* When an FMU provides a `Transmit` operation and receives a `Confirm` operation for it, the TEC shall be decreased by 1 unless it was already 0.
-* When an FMU gets a `Transmit` operation, the REC shall be decreased by 1, if it was between 1 and 127.
-If the REC was 0, it stays 0, and if it was greater than 127, then it will be set to the value between 119 and 127.
+* When an FMU provides a `Transmit` operation and receives a `Confirm` operation for it, TEC shall be decreased by 1 unless it was already 0.
+* When an FMU receives a `Transmit` operation, REC shall be decreased by 1, if it was between 1 and 127.
+If it was 0, it stays 0.
+If REC was greater than 127, it shall be set to any value between 119 and 127.
 
 A Network FMU communicates its current CAN node state via the `Status` operation by using the following rule set:
 
-* After the initialization of a Network FMU, the current CAN node state shall be set to `ERROR_ACTIVE` and communicate via `Status` operation to the Bus Simulation.
-* The current CAN node state of a Network FMU shall be set to `ERROR_PASSIVE` if the value of REC > 127 or TEC > 127 and communicate via `Status` operation to the Bus Simulation.
-* The current CAN node state of a Network FMU shall be set to `ERROR_ACTIVE` if the value of REC < 128 and TEC < 128 and communicate via `Status` operation to the Bus Simulation.
-* The current CAN node state of a Network FMU shall be set to `BUS_OFF` if the value of TEC > 255 and communicate via `Status` operation to the Bus Simulation.
-* The `BUS_OFF` status shall be set to `ERROR_ACTIVE` again when the Network FMU simulates a controller reset (optional) and has received in total 128 `Transmit` operations or `Bus Error` operations from the network.
+* After the initialization of a Network FMU, the current CAN node state shall be set to `ERROR_ACTIVE` and communicated via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `ERROR_PASSIVE` if the value of REC > 127 or TEC > 127 and shall be communicated via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `ERROR_ACTIVE` if the value of REC < 128 and TEC < 128 and shall be communicated via `Status` operation to the Bus Simulation.
+* The current CAN node state of a Network FMU shall be set to `BUS_OFF` if the value of TEC > 255 and shall be communicated via `Status` operation to the Bus Simulation.
+* The `BUS_OFF` status shall be set back to `ERROR_ACTIVE` when the Network FMU simulates a controller reset (optional) and has received a total of 128 `Transmit` or `Bus Error` operations from the network.
 
-If `org.fmi_standard.fmi_ls_bus.WaitForBusNotification` is set to `false`, the `Confirm` operation cannot be directly used as indicator to set the TEC value and will be incorrect under the rules outlined above.
-Also `Bus Error` operations are not available in this scenario, so that the values for TEC and REC automatically remain zero in this case.
-It is recommended to solve the error handling differently in this case or to disabling it completely within the specified Network FMU.
+If `org.fmi_standard.fmi_ls_bus.Can_BusNotifications` is set to `false`, the `Confirm` operation cannot be directly used as indicator to set the TEC value and will be incorrect under the rules outlined above.
+Also `Bus Error` operations are not available in this scenario, i.e. the values for TEC and REC remain zero.
+In this case, it is recommended to either implement error handling in a different manner or to disable it completely within the specified Network FMU.
