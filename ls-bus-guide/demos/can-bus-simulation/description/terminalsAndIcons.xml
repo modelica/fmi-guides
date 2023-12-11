@@ -8,16 +8,16 @@
               name="Node1"
               description="CAN bus terminal definition">
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node1::Rx_Clock"
+                              variableName="Node1.Rx_Clock"
                               memberName="Rx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node1::Rx_Data"
+                              variableName="Node1.Rx_Data"
                               memberName="Rx_Data" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node1::Tx_Clock"
+                              variableName="Node1.Tx_Clock"
                               memberName="Tx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node1::Tx_Data"
+                              variableName="Node1.Tx_Data"
                               memberName="Tx_Data" />
     </Terminal>
     <Terminal terminalKind="org.fmi-ls-bus.network-terminal"
@@ -25,16 +25,16 @@
               name="Node2"
               description="CAN bus terminal definition">
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node2::Rx_Clock"
+                              variableName="Node2.Rx_Clock"
                               memberName="Rx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node2::Rx_Data"
+                              variableName="Node2.Rx_Data"
                               memberName="Rx_Data" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node2::Tx_Clock"
+                              variableName="Node2.Tx_Clock"
                               memberName="Tx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="Node2::Tx_Data"
+                              variableName="Node2.Tx_Data"
                               memberName="Tx_Data" />
     </Terminal>
   </Terminals>

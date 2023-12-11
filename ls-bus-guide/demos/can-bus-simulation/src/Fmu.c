@@ -241,6 +241,33 @@ FMI3_Export fmi3Status fmi3GetClock(fmi3Instance instance,
     return fmi3OK;
 }
 
+FMI3_Export fmi3Status fmi3SetFloat64(fmi3Instance instance,
+                                      const fmi3ValueReference valueReferences[],
+                                      size_t nValueReferences,
+                                      const fmi3Float64 values[],
+                                      size_t nValues)
+{
+    FmuInstance* fmuInstance = instance;
+
+    if (nValueReferences != nValues)
+    {
+        TerminateWithError(instance, "fmi3SetFloat64: Invalid call");
+        return fmi3Error;
+    }
+
+    for (size_t i = 0; i < nValueReferences; i++)
+    {
+        if (!App_SetFloat64(fmuInstance, valueReferences[i], values[i]))
+        {
+            TerminateWithError(instance, "fmi3SetFloat64: Invalid call with value reference %u and value %f",
+                               valueReferences[i], values[i]);
+            return fmi3Error;
+        }
+    }
+
+    return fmi3OK;
+}
+
 FMI3_Export fmi3Status fmi3SetBoolean(fmi3Instance instance,
                                       const fmi3ValueReference valueReferences[],
                                       size_t nValueReferences,
@@ -265,7 +292,7 @@ FMI3_Export fmi3Status fmi3SetBoolean(fmi3Instance instance,
         }
     }
 
-    return fmi3Error;
+    return fmi3OK;
 }
 
 FMI3_Export fmi3Status fmi3SetBinary(fmi3Instance instance,
@@ -640,15 +667,6 @@ FMI3_Export fmi3Status fmi3SetFloat32(fmi3Instance instance,
                                       const fmi3ValueReference valueReferences[],
                                       size_t nValueReferences,
                                       const fmi3Float32 values[],
-                                      size_t nValues)
-{
-    return INVALID_CALL_IF_NONZERO(nValueReferences, instance);
-}
-
-FMI3_Export fmi3Status fmi3SetFloat64(fmi3Instance instance,
-                                      const fmi3ValueReference valueReferences[],
-                                      size_t nValueReferences,
-                                      const fmi3Float64 values[],
                                       size_t nValues)
 {
     return INVALID_CALL_IF_NONZERO(nValueReferences, instance);

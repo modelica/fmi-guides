@@ -20,7 +20,9 @@ typedef enum
     FMU_VAR_NODE2_RX_DATA = 4,
     FMU_VAR_NODE2_TX_DATA = 5,
     FMU_VAR_NODE2_RX_CLOCK = 6,
-    FMU_VAR_NODE2_TX_CLOCK = 7
+    FMU_VAR_NODE2_TX_CLOCK = 7,
+
+    FMU_VAR_BUS_ERROR_PROBABILITY = 255
 } FmuVariables;
 
 
@@ -83,6 +85,7 @@ typedef struct
     FrameQueue FrameQueue;
 
     fmi3LsBusCanBaudrate BaudRate;
+    fmi3LsBusCanArbitrationLostBehavior ArbitrationLostBehavior;
 } NodeData;
 
 
@@ -91,13 +94,15 @@ typedef struct
  */
 struct AppType
 {
-    fmi3LsBusCanBaudrate BusBaudRate;
+    fmi3LsBusCanBaudrate BusBaudRate; /**< Current baud rate of the simulated bus. When set to 0, bus communication is disabled. */
+    fmi3Float64 BusErrorProbability; /**< Probability that a simulated error occurs for a transmitted frame. */
 
     NodeData Nodes[NumNodes];
 
     fmi3UInt64 TxClockCounter;
     fmi3UInt64 TxClockResolution;
 
+    bool TxClockSet;
     bool DiscreteStatesEvaluated;
 };
 
@@ -166,7 +171,7 @@ AppType* App_Instantiate(void)
         return NULL;
     }
 
-    // Initialize transmit and receive buffers
+    // Initialize transmit and receive buffers and other node data
     for (NodeIdType i = 0; i < NumNodes; i++)
     {
         FMI3_LS_BUS_BUFFER_INFO_INIT(&app->Nodes[i].RxBufferInfo, app->Nodes[i].RxBuffer,
@@ -175,6 +180,9 @@ AppType* App_Instantiate(void)
                                      sizeof(app->Nodes[i].TxBuffer));
 
         app->Nodes[i].TxClockQualifier = fmi3IntervalNotYetKnown;
+
+        app->Nodes[i].ArbitrationLostBehavior =
+            FMI3_LS_BUS_CAN_CONFIG_PARAM_ARBITRATION_LOST_BEHAVIOR_BUFFER_AND_RETRANSMIT;
     }
 
     return app;
@@ -193,6 +201,14 @@ bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targ
 }
 
 
+/**
+ * \brief Finds the next frame to be transmitted on the simulated CAN cluster.
+ *
+ * \param[in] instance The FMU instance.
+ * \param[out] nextFrame The next frame to be transmitted.
+ * \param[out] originator The ID of the node transmitting the frame.
+ * \return Whether a frame to be transmitted could be found.
+ */
 static bool App_GetNextFrame(const FmuInstance* instance, const FrameQueueEntry** nextFrame, NodeIdType* originator)
 {
     *nextFrame = NULL;
@@ -230,7 +246,7 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
                     const fmi3LsBusCanOperationCanTransmit* transmitOp = (fmi3LsBusCanOperationCanTransmit*)operation;
                     LogFmuMessage(instance, fmi3OK, "Info", "Received CAN frame with ID %u and length %u from node %u",
                                   transmitOp->id, transmitOp->dataLength, i + 1);
-                    FrameQueue_Enqueue(&instance->App->Nodes[0].FrameQueue, transmitOp);
+                    FrameQueue_Enqueue(&instance->App->Nodes[i].FrameQueue, transmitOp);
                 }
                 else if (operation->type == FMI3_LS_BUS_CAN_OP_CONFIGURATION)
                 {
@@ -238,8 +254,21 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
                     if (configOp->parameterType == FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_CAN_BAUDRATE)
                     {
                         LogFmuMessage(instance, fmi3OK, "Info",
-                                      "Nodes %u configured baud rate %u", i, configOp->baudrate);
+                                      "Node %u configured baud rate %u", i, configOp->baudrate);
                         instance->App->Nodes[i].BaudRate = configOp->baudrate;
+                    }
+                    else if (configOp->parameterType == FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_ARBITRATION_LOST_BEHAVIOR)
+                    {
+                        LogFmuMessage(instance, fmi3OK, "Info", "Node %u configured arbitration lost behavior to %s",
+                                      i + 1,
+                                      configOp->arbitrationLostBehavior ==
+                                      FMI3_LS_BUS_CAN_CONFIG_PARAM_ARBITRATION_LOST_BEHAVIOR_BUFFER_AND_RETRANSMIT
+                                          ? "BUFFER_AND_RETRANSMIT"
+                                          : configOp->arbitrationLostBehavior ==
+                                          FMI3_LS_BUS_CAN_CONFIG_PARAM_ARBITRATION_LOST_BEHAVIOR_DISCARD_AND_NOTIFY
+                                          ? "DISCARD_AND_NOTIFY"
+                                          : "INVALID");
+                        instance->App->Nodes[i].ArbitrationLostBehavior = configOp->arbitrationLostBehavior;
                     }
                 }
             }
@@ -279,18 +308,55 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
         if (App_GetNextFrame(instance, &nextFrame, &nextFrameOriginator))
         {
             FrameQueue_Pop(&instance->App->Nodes[nextFrameOriginator].FrameQueue);
+
+            // Randomly decide whether we want to simulate a bus error for this frame
+            // Note: rand() is used here for simplicity's sake but not recommended to achieve reproducible simulations
+            const fmi3Float64 busErrorRandom =
+                (fmi3Float64)rand() /  // NOLINT(clang-diagnostic-bad-function-cast, concurrency-mt-unsafe)
+                (fmi3Float64)RAND_MAX;
+            const bool simulateError = busErrorRandom < instance->App->BusErrorProbability;
+
             for (NodeIdType i = 0; i < NumNodes; i++)
             {
-                // The originator of the frame receives a confirm, everyone else receives the frame
-                if (i == nextFrameOriginator)
+                if (!simulateError)
                 {
-                    FMI3_LS_BUS_CAN_CREATE_OP_CONFIRM(&instance->App->Nodes[i].TxBufferInfo, nextFrame->Id);
+                    // The originator of the frame receives a confirm, everyone else receives the frame
+                    if (i == nextFrameOriginator)
+                    {
+                        LogFmuMessage(instance, fmi3OK, "Trace",
+                                      "Sending confirmation for CAN frame with ID %u to node %u", nextFrame->Id, i + 1);
+                        FMI3_LS_BUS_CAN_CREATE_OP_CONFIRM(&instance->App->Nodes[i].TxBufferInfo, nextFrame->Id);
+                    }
+                    else
+                    {
+                        FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&instance->App->Nodes[i].TxBufferInfo, nextFrame->Id,
+                                                               nextFrame->Ide, nextFrame->Rtr, nextFrame->DataLength,
+                                                               nextFrame->Data);
+                        LogFmuMessage(instance, fmi3OK, "Trace", "Sending CAN frame with ID %u to node %u", nextFrame->Id,
+                                      i + 1);
+                    }
                 }
                 else
                 {
-                    FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT(&instance->App->Nodes[i].TxBufferInfo, nextFrame->Id,
-                                                           nextFrame->Ide, nextFrame->Rtr, nextFrame->DataLength,
-                                                           nextFrame->Data);
+                    LogFmuMessage(instance, fmi3OK, "Trace", "Sending error notification for CAN frame with ID %u to node %u",
+                                  nextFrame->Id, i + 1);
+                    FMI3_LS_BUS_CAN_CREATE_OP_BUS_ERROR(&instance->App->Nodes[i].TxBufferInfo, nextFrame->Id,
+                        FMI3_LS_BUS_CAN_BUSERROR_PARAM_ERROR_CODE_CRC_ERROR,
+                        FMI3_LS_BUS_CAN_BUSERROR_PARAM_ERROR_FLAG_PRIMARY_ERROR_FLAG,
+                        i == nextFrameOriginator ? FMI3_LS_BUS_TRUE : FMI3_LS_BUS_FALSE);
+                }
+
+                // If the node still has frames to transmit but configured an arbitration behavior of DISCARD_AND_NOTIFY,
+                // discard its frames and notify it since it has lost arbitration.
+                while (FrameQueue_Peek(&instance->App->Nodes[i].FrameQueue) &&
+                    instance->App->Nodes[i].ArbitrationLostBehavior ==
+                    FMI3_LS_BUS_CAN_CONFIG_PARAM_ARBITRATION_LOST_BEHAVIOR_DISCARD_AND_NOTIFY)
+                {
+                    const FrameQueueEntry* droppedFrame = FrameQueue_Pop(&instance->App->Nodes[i].FrameQueue);
+                    FMI3_LS_BUS_CAN_CREATE_OP_ARBITRATION_LOST(&instance->App->Nodes[i].TxBufferInfo, droppedFrame->Id);
+                    LogFmuMessage(instance, fmi3OK, "Trace",
+                                  "Sending arbitration lost notification for CAN frame with ID %u to node %u",
+                                  droppedFrame->Id, i + 1);
                 }
             }
         }
@@ -303,6 +369,7 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
         // Reset the TX clock state
         instance->App->Nodes[0].TxClockQualifier = fmi3IntervalNotYetKnown;
         instance->App->Nodes[1].TxClockQualifier = fmi3IntervalNotYetKnown;
+        instance->App->TxClockSet = false;
     }
     else if (instance->App->Nodes[0].TxClock == fmi3ClockActive || instance->App->Nodes[1].TxClock == fmi3ClockActive)
     {
@@ -311,15 +378,20 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
                       "TX clocks for nodes ticked independently, this is not supported by this FMU.");
     }
 
-    // Schedule next transmission
-    const FrameQueueEntry* nextFrame;
-    NodeIdType nextFrameOriginator;
-    if (App_GetNextFrame(instance, &nextFrame, &nextFrameOriginator))
+    // Check that the next transmit interval has not already been set, otherwise we may postpone it by accident.
+    if (!instance->App->TxClockSet)
     {
-        instance->App->Nodes[0].TxClockQualifier = fmi3IntervalChanged;
-        instance->App->Nodes[1].TxClockQualifier = fmi3IntervalChanged;
-        instance->App->TxClockCounter = 44 + nextFrame->DataLength;
-        instance->App->TxClockResolution = instance->App->BusBaudRate;
+        // Schedule next transmission
+        const FrameQueueEntry* nextFrame;
+        NodeIdType nextFrameOriginator;
+        if (App_GetNextFrame(instance, &nextFrame, &nextFrameOriginator))
+        {
+            instance->App->Nodes[0].TxClockQualifier = fmi3IntervalChanged;
+            instance->App->Nodes[1].TxClockQualifier = fmi3IntervalChanged;
+            instance->App->TxClockCounter = 44 + nextFrame->DataLength;
+            instance->App->TxClockResolution = instance->App->BusBaudRate;
+            instance->App->TxClockSet = true;
+        }
     }
 
     instance->App->DiscreteStatesEvaluated = true;
@@ -351,6 +423,23 @@ void App_UpdateDiscreteStates(FmuInstance* instance)
 
 bool App_SetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Boolean value)
 {
+    return false;
+}
+
+
+bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64 value)
+{
+    if (valueReference == FMU_VAR_BUS_ERROR_PROBABILITY)
+    {
+        if (instance->App->BusErrorProbability != value)  // NOLINT(clang-diagnostic-float-equal)
+        {
+            LogFmuMessage(instance, fmi3OK, "Info",
+                          "Probability for simulated bus errors has been set to %.4e", value);
+            instance->App->BusErrorProbability = value;
+        }
+        return true;
+    }
+
     return false;
 }
 

@@ -168,6 +168,12 @@ bool App_SetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fm
 }
 
 
+bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64 value)
+{
+    return false;
+}
+
+
 bool App_SetBinary(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Binary value, size_t valueLength)
 {
     if (valueReference == FMU_VAR_RX_DATA)
