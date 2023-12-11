@@ -43,7 +43,7 @@
   <ModelVariables>
     <Float64 name="time" valueReference="1024" causality="independent" variability="continuous" description="Simulation time" />
 
-    <Binary name="Node1::Rx_Data"
+    <Binary name="Node1.Rx_Data"
         valueReference="0"
         causality="input"
         variability="discrete"
@@ -55,7 +55,7 @@
         <Start value="" />
     </Binary>
 
-    <Binary name="Node1::Tx_Data"
+    <Binary name="Node1.Tx_Data"
         valueReference="1"
         causality="output"
         variability="discrete"
@@ -65,10 +65,10 @@
         mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
     </Binary>
 
-    <Clock name="Node1::Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
-    <Clock name="Node1::Tx_Clock" valueReference="3" causality="input" intervalVariability="countdown" />
+    <Clock name="Node1.Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
+    <Clock name="Node1.Tx_Clock" valueReference="3" causality="input" intervalVariability="countdown" />
 
-    <Binary name="Node2::Rx_Data"
+    <Binary name="Node2.Rx_Data"
             valueReference="4"
             causality="input"
             variability="discrete"
@@ -80,7 +80,7 @@
       <Start value="" />
     </Binary>
 
-    <Binary name="Node2::Tx_Data"
+    <Binary name="Node2.Tx_Data"
             valueReference="5"
             causality="output"
             variability="discrete"
@@ -90,8 +90,10 @@
             mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
     </Binary>
 
-    <Clock name="Node2::Rx_Clock" valueReference="6" causality="input" intervalVariability="triggered" />
-    <Clock name="Node2::Tx_Clock" valueReference="7" causality="input" intervalVariability="countdown" />
+    <Clock name="Node2.Rx_Clock" valueReference="6" causality="input" intervalVariability="triggered" />
+    <Clock name="Node2.Tx_Clock" valueReference="7" causality="input" intervalVariability="countdown" />
+    
+    <Float64 name="BusErrorProbability" valueReference="255" causality="input" variability="discrete" start="0.0" />
   </ModelVariables>
 
   <ModelStructure>

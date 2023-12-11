@@ -42,7 +42,7 @@
   <ModelVariables>
     <Float64 name="time" valueReference="1024" causality="independent" variability="continuous" description="Simulation time" />
 
-    <Binary name="CanChannel::Rx_Data"
+    <Binary name="CanChannel.Rx_Data"
         valueReference="0"
         causality="input"
         variability="discrete"
@@ -54,7 +54,7 @@
         <Start value="" />
     </Binary>
 
-    <Binary name="CanChannel::Tx_Data"
+    <Binary name="CanChannel.Tx_Data"
         valueReference="1"
         causality="output"
         variability="discrete"
@@ -64,8 +64,8 @@
         mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
     </Binary>
 
-    <Clock name="CanChannel::Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
-    <Clock name="CanChannel::Tx_Clock" valueReference="3" causality="output" intervalVariability="triggered" />
+    <Clock name="CanChannel.Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
+    <Clock name="CanChannel.Tx_Clock" valueReference="3" causality="output" intervalVariability="triggered" />
 
     <Boolean name="org.fmi_standard.fmi_ls_bus.Can_BusNotifications" valueReference="128" causality="structuralParameter" variability="fixed" start="false" />
   </ModelVariables>

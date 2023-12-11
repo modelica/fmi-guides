@@ -8,16 +8,16 @@
               name="CanChannel"
               description="CAN bus terminal definition">
       <TerminalMemberVariable variableKind="signal"
-                              variableName="CanChannel::Rx_Clock"
+                              variableName="CanChannel.Rx_Clock"
                               memberName="Rx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="CanChannel::Rx_Data"
+                              variableName="CanChannel.Rx_Data"
                               memberName="Rx_Data" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="CanChannel::Tx_Clock"
+                              variableName="CanChannel.Tx_Clock"
                               memberName="Tx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-                              variableName="CanChannel::Tx_Data"
+                              variableName="CanChannel.Tx_Data"
                               memberName="Tx_Data" />
     </Terminal>
   </Terminals>

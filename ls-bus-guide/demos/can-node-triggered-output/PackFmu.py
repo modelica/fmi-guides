@@ -9,7 +9,7 @@ FMU_PATH = Path('DemoCanNodeTriggeredOutput.fmu')
 
 # Repository to fetch the LS-BUS headers from
 LS_BUS_REPO = 'modelica/fmi-ls-bus'
-LS_BUS_REV = '4680d63c0705fbf9076f97128e913f464b442f53'
+LS_BUS_REV = '7d277c5d55b294f69d61627b1968f39d7ff9fc4d'
 LS_BUS_HEADERS = [ 'fmi3LsBus.h', 'fmi3LsBusCan.h', 'fmi3LsBusUtil.h', 'fmi3LsBusUtilCan.h' ]
 
 

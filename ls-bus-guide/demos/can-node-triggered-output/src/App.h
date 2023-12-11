@@ -55,6 +55,15 @@ void App_UpdateDiscreteStates(FmuInstance* instance);
 bool App_SetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Boolean value);
 
 /**
+ * \brief Sets the value of a float64 input variable.
+ * \note Called as part of fmi3SetFloat64.
+ * \param[in] instance The instance data of the application.
+ * \param[in] valueReference The value reference of the variable.
+ * \param[in] value The new value of the variable.
+ */
+bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64 value);
+
+/**
  * \brief Sets the value of a binary input variable.
  * \note Called as part of fmi3SetBinary.
  * \param[in] instance The instance data of the application.
