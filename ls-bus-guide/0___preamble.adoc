@@ -6,7 +6,7 @@ https://github.com/modelica/fmi-guides/releases[Releases] and https://github.com
 {empty} +
 {empty}
 
-Copyright (C) 2021-2023 The Modelica Association Project FMI.
+Copyright (C) 2021-2024 The Modelica Association Project FMI.
 
 This document is licensed under the Attribution-ShareAlike 4.0 International license.
 The code is released under the 2-Clause BSD License.
