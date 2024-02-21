@@ -241,14 +241,14 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
             fmi3LsBusOperationHeader* operation = NULL;
             while (FMI3_LS_BUS_READ_NEXT_OPERATION(&instance->App->Nodes[i].RxBufferInfo, operation))
             {
-                if (operation->type == FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT)
+                if (operation->opCode == FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT)
                 {
                     const fmi3LsBusCanOperationCanTransmit* transmitOp = (fmi3LsBusCanOperationCanTransmit*)operation;
                     LogFmuMessage(instance, fmi3OK, "Info", "Received CAN frame with ID %u and length %u from node %u",
                                   transmitOp->id, transmitOp->dataLength, i + 1);
                     FrameQueue_Enqueue(&instance->App->Nodes[i].FrameQueue, transmitOp);
                 }
-                else if (operation->type == FMI3_LS_BUS_CAN_OP_CONFIGURATION)
+                else if (operation->opCode == FMI3_LS_BUS_CAN_OP_CONFIGURATION)
                 {
                     const fmi3LsBusCanOperationConfiguration* configOp = (fmi3LsBusCanOperationConfiguration*)operation;
                     if (configOp->parameterType == FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_CAN_BAUDRATE)

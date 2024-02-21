@@ -125,17 +125,17 @@ void App_UpdateDiscreteStates(FmuInstance* instance)
         fmi3LsBusOperationHeader* operation = NULL;
         while (FMI3_LS_BUS_READ_NEXT_OPERATION(&instance->App->RxBufferInfo, operation))
         {
-            if (operation->type == FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT)
+            if (operation->opCode == FMI3_LS_BUS_CAN_OP_CAN_TRANSMIT)
             {
                 const fmi3LsBusCanOperationCanTransmit* transmitOp = (fmi3LsBusCanOperationCanTransmit*)operation;
                 LogFmuMessage(instance, fmi3OK, "Info", "Received CAN frame with ID %u and length %u", transmitOp->id,
                               transmitOp->dataLength);
             }
-            else if (operation->type == FMI3_LS_BUS_CAN_OP_CONFIGURATION ||
-                     operation->type == FMI3_LS_BUS_CAN_OP_STATUS ||
-                     operation->type == FMI3_LS_BUS_CAN_OP_CONFIRM ||
-                     operation->type == FMI3_LS_BUS_CAN_OP_BUS_ERROR ||
-                     operation->type == FMI3_LS_BUS_CAN_OP_ARBITRATION_LOST)
+            else if (operation->opCode == FMI3_LS_BUS_CAN_OP_CONFIGURATION ||
+                     operation->opCode == FMI3_LS_BUS_CAN_OP_STATUS ||
+                     operation->opCode == FMI3_LS_BUS_CAN_OP_CONFIRM ||
+                     operation->opCode == FMI3_LS_BUS_CAN_OP_BUS_ERROR ||
+                     operation->opCode == FMI3_LS_BUS_CAN_OP_ARBITRATION_LOST)
             {
                 // Ignore
             }
