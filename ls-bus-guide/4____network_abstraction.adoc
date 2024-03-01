@@ -355,6 +355,9 @@ FMU 1 receives a `Confirm` operation, because the specified frame with CAN ID 15
 [#figure-can-arbitration-overview]
 image::can_arbitration_overview.svg[width=80%, align="center"]
 
+_[Note: The number and use of super-dense time instants may differ depending on the implementation.
+Only one possible path is given here, which is permitted by the FMI specification.]_
+
 ===== CAN Arbitration with Buffering [[low-cut-can-example-can-arbitration-with-buffering]]
 <<#figure-can-arbitration-overview-with-buffer>> shows the realization of a CAN arbitration by using the `Arbitration Lost Behavior` option `BUFFER_AND_RETRANSMIT` within the `Configuration` operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
@@ -370,6 +373,9 @@ FMU 1 gets a `Confirm` operation, because the specified frame with CAN ID 15 was
 .Arbitration of CAN frames with buffering within Bus Simulation.
 [#figure-can-arbitration-overview-with-buffer]
 image::can_arbitration_overview_with_buffer.svg[width=80%, align="center"]
+
+_[Note: The number and use of super-dense time instants may differ depending on the implementation.
+Only one possible path is given here, which is permitted by the FMI specification.]_
 
 ==== Realization of CAN Error Handling [[low-cut-can-realization-of-can-error-handling]]
 This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on `Bus Error` operations.

@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-06-02T10:25:24.859Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57" etag="Y-hQ1XDeLjY7WGcurQxg" version="21.3.6" type="device">
+<mxfile host="app.diagrams.net" modified="2024-01-02T12:31:46.094Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0" etag="pNSGVN_fZ0xV6MWjshBV" version="22.1.16" type="device">
   <diagram id="kgpKYQtTHZ0yAKxKKP6v" name="Page-1">
-    <mxGraphModel dx="1607" dy="905" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="382" dy="213" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -103,10 +103,10 @@
         <mxCell id="TJ8cURRopO99HcsGI5Q8-3" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="401" y="460" width="20" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="TJ8cURRopO99HcsGI5Q8-4" value="Super-dense&#xa;time iteration&#xa;(1)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
+        <mxCell id="TJ8cURRopO99HcsGI5Q8-4" value="Super-dense&#xa;time iteration&#xa;(t, 1)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="327" y="268" width="80" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="TJ8cURRopO99HcsGI5Q8-5" value="Super-dense&#xa;time iteration&#xa;(1)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
+        <mxCell id="TJ8cURRopO99HcsGI5Q8-5" value="Super-dense&#xa;time iteration&#xa;(t, 1)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="327" y="487" width="80" height="26" as="geometry" />
         </mxCell>
         <mxCell id="TJ8cURRopO99HcsGI5Q8-6" value="Event Mode" style="text;align=left;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
@@ -121,7 +121,7 @@
         <mxCell id="WQ29GB5LsVI4mir2wNij-17" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="401" y="546" width="20" height="114" as="geometry" />
         </mxCell>
-        <mxCell id="WQ29GB5LsVI4mir2wNij-18" value="Super-dense&#xa;time iteration&#xa;(2)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
+        <mxCell id="WQ29GB5LsVI4mir2wNij-18" value="Super-dense&#xa;time iteration&#xa;(t, 2)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="328" y="590" width="80" height="26" as="geometry" />
         </mxCell>
         <mxCell id="T2kxRcn2vWfKBakwWOv0-1" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;fontSize=11;fillColor=none;" parent="1" vertex="1">
@@ -173,13 +173,13 @@
         <mxCell id="T2kxRcn2vWfKBakwWOv0-10" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="401" y="716" width="20" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="T2kxRcn2vWfKBakwWOv0-11" value="Super-dense&#xa;time iteration&#xa;(1)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
+        <mxCell id="T2kxRcn2vWfKBakwWOv0-11" value="Super-dense&#xa;time iteration&#xa;(t, 1)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="327" y="743" width="80" height="26" as="geometry" />
         </mxCell>
         <mxCell id="T2kxRcn2vWfKBakwWOv0-12" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="401" y="802" width="20" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="T2kxRcn2vWfKBakwWOv0-13" value="Super-dense&#xa;time iteration&#xa;(2)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
+        <mxCell id="T2kxRcn2vWfKBakwWOv0-13" value="Super-dense&#xa;time iteration&#xa;(t, 2)" style="text;align=center;fontStyle=0;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="328" y="808" width="80" height="26" as="geometry" />
         </mxCell>
       </root>
