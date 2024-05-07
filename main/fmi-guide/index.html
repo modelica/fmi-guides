@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.21">
+<meta name="generator" content="Asciidoctor 2.0.22">
 <title>FMI 3.0 Implementers' Guide</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -590,8 +590,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-6797b5bbd4649f0357bf817a6f4229fee9ddc0e8,</span>
-<span id="revdate">2024-03-01</span>
+<span id="revnumber">version main-83f1d3ad4fcc9c041eb8b465dea7c0da5b329990,</span>
+<span id="revdate">2024-05-07</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -1050,7 +1050,82 @@ They should provide support for generating FMUs that contain multiple binary imp
 <p>Exporting implementations should document supported compilers, their versions, and required compiler flags and settings to compile generated source FMUs for common platforms.</p>
 </div>
 <div class="paragraph">
-<p>For FMI 3.0, the compilers and required compiler flags and settings should be placed in the <code>buildDescription.xml</code> file of the FMU to allow automated building from source as far as possible.</p>
+<p>For FMI 3.0, the languages, compilers and required compiler flags and settings should be placed in the <code>buildDescription.xml</code> file of the FMU to allow automated building from source as far as possible.
+The following are lists of commonly agreed upon names for languages and compilers, that should be used if no other values are more appropriate:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Languages</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">C90</dt>
+<dd>
+<p>ISO/IEC 9899:1990, which is technically identical to ANSI X3.159-1989 (sometimes termed C89)</p>
+</dd>
+<dt class="hdlist1">C95</dt>
+<dd>
+<p>ISO/IEC 9899:1990/AMD1:1995, i.e. ISO/IEC 9899:1990 as ammended by Ammendment 1, including wide characters, digraphs, and standard macro <code><em>STDC_VERSION</em></code></p>
+</dd>
+<dt class="hdlist1">C99</dt>
+<dd>
+<p>ISO/IEC 9899:1999</p>
+</dd>
+<dt class="hdlist1">C11</dt>
+<dd>
+<p>ISO/IEC 9899:2011</p>
+</dd>
+<dt class="hdlist1">C17</dt>
+<dd>
+<p>ISO/IEC 9899:2018</p>
+</dd>
+<dt class="hdlist1">C++98</dt>
+<dd>
+<p>ISO/IEC 14882:1998</p>
+</dd>
+<dt class="hdlist1">C++03</dt>
+<dd>
+<p>ISO/IEC 14882:2003</p>
+</dd>
+<dt class="hdlist1">C++11</dt>
+<dd>
+<p>ISO/IEC 14882:2011</p>
+</dd>
+<dt class="hdlist1">C++14</dt>
+<dd>
+<p>ISO/IEC 14882:2014</p>
+</dd>
+<dt class="hdlist1">C++17</dt>
+<dd>
+<p>ISO/IEC 14882:2017</p>
+</dd>
+<dt class="hdlist1">C++20</dt>
+<dd>
+<p>ISO/IEC 14882:2020</p>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">Compilers</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">VisualC</dt>
+<dd>
+<p>Microsoft Visual Studio C/C++ compiler</p>
+</dd>
+<dt class="hdlist1">gcc</dt>
+<dd>
+<p>GNU Compiler Collection (gcc) C/C++ compiler</p>
+</dd>
+<dt class="hdlist1">clang</dt>
+<dd>
+<p>CLANG LLVM-based C/C++ compiler</p>
+</dd>
+</dl>
+</div>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
 <p>When generating binary FMUs directly, the supported and used compilers, compiler flags, and settings should also be documented.
