@@ -2,7 +2,7 @@
 <fmiLayeredStandardManifest
 		xmlns:fmi-ls="http://fmi-standard.org/fmi-ls-manifest"
 		fmi-ls:fmi-ls-name="org.fmi-standard.fmi-ls-bus"
-		fmi-ls:fmi-ls-version="1.0.0-alpha.1"
+		fmi-ls:fmi-ls-version="1.0.0-beta.1"
 		fmi-ls:fmi-ls-description="Layered Standard for the simulation of bus communication on a signal or network abstraction based level."
 		isBusSimulationFMU="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
