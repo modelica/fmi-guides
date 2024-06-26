@@ -49,7 +49,7 @@
         initial="exact"
         maxSize="2048"
         clocks="2"
-        mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot1.0.0-beta.1&quot">
         <Dimension start="1" />
         <Start value="" />
     </Binary>
@@ -61,7 +61,7 @@
         initial="calculated"
         maxSize="2048"
         clocks="3"
-        mimeType="org.fmi-standard.fmi-ls-bus.v1.can">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot1.0.0-beta.1&quot">
     </Binary>
 
     <Clock name="CanChannel.Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
