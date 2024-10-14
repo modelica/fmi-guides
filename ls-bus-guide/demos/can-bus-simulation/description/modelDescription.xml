@@ -50,7 +50,7 @@
         initial="exact"
         maxSize="2048"
         clocks="2"
-        mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot1.0.0-beta.1&quot">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot;1.0.0-beta.1&quot;">
         <Dimension start="1" />
         <Start value="" />
     </Binary>
@@ -62,7 +62,7 @@
         initial="calculated"
         maxSize="2048"
         clocks="3"
-        mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot1.0.0-beta.1&quot">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot;1.0.0-beta.1&quot;">
     </Binary>
 
     <Clock name="Node1.Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
@@ -75,7 +75,7 @@
             initial="exact"
             maxSize="2048"
             clocks="6"
-            mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot1.0.0-beta.1&quot">
+            mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot;1.0.0-beta.1&quot;">
       <Dimension start="1" />
       <Start value="" />
     </Binary>
@@ -87,7 +87,7 @@
             initial="calculated"
             maxSize="2048"
             clocks="7"
-            mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot1.0.0-beta.1&quot">
+            mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot;1.0.0-beta.1&quot;">
     </Binary>
 
     <Clock name="Node2.Rx_Clock" valueReference="6" causality="input" intervalVariability="triggered" />
