@@ -61,7 +61,7 @@ typedef struct
 /**
  * \brief Type identifying bus nodes.
  */
-typedef uint32_t NodeIdType;
+typedef fmi3UInt32 NodeIdType;
 
 
 enum { NumNodes = 2 /**< Number of terminals for attaching nodes to this bus simulation. */ };
