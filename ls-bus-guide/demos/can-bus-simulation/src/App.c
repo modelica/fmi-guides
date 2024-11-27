@@ -125,6 +125,8 @@ static bool FrameQueue_Enqueue(FrameQueue* queue, const fmi3LsBusCanOperationCan
     queue->Entries[queue->WritePos].Rtr = transmitOp->rtr;
     queue->Entries[queue->WritePos].DataLength = transmitOp->dataLength;
 
+    memcpy(queue->Entries[queue->WritePos].Data, transmitOp->data, transmitOp->dataLength);
+
     queue->WritePos = FRAME_QUEUE_INCREMENT(queue->WritePos, FrameQueueSize);
 
     return true;
