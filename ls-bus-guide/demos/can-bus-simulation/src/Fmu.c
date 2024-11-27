@@ -392,7 +392,12 @@ FMI3_Export fmi3Status fmi3GetIntervalDecimal(fmi3Instance instance,
                                valueReferences[i]);
             return fmi3Error;
         }
-        intervals[i] = (fmi3Float64)counter / (fmi3Float64)resolution;
+
+        if (resolution <= 0) {
+            qualifiers[i] = fmi3IntervalNotYetKnown;
+        } else {
+            intervals[i] = (fmi3Float64)counter / (fmi3Float64)resolution;
+        }
     }
 
     return fmi3OK;
