@@ -51,7 +51,6 @@
         maxSize="2048"
         clocks="2"
         mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot;1.0.0-beta.1&quot;">
-        <Dimension start="1" />
         <Start value="" />
     </Binary>
 
@@ -76,7 +75,6 @@
             maxSize="2048"
             clocks="6"
             mimeType="application/org.fmi-standard.fmi-ls-bus.can; version=&quot;1.0.0-beta.1&quot;">
-      <Dimension start="1" />
       <Start value="" />
     </Binary>
 
