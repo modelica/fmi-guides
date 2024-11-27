@@ -125,6 +125,8 @@ static bool FrameQueue_Enqueue(FrameQueue* queue, const fmi3LsBusCanOperationCan
     queue->Entries[queue->WritePos].Rtr = transmitOp->rtr;
     queue->Entries[queue->WritePos].DataLength = transmitOp->dataLength;
 
+    memcpy(queue->Entries[queue->WritePos].Data, transmitOp->data, transmitOp->dataLength);
+
     queue->WritePos = FRAME_QUEUE_INCREMENT(queue->WritePos, FrameQueueSize);
 
     return true;
@@ -254,7 +256,7 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
                     if (configOp->parameterType == FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_CAN_BAUDRATE)
                     {
                         LogFmuMessage(instance, fmi3OK, "Info",
-                                      "Node %u configured baud rate %u", i, configOp->baudrate);
+                                      "Node %u configured baud rate %u", i + 1, configOp->baudrate);
                         instance->App->Nodes[i].BaudRate = configOp->baudrate;
                     }
                     else if (configOp->parameterType == FMI3_LS_BUS_CAN_CONFIG_PARAM_TYPE_ARBITRATION_LOST_BEHAVIOR)
