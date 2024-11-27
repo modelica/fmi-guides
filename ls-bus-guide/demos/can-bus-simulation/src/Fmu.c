@@ -420,6 +420,10 @@ FMI3_Export fmi3Status fmi3GetIntervalFraction(fmi3Instance instance,
                                valueReferences[i]);
             return fmi3Error;
         }
+
+        if (resolutions[i] <= 0) {
+            qualifiers[i] = fmi3IntervalNotYetKnown;
+        }
     }
 
     return fmi3OK;
