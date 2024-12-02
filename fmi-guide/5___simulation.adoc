@@ -61,6 +61,10 @@ With FMI 2.0 Co-Simulation FMUs do not support 0-size time steps in any case.
 With FMI 3.0, Co-Simulation FMUs can support event handling explicitly via the `hasEventMode` capability flag.
 Importers can make use of this feature by passing `fmi3True` for the `eventModeUsed` argument of the `fmi3InstantiateCoSimulation` call.
 
+=== Time increment
+
+An accurate simulation is dependent on an accurate increment of time. The importer must therefore set the current simulation time in a non-error-cumulative manner. As the actual implementation of the time increment is importer specific and unknown to the imported FMU, the FMU itself should not make any assumptions about the precision of the next time steps.
+
 === Support for Solvers
 
 Importing implementations should support a wide variety of solver algorithms, in order to support Model-Exchange FMUs as fully as possible.
