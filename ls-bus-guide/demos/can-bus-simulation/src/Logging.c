@@ -9,9 +9,6 @@
 enum { LOG_BUFFER_SIZE = 4096 };
 
 
-#if defined(__clang__) || defined(__GNUC__)
-__attribute__((format(printf, 4, 0)))
-#endif
 void LogFmuMessageV(fmi3Instance instance,
                     fmi3Status status,
                     fmi3String category,
@@ -31,9 +28,6 @@ void LogFmuMessageV(fmi3Instance instance,
 }
 
 
-#if defined(__clang__) || defined(__GNUC__)
-__attribute__((format(printf, 4, 5)))
-#endif
 void LogFmuMessage(fmi3Instance instance,
                    fmi3Status status,
                    fmi3String category,
@@ -47,9 +41,7 @@ void LogFmuMessage(fmi3Instance instance,
 }
 
 
-#if defined(__clang__) || defined(__GNUC__)
-__attribute__((format(printf, 2, 3)))
-#endif
+
 fmi3Status TerminateWithError(fmi3Instance instance,
                               fmi3String message,
                               ...)
