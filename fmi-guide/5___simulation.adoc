@@ -63,7 +63,10 @@ Importers can make use of this feature by passing `fmi3True` for the `eventModeU
 
 === Time increment
 
-An accurate simulation is dependent on an accurate increment of time. The importer must therefore set the current simulation time in a non-error-cumulative manner. As the actual implementation of the time increment is importer specific and unknown to the imported FMU, the FMU itself should not make any assumptions about the precision of the next time steps.
+An accurate simulation is dependent on an accurate increment of time.
+The importer must therefore set the current simulation time in a non-error-cumulative manner.
+As the actual implementation of the time increment is importer specific and unknown to the imported FMU, the FMU itself should not make any assumptions about the precision of the next time steps.
+This can mean, for example, that even in a fixed-step simulation the individual `communicationStepSize` values will differ by very small amounts.
 
 === Support for Solvers
 
