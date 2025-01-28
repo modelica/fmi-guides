@@ -590,7 +590,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-50baf5f011237908e4abdb3c592f1a045a5fa474,</span>
+<span id="revnumber">version main-237a4b90ed456c48d89927cf7b8fef8fc7208a06,</span>
 <span id="revdate">2025-01-28</span>
 </div>
 <div id="toc" class="toc2">
@@ -631,6 +631,7 @@ document.addEventListener('keydown', (event) => {
 <li><a href="#_global_state">3.8.1. Global State</a></li>
 </ul>
 </li>
+<li><a href="#_api_function_implementation">3.9. API Function Implementation</a></li>
 </ul>
 </li>
 <li><a href="#_parameter_and_variable_handling">4. Parameter and Variable Handling</a>
@@ -1229,6 +1230,40 @@ The FMU code cannot make any assumptions on this, but must rather be conservativ
 <p>FMU funtions can, on the other hand, change the floating point control word of the CPU during their execution, since this is directly tied to the thread of execution.
 However they must restore the floating point control word before returning, so as to not affect state outside of the current thread of execution.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_api_function_implementation">3.9. API Function Implementation</h3>
+<div class="paragraph">
+<p>The FMI standards specify which functions of the API an FMU has to implement:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">FMI 3.0</dt>
+<dd>
+<p>The standard since release 3.0.1 clearly specifies that all functions specified in the standard are to be present in an FMU.
+In the initial 3.0 release, this specification was ambiguous: While the intent always was for all functions to be present, it could be read as only requiring the functions of those interface types the FMU supports having to be present.
+In any case all functions for optional features have to be present.</p>
+</dd>
+<dt class="hdlist1">FMI 2.0</dt>
+<dd>
+<p>The standard requires all functions of FMI for Co-Simulation, or all functions of FMI for Model Exchange, or both, to be present.
+All functions for optional features have to be present.</p>
+</dd>
+<dt class="hdlist1">FMI 1.0</dt>
+<dd>
+<p>The standard does not explicitly state the requirements of function implementation.
+However it can be assumed that all functions of FMI for Co-Simulation, or all functions of FMI for Model Exchange, or both, have to be present.
+The requirements for optional features are unclear.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Independent of the normative situation, it is recommended that importers refrain from relying on the presence or particular behavior of functions that are not needed for the operation of the FMU.</p>
+</div>
+<div class="paragraph">
+<p>Similarly it is recommended that exporters always generate all functions specified in the relevant standards.
+Unsupported feature and interface type functions should be implemented to return an appropriate error code (e.g. <code>fmi3Error</code>) when called, after logging the reason for the error.</p>
 </div>
 </div>
 </div>
