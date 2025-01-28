@@ -5,7 +5,7 @@ This chapter contains details on common topics of the network abstraction layer.
 This chapter contains details on CAN, CAN FD, CAN XL specific topics.
 
 ==== Getting Started with CAN, CAN FD and CAN XL [[low-cut-can-getting-started-with-can]] 
-This section shows the exemplary implementation in conjunction with the provided header files of the fmi-ls-bus layered standard.
+This section shows the exemplary implementation in conjunction with the provided header files of the FMI-LS-BUS layered standard.
 
 ===== Provided Header Files [[low-cut-can-getting-started-provided-header-files]]
 Besides the textual specification for FMUs with bus support, the Layered Standard for Network Communication also provides a C API to make the creation of FMUs with bus support as easy and generalized as possible.
@@ -350,6 +350,9 @@ FMU 1 receives a `Confirm` operation, because the specified frame with CAN ID 15
 [#figure-can-arbitration-overview]
 image::can_arbitration_overview.svg[width=80%, align="center"]
 
+_[Note: The path shown represents the intended approach.
+Other implementations may also be valid according to the FMI specification.]_
+
 ===== CAN Arbitration with Buffering [[low-cut-can-example-can-arbitration-with-buffering]]
 <<#figure-can-arbitration-overview-with-buffer>> shows the realization of a CAN arbitration by using the `Arbitration Lost Behavior` option `BUFFER_AND_RETRANSMIT` within the `Configuration` operation.
 At the beginning, FMU 1 and FMU 2 each send network data at the same time.
@@ -365,6 +368,9 @@ FMU 1 gets a `Confirm` operation, because the specified frame with CAN ID 15 was
 .Arbitration of CAN frames with buffering within Bus Simulation.
 [#figure-can-arbitration-overview-with-buffer]
 image::can_arbitration_overview_with_buffer.svg[width=80%, align="center"]
+
+_[Note: The path shown represents the intended approach.
+Other implementations may also be valid according to the FMI specification.]_
 
 ==== Realization of CAN Error Handling [[low-cut-can-realization-of-can-error-handling]]
 This chapter describes a possible implementation of the CAN error handling within Network FMUs using a rule set based on `Bus Error` operations.

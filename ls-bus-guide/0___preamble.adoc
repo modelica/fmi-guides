@@ -1,4 +1,4 @@
-The FMI LS Bus Implementers' Guide is a free resource intended to give non-normative recommendations and guidance to implementers of the Functional Mock-up Interface layered standard Network Communication (FMI-LS-BUS).
+The FMI-LS-BUS Implementers' Guide is a free resource intended to give non-normative recommendations and guidance to implementers of the Functional Mock-up Interface layered standard Network Communication (FMI-LS-BUS).
 This document is continually revised based on implementer and user feedback and input.
 All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI 3.0 standard, the FMI-LS-BUS layered standard, or any other standard or layered standard.
 https://github.com/modelica/fmi-guides/releases[Releases] and https://github.com/modelica/fmi-guides/issues[issues] can be found on https://github.com/modelica/fmi-guides[github.com/modelica/fmi-guides].
