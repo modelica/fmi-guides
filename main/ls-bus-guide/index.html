@@ -586,7 +586,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI LS BUS Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-2aa2a4e8431cf473a3b506a7960e9dd6f09d6fb3,</span>
+<span id="revnumber">version main-c2c0fba8182bc24dbfa2e91d9241afec93adc088,</span>
 <span id="revdate">2025-01-28</span>
 </div>
 <div id="toc" class="toc2">
@@ -631,7 +631,7 @@ document.addEventListener('keydown', (event) => {
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The FMI LS Bus Implementers' Guide is a free resource intended to give non-normative recommendations and guidance to implementers of the Functional Mock-up Interface layered standard Network Communication (FMI-LS-BUS).
+<p>The FMI-LS-BUS Implementers' Guide is a free resource intended to give non-normative recommendations and guidance to implementers of the Functional Mock-up Interface layered standard Network Communication (FMI-LS-BUS).
 This document is continually revised based on implementer and user feedback and input.
 All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI 3.0 standard, the FMI-LS-BUS layered standard, or any other standard or layered standard.
 <a href="https://github.com/modelica/fmi-guides/releases">Releases</a> and <a href="https://github.com/modelica/fmi-guides/issues">issues</a> can be found on <a href="https://github.com/modelica/fmi-guides">github.com/modelica/fmi-guides</a>.</p>
@@ -704,7 +704,7 @@ It also considers errors and bugs encountered in the practical use of existing F
 <div class="sect3">
 <h4 id="low-cut-can-getting-started-with-can">4.1.1. Getting Started with CAN, CAN FD and CAN XL</h4>
 <div class="paragraph">
-<p>This section shows the exemplary implementation in conjunction with the provided header files of the fmi-ls-bus layered standard.</p>
+<p>This section shows the exemplary implementation in conjunction with the provided header files of the FMI-LS-BUS layered standard.</p>
 </div>
 <div class="sect4">
 <h5 id="low-cut-can-getting-started-provided-header-files">4.1.1.1. Provided Header Files</h5>
@@ -1270,6 +1270,10 @@ FMU 1 receives a <code>Confirm</code> operation, because the specified frame wit
 </div>
 <div class="title">Figure 3. Arbitration of CAN frames within Bus Simulation.</div>
 </div>
+<div class="paragraph">
+<p><em>[Note: The path shown represents the intended approach.
+Other implementations may also be valid according to the FMI specification.]</em></p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="low-cut-can-example-can-arbitration-with-buffering">4.1.3.3. CAN Arbitration with Buffering</h5>
@@ -1290,6 +1294,10 @@ FMU 1 gets a <code>Confirm</code> operation, because the specified frame with CA
 <img src="images/can_arbitration_overview_with_buffer.svg" alt="can arbitration overview with buffer" width="80%">
 </div>
 <div class="title">Figure 4. Arbitration of CAN frames with buffering within Bus Simulation.</div>
+</div>
+<div class="paragraph">
+<p><em>[Note: The path shown represents the intended approach.
+Other implementations may also be valid according to the FMI specification.]</em></p>
 </div>
 </div>
 </div>
