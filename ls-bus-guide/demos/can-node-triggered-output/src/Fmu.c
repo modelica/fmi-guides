@@ -268,6 +268,33 @@ FMI3_Export fmi3Status fmi3SetFloat64(fmi3Instance instance,
     return fmi3OK;
 }
 
+FMI3_Export fmi3Status fmi3GetFloat64(fmi3Instance instance,
+                                      const fmi3ValueReference valueReferences[],
+                                      size_t nValueReferences,
+                                      fmi3Float64 values[],
+                                      size_t nValues)
+{
+    FmuInstance* fmuInstance = instance;
+
+    if (nValueReferences != nValues)
+    {
+        TerminateWithError(instance, "fmi3GetFloat64: Invalid call");
+        return fmi3Error;
+    }
+
+    for (size_t i = 0; i < nValueReferences; i++)
+    {
+        if (!App_GetFloat64(fmuInstance, valueReferences[i], &values[i]))
+        {
+            TerminateWithError(instance, "fmi3GetFloat64: Invalid call with value reference %u",
+                               valueReferences[i]);
+            return fmi3Error;
+        }
+    }
+
+    return fmi3OK;
+}
+
 FMI3_Export fmi3Status fmi3SetBoolean(fmi3Instance instance,
                                       const fmi3ValueReference valueReferences[],
                                       size_t nValueReferences,
@@ -392,7 +419,12 @@ FMI3_Export fmi3Status fmi3GetIntervalDecimal(fmi3Instance instance,
                                valueReferences[i]);
             return fmi3Error;
         }
-        intervals[i] = (fmi3Float64)counter / (fmi3Float64)resolution;
+
+        if (resolution <= 0) {
+            qualifiers[i] = fmi3IntervalNotYetKnown;
+        } else {
+            intervals[i] = (fmi3Float64)counter / (fmi3Float64)resolution;
+        }
     }
 
     return fmi3OK;
@@ -414,6 +446,10 @@ FMI3_Export fmi3Status fmi3GetIntervalFraction(fmi3Instance instance,
             TerminateWithError(instance, "fmi3GetIntervalFraction: Invalid call with value reference %u",
                                valueReferences[i]);
             return fmi3Error;
+        }
+
+        if (resolutions[i] <= 0) {
+            qualifiers[i] = fmi3IntervalNotYetKnown;
         }
     }
 
@@ -564,14 +600,6 @@ FMI3_Export fmi3Status fmi3GetFloat32(fmi3Instance instance,
     return INVALID_CALL_IF_NONZERO(nValueReferences, instance);
 }
 
-FMI3_Export fmi3Status fmi3GetFloat64(fmi3Instance instance,
-                                      const fmi3ValueReference valueReferences[],
-                                      size_t nValueReferences,
-                                      fmi3Float64 values[],
-                                      size_t nValues)
-{
-    return INVALID_CALL_IF_NONZERO(nValueReferences, instance);
-}
 
 FMI3_Export fmi3Status fmi3GetInt8(fmi3Instance instance,
                                    const fmi3ValueReference valueReferences[],
