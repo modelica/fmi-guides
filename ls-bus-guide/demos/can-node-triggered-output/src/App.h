@@ -26,7 +26,6 @@ void App_Free(AppType* instance);
  * \param[in] instance The instance data of the application.
  * \param[in] currentTime The time at the start of the step.
  * \param[in] targetTime The time at the end of the step.
- * \return Determines whether the event mode should be activated on return
  */
 bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targetTime);
 
@@ -65,15 +64,6 @@ bool App_SetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fm
 bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64 value);
 
 /**
- * \brief Gets the value of a float64 output variable.
- * \note Called as part of fmi3GetFloat64.
- * \param[in] instance The instance data of the application.
- * \param[in] valueReference The value reference of the variable.
- * \param[out] value The new value of the variable.
- */
-bool App_GetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64* value);
-
-/**
  * \brief Sets the value of a binary input variable.
  * \note Called as part of fmi3SetBinary.
  * \param[in] instance The instance data of the application.
@@ -103,7 +93,7 @@ bool App_GetBinary(FmuInstance* instance, fmi3ValueReference valueReference, fmi
 bool App_SetClock(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Clock value);
 
 /**
- * \brief Gets the value of a triggered output clock.
+ * \brief Sets the value of a triggered output clock.
  * \note Called as part of fmi3GetClock.
  * \param[in] instance The instance data of the application.
  * \param[in] valueReference The value reference of the clock.

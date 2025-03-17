@@ -17,8 +17,7 @@ typedef enum
     FMU_VAR_RX_CLOCK = 2,
     FMU_VAR_TX_CLOCK = 3,
 
-    FMU_VAR_CAN_BUS_NOTIFICATIONS = 128,
-    FMU_VAR_SIMULATION_TIME = 1024
+    FMU_VAR_CAN_BUS_NOTIFICATIONS = 128
 } FmuVariables;
 
 
@@ -39,7 +38,6 @@ struct AppType
     fmi3Clock TxClock;
 
     fmi3Float64 NextTransmitTime;
-    fmi3Float64 SimulationTime;
 };
 
 
@@ -64,7 +62,7 @@ AppType* App_Instantiate(void)
 
     // Schedule next transmission
     app->NextTransmitTime = TransmitInterval;
-    app->SimulationTime = 0.0;
+
     return app;
 }
 
@@ -77,13 +75,9 @@ void App_Free(AppType* instance)
 
 bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targetTime)
 {
-    instance->App->SimulationTime = currentTime;
-
     // Send transmit operations with the given interval until we reach the target time
     while (instance->App->NextTransmitTime <= targetTime)
     {
-        instance->App->SimulationTime = instance->App->NextTransmitTime;
-
         // We are transmitting with a constant CAN ID and payload
         const fmi3LsBusCanId id = 0x1;
         const fmi3Byte data[4] = {1, 2, 3, 4};
@@ -104,8 +98,6 @@ bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targ
         // Schedule next transmission
         instance->App->NextTransmitTime = instance->App->NextTransmitTime + TransmitInterval;
     }
-
-     instance->App->SimulationTime = targetTime;
 
     // If we create bus transmit operations, we have to enter event mode and set the TX clock after this step
     if (FMI3_LS_BUS_BUFFER_LENGTH(&instance->App->TxBufferInfo) > 0)
@@ -178,21 +170,6 @@ bool App_SetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fm
 
 bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64 value)
 {
-    (void)instance;
-    (void)valueReference;
-    (void)value;
-    return false;
-}
-
-
-bool App_GetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64* value)
-{
-    if (valueReference == FMU_VAR_SIMULATION_TIME)
-    {
-        *value = instance->App->SimulationTime;
-        return true;
-    }
-
     return false;
 }
 
@@ -260,10 +237,5 @@ bool App_GetIntervalFraction(FmuInstance* instance,
                              fmi3UInt64* resolution,
                              fmi3IntervalQualifier* qualifier)
 {
-    (void)instance;
-    (void)valueReference;
-    (void)counter;
-    (void)resolution;
-    (void)qualifier;
     return false;
 }
