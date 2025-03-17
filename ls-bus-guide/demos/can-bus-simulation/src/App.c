@@ -22,7 +22,8 @@ typedef enum
     FMU_VAR_NODE2_RX_CLOCK = 6,
     FMU_VAR_NODE2_TX_CLOCK = 7,
 
-    FMU_VAR_BUS_ERROR_PROBABILITY = 255
+    FMU_VAR_BUS_ERROR_PROBABILITY = 255,
+    FMU_VAR_SIMULATION_TIME = 1024
 } FmuVariables;
 
 
@@ -104,6 +105,7 @@ struct AppType
 
     bool TxClockSet;
     bool DiscreteStatesEvaluated;
+    fmi3Float64 SimulationTime;
 };
 
 
@@ -187,6 +189,7 @@ AppType* App_Instantiate(void)
             FMI3_LS_BUS_CAN_CONFIG_PARAM_ARBITRATION_LOST_BEHAVIOR_BUFFER_AND_RETRANSMIT;
     }
 
+    app->SimulationTime = 0.0;
     return app;
 }
 
@@ -199,6 +202,8 @@ void App_Free(AppType* instance)
 
 bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targetTime)
 {
+    instance->App->SimulationTime = targetTime;
+    /* Return whether event mode is needed */
     return false;
 }
 
@@ -445,6 +450,16 @@ bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fm
     return false;
 }
 
+bool App_GetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64* value)
+{
+    if (valueReference == FMU_VAR_SIMULATION_TIME)
+    {
+        *value = instance->App->SimulationTime;
+        return true;
+    }
+
+    return false;
+}
 
 bool App_SetBinary(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Binary value, size_t valueLength)
 {
