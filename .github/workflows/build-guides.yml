@@ -32,19 +32,19 @@ jobs:
     - name: copy images
       run: tar cf - fmi-guide/images ls-bus-guide/images fmi-profiles/images | tar xfC - build
     - name: archive implementers guide
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: FMI-Guide
         path: build/fmi-guide/*
         if-no-files-found: error
     - name: archive LS-BUS implementers guide
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: LS-BUS-Guide
         path: build/ls-bus-guide/*
         if-no-files-found: error
     - name: archive FMI profiles
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: FMI-Profiles
         path: build/fmi-profiles/*
