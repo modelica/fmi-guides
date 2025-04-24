@@ -393,9 +393,10 @@ void App_EvaluateDiscreteStates(FmuInstance* instance)
         NodeIdType nextFrameOriginator;
         if (App_GetNextFrame(instance, &nextFrame, &nextFrameOriginator))
         {
+            // Set the TxClock interval based on the transmission time of the frame to simulate transmission timing behaviour. 
             instance->App->Nodes[0].TxClockQualifier = fmi3IntervalChanged;
             instance->App->Nodes[1].TxClockQualifier = fmi3IntervalChanged;
-            instance->App->TxClockCounter = 44 + nextFrame->DataLength;
+            instance->App->TxClockCounter = 44 + nextFrame->DataLength; /* The value 44 represents the constant length (in bits) of a CAN frame in addition to the variable length (in bits) of the data */
             instance->App->TxClockResolution = instance->App->BusBaudRate;
             instance->App->TxClockSet = true;
         }
