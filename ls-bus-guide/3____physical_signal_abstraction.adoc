@@ -1,2 +1,2 @@
-== Physical Signal Abstraction ("high cut")
-This chapter contains details on common topics of the physical signal abstraction layer.
+== Physical Signal Abstraction ("High-Cut")
+This chapter contains details on common topics of the Physical Signal Abstraction layer.

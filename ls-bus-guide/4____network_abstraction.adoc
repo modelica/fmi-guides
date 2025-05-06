@@ -1,5 +1,5 @@
-== Network Abstraction ("low cut")
-This chapter contains details on common topics of the network abstraction layer.
+== Network Abstraction ("Low-Cut")
+This chapter contains details on common topics of the Network Abstraction Layer.
 
 === CAN, CAN FD, CAN XL
 This chapter contains details on CAN, CAN FD, CAN XL specific topics.
