@@ -418,7 +418,36 @@ Besides the textual specification for FMUs with bus support, the Layered Standar
 
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h[fmi3LsBus.h] provides general macros, types and structures of common Bus Operations.
 This header file applies to all supported bus types of the layered standard.
-* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusCan.h[fmi3LsBusFlexRay.h] provides macros, types and structures of Bus Operations explicit for FlexRay.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusFlexRay.h[fmi3LsBusFlexRay.h] provides macros, types and structures of Bus Operations explicit for FlexRay.
 Primarily, structures are included here that allow the Bus Operations specified by the layered standard to be easily created and used.
 * https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtil.h[fmi3LsBusUtil.h] provides common utility macros and structures for all supported bus types.
-* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilFlexRay.h] provides FlexRay explicit utility macros.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilFlexRay.h[fmi3LsBusUtilFlexRay.h] provides FlexRay explicit utility macros.
+
+==== Demos [[low-cut-flexray-demos]]
+###TODO###
+The following list contains demos, which illustrate both the Bus Simulation as such and Network FMUs of various designs:
+
+* https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/can-bus-simulation[CAN Bus Simulation]: Represents an exemplary Bus Simulation FMU for CAN.
+This Bus Simulation can be used in combination with the other Network FMUs listed below. 
+
+* https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/can-node-triggered-output[CAN Triggered Output]: This demo Network FMU demonstrates sending and receiving multiple CAN Transmit operations using `triggered` output clocks.
+
+
+===== General Aspects
+Bus Operations represent protocol units to be transmitted in the environment of the layered standard based on the https://modelica.github.io/fmi-ls-bus/main/#low-cut-layered-standard-bus-protocol[Layered Standard Bus Protocol].
+All FMI variables required for the exchange are grouped by a defined https://modelica.github.io/fmi-ls-bus/main/#low-cut-bus-terminal[Bus Terminal].
+Bus Operations are created and processed within an FMU.
+This can be done either in `Step Mode` or in `Event Mode`.
+For a transfer, all Bus Operations are serialized together in a `fmi3Binary` https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-rx-data-variables[variable].
+This serialization can be done using the provided <<low-cut-flexray-getting-started-provided-header-files,header files>> or using a custom approach.
+After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized again and then processed inside the receiver.
+
+.Create, process and transfer Bus Operations.
+[#figure-general-aspects-overview-flexray]
+image::create_process_bus_operations.svg[width=60%, align="center"]
+
+The point in time where Bus Operations are transferred between different FMUs is defined by the usage of `fmi3Clock` variables.
+For this reason, the exchange of Bus Operations is always carried out within the `Event Mode`.
+Details about possible entry points regarding the FMI interface will be provided later in this section.
+However, it is important to know that due to the resulting decoupling between the generation, processing and transfer of Bus Operations, the need for buffer semantics arises.
+This semantics is reflected directly in the structure and handling of the <<low-cut-flexray-getting-started-provided-header-files,header files>> provided.
