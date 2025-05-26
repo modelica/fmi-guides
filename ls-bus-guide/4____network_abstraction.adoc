@@ -406,3 +406,19 @@ A Network FMU communicates its current CAN node state via the `Status` operation
 If `org.fmi_standard.fmi_ls_bus.Can_BusNotifications` is set to `false`, the `Confirm` operation cannot be directly used as indicator to set the TEC value and will be incorrect under the rules outlined above.
 Also `Bus Error` operations are not available in this scenario, i.e. the values for TEC and REC remain zero.
 In this case, it is recommended to either implement error handling in a different manner or to disable it completely within the specified Network FMU.
+
+=== FlexRay
+This chapter contains details on FlexRay specific topics.
+
+==== Getting Started with FlexRay [[low-cut-flexray-getting-started-with-flexray]] 
+This section shows the exemplary implementation in conjunction with the provided header files of the FMI-LS-BUS layered standard.
+
+===== Provided Header Files [[low-cut-flexray-getting-started-provided-header-files]]
+Besides the textual specification for FMUs with bus support, the Layered Standard for Network Communication also provides a C API to make the creation of FMUs with bus support as easy and generalized as possible.
+
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h[fmi3LsBus.h] provides general macros, types and structures of common Bus Operations.
+This header file applies to all supported bus types of the layered standard.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusCan.h[fmi3LsBusFlexRay.h] provides macros, types and structures of Bus Operations explicit for FlexRay.
+Primarily, structures are included here that allow the Bus Operations specified by the layered standard to be easily created and used.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtil.h[fmi3LsBusUtil.h] provides common utility macros and structures for all supported bus types.
+* https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilCan.h[fmi3LsBusUtilFlexRay.h] provides FlexRay explicit utility macros.
