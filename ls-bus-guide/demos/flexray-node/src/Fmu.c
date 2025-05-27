@@ -686,7 +686,24 @@ FMI3_Export fmi3Status fmi3GetBoolean(fmi3Instance instance,
                                       fmi3Boolean values[],
                                       size_t nValues)
 {
-    return INVALID_CALL_IF_NONZERO(nValueReferences, instance);
+    FmuInstance* fmuInstance = instance;
+
+    if (nValueReferences != nValues)
+    {
+        TerminateWithError(instance, "fmi3GetBoolean: Invalid call");
+        return fmi3Error;
+    }
+
+    for (size_t i = 0; i < nValueReferences; i++)
+    {
+        if (!App_GetBoolean(fmuInstance, valueReferences[i], &values[i]))
+        {
+            TerminateWithError(instance, "fmi3GetBoolean: Invalid call with value reference %u", valueReferences[i]);
+            return fmi3Error;
+        }
+    }
+
+    return fmi3OK;
 }
 
 FMI3_Export fmi3Status fmi3GetString(fmi3Instance instance,

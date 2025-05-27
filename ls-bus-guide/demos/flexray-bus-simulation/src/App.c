@@ -27,6 +27,12 @@ typedef enum
     FMU_VAR_NODE2_TX_DATA = 5,
     FMU_VAR_NODE2_RX_CLOCK = 6,
     FMU_VAR_NODE2_TX_CLOCK = 7,
+
+    
+    FMU_VAR_NODE1_BUS_NOTIFICATIONS = 10,
+    FMU_VAR_NODE1_DELIVERY_ON_BOUNDARY = 11,
+    FMU_VAR_NODE2_BUS_NOTIFICATIONS = 12,
+    FMU_VAR_NODE2_DELIVERY_ON_BOUNDARY = 13,
 } FmuVariables;
 
 enum
@@ -546,6 +552,22 @@ void App_UpdateDiscreteStates(FmuInstance* instance)
 bool App_SetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Boolean value)
 {
     return false;
+}
+
+bool App_GetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Boolean* value)
+{
+    switch (valueReference)
+    {
+        case FMU_VAR_NODE1_BUS_NOTIFICATIONS:
+        case FMU_VAR_NODE2_BUS_NOTIFICATIONS:
+        case FMU_VAR_NODE1_DELIVERY_ON_BOUNDARY:
+        case FMU_VAR_NODE2_DELIVERY_ON_BOUNDARY:
+            *value = true;
+            return true;
+
+        default:
+            return false;
+    }
 }
 
 bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64 value)

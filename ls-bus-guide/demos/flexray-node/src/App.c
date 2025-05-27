@@ -924,6 +924,11 @@ bool App_SetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fm
     return false;
 }
 
+bool App_GetBoolean(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Boolean* value)
+{
+    return false;
+}
+
 bool App_SetFloat64(FmuInstance* instance, fmi3ValueReference valueReference, fmi3Float64 value)
 {
     return false;
