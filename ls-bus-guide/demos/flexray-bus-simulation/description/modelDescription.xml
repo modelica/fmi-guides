@@ -50,7 +50,7 @@
         initial="exact"
         maxSize="2048"
         clocks="2"
-        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.1.0-alpha.1&quot;">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.0.0-alpha.1&quot;">
         <Start value="" />
     </Binary>
 
@@ -61,19 +61,15 @@
         initial="calculated"
         maxSize="2048"
         clocks="3"
-        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.1.0-alpha.1&quot;">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.0.0-alpha.1&quot;">
     </Binary>
 
     <Clock name="FlexRayChannel.Node1.Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
     <Clock name="FlexRayChannel.Node1.Tx_Clock" valueReference="3" causality="input" intervalVariability="countdown" />
     
-    <Boolean name="FlexRayChannel.Node1.BusNotifications" valueReference="10" causality="output" variability="constant" initial="exact">
-      <Start value="true" />
-    </Boolean>
+    <Boolean name="FlexRayChannel.Node1.BusNotifications" valueReference="10" causality="output" variability="constant" initial="exact" start="true" />
     
-    <Boolean name="FlexRayChannel.Node1.DeliveryOnBoundary" valueReference="11" causality="output" variability="constant" initial="exact">
-      <Start value="true" />
-    </Boolean>
+    <Boolean name="FlexRayChannel.Node1.DeliveryOnBoundary" valueReference="11" causality="output" variability="constant" initial="exact" start="true" />
 
     <Binary name="FlexRayChannel.Node2.Rx_Data"
             valueReference="4"
@@ -82,7 +78,7 @@
             initial="exact"
             maxSize="2048"
             clocks="6"
-            mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.1.0-alpha.1&quot;">
+            mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.0.0-alpha.1&quot;">
       <Start value="" />
     </Binary>
 
@@ -93,19 +89,15 @@
             initial="calculated"
             maxSize="2048"
             clocks="7"
-            mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.1.0-alpha.1&quot;">
+            mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.0.0-alpha.1&quot;">
     </Binary>
 
     <Clock name="FlexRayChannel.Node2.Rx_Clock" valueReference="6" causality="input" intervalVariability="triggered" />
     <Clock name="FlexRayChannel.Node2.Tx_Clock" valueReference="7" causality="input" intervalVariability="countdown" />
     
-    <Boolean name="FlexRayChannel.Node2.BusNotifications" valueReference="12" causality="output" variability="constant" initial="exact">
-      <Start value="true" />
-    </Boolean>
-    
-    <Boolean name="FlexRayChannel.Node2.DeliveryOnBoundary" valueReference="13" causality="output" variability="constant" initial="exact">
-      <Start value="true" />
-    </Boolean>
+    <Boolean name="FlexRayChannel.Node2.BusNotifications" valueReference="12" causality="output" variability="constant" initial="exact" start="true" />
+
+    <Boolean name="FlexRayChannel.Node2.DeliveryOnBoundary" valueReference="13" causality="output" variability="constant" initial="exact" start="true" />
   </ModelVariables>
 
   <ModelStructure>
