@@ -35,7 +35,7 @@ def main():
 
             # Add description files
             fmu.write(fmu_dir / 'description' /  'modelDescription.xml', 'modelDescription.xml')
-            fmu.write(demo_dir / 'description' / 'buildDescription.xml', 'sources/buildDescription.xml')
+            fmu.write(fmu_dir / 'description' / 'buildDescription.xml', 'sources/buildDescription.xml')
             fmu.write(demo_dir / 'description' / 'terminalsAndIcons.xml', 'terminalsAndIcons/terminalsAndIcons.xml')
             fmu.write(demo_dir / 'description' / 'fmi-ls-manifest.xml', 'extra/org.fmi-standard.fmi-ls-bus/fmi-ls-manifest.xml')
 
