@@ -70,13 +70,9 @@
     <Clock name="FlexRayChannel.Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />
     <Clock name="FlexRayChannel.Tx_Clock" valueReference="3" causality="input" intervalVariability="countdown" />
     
-    <Boolean name="FlexRayChannel.BusNotifications" valueReference="128" causality="parameter" variability="fixed" initial="exact">
-      <Start value="false" />
-    </Boolean>
+    <Boolean name="FlexRayChannel.BusNotifications" valueReference="128" causality="parameter" variability="fixed" initial="exact" start="false" />
     
-    <Boolean name="FlexRayChannel.DeliveryOnBoundary" valueReference="127" causality="parameter" variability="fixed" initial="exact">
-      <Start value="true" />
-    </Boolean>
+    <Boolean name="FlexRayChannel.DeliveryOnBoundary" valueReference="127" causality="parameter" variability="fixed" initial="exact" start="true" />
   </ModelVariables>
 
   <ModelStructure>
