@@ -6,9 +6,12 @@
 #ifndef OPERATION_BUFFER_H
 #define OPERATION_BUFFER_H
 
+#include <stdbool.h>
+
 #include "fmi3PlatformTypes.h"
 
 #include "fmi3LsBus.h"
+
 
 /**
  * \brief Size of elements in a bus operation buffer.

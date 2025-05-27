@@ -5,6 +5,9 @@
 
 #include "OperationBuffer.h"
 
+#include <stddef.h>
+
+
 void OperationBuffer_Init(OperationBuffer* buffer)
 {
     buffer->ReadIndex = 0;
