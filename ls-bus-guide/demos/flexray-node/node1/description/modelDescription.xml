@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fmiModelDescription
     fmiVersion="3.0"
-    modelName="DemoFlexRayNode"
+    modelName="DemoFlexRayNode1"
     instantiationToken=""
     variableNamingConvention="structured"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/modelica/fmi-standard/v3.0.1/schema/fmi3ModelDescription.xsd">
 
   <CoSimulation
-      modelIdentifier="DemoFlexRayNode"
+      modelIdentifier="DemoFlexRayNode1"
       needsExecutionTool="false"
       canGetAndSetFMUState="false"
       canSerializeFMUState="false"
@@ -43,7 +43,7 @@
   <ModelVariables>
     <Float64 name="Time" valueReference="1024" causality="independent" variability="continuous" description="Simulation time" />
 
-    <Boolean name="IsSecondNode" valueReference="129" causality="parameter" variability="discrete" initial="exact" />
+    <Boolean name="IsSecondNode" valueReference="129" causality="parameter" variability="fixed" initial="exact" start="false" />
 
     <Binary name="FlexRayChannel.Rx_Data"
         valueReference="0"

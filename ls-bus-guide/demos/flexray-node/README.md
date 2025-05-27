@@ -24,3 +24,4 @@ This FMU can then be loaded by an importer or precompiled using, e.g., FMPy.
 To run the FMU, a supported simulator and optionally a bus simulation FMU is required.
 It can either be directly connected to another node FMU (or even another instance of this FMU) or to a bus simulation FMU using the `FlexRayChannel` terminal.
 This FMU can be instantiated two times per cluster, whereas the first instance must have the `IsSecondNode` parameter set to `false` and second instance must have it set to `true`.
+The `PackFMU.py` generates two variants of the demo FMU with differing default values of the `IsSecondNode` parameter for ease of use.
