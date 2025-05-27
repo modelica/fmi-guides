@@ -61,8 +61,8 @@ typedef struct
     bool IsValid;
 } FlexRayBuffer;
 
-#define NUMBER_OF_TRANSMIT_BUFFERS (2)
-#define NUMBER_OF_RECEIVE_BUFFERS (2)
+#define NUMBER_OF_TRANSMIT_BUFFERS (3)
+#define NUMBER_OF_RECEIVE_BUFFERS (3)
 
 #define TX_TASK_INTERVAL (1000000)
 #define RX_TASK_INTERVAL (1000000)
@@ -177,7 +177,7 @@ static fmi3UInt64 GetNextTxBufferTime(const AppType* app, const fmi3UInt8 slotOf
  * \param time The time in seconds.
  * \return The time in nanoseconds.
  */
-static uint64_t ConvertTimeToNs(fmi3Float64 time)
+static fmi3UInt64 ConvertTimeToNs(fmi3Float64 time)
 {
     return (fmi3UInt64)(time * 1.0E9 + 0.5);
 }
@@ -290,7 +290,7 @@ void App_Init(FmuInstance* instance)
     app->ClusterConfig.MacroTickDurationNs = 1000;
     app->ClusterConfig.MacroTicksPerCycle = 1000;
     app->ClusterConfig.StaticSlotDurationMt = 100;
-    app->ClusterConfig.NumberOfCycles = 1;
+    app->ClusterConfig.NumberOfCycles = 2;
     app->ClusterConfig.NumberOfStaticSlots = 2;
     app->ClusterConfig.MinislotDurationMt = 10;
     app->ClusterConfig.ActionPointOffset = 1;
@@ -314,6 +314,10 @@ void App_Init(FmuInstance* instance)
         app->TransmitBuffers[1].CycleId = 0;
         app->TransmitBuffers[1].SlotId = 3;
         app->TransmitBuffers[1].IsStartup = fmi3False;
+        app->TransmitBuffers[2].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
+        app->TransmitBuffers[2].CycleId = 1;
+        app->TransmitBuffers[2].SlotId = 1;
+        app->TransmitBuffers[2].IsStartup = fmi3True;
 
         app->ReceiveBuffers[0].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
         app->ReceiveBuffers[0].CycleId = 0;
@@ -321,6 +325,9 @@ void App_Init(FmuInstance* instance)
         app->ReceiveBuffers[1].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
         app->ReceiveBuffers[1].CycleId = 0;
         app->ReceiveBuffers[1].SlotId = 4;
+        app->ReceiveBuffers[2].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
+        app->ReceiveBuffers[2].CycleId = 1;
+        app->ReceiveBuffers[2].SlotId = 2;
     }
     else
     {
@@ -332,6 +339,10 @@ void App_Init(FmuInstance* instance)
         app->TransmitBuffers[1].CycleId = 0;
         app->TransmitBuffers[1].SlotId = 4;
         app->TransmitBuffers[1].IsStartup = fmi3False;
+        app->TransmitBuffers[2].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
+        app->TransmitBuffers[2].CycleId = 1;
+        app->TransmitBuffers[2].SlotId = 2;
+        app->TransmitBuffers[2].IsStartup = fmi3True;
 
         app->ReceiveBuffers[0].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
         app->ReceiveBuffers[0].CycleId = 0;
@@ -339,6 +350,9 @@ void App_Init(FmuInstance* instance)
         app->ReceiveBuffers[1].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
         app->ReceiveBuffers[1].CycleId = 0;
         app->ReceiveBuffers[1].SlotId = 3;
+        app->ReceiveBuffers[2].Channel = FMI3_LS_BUS_FLEXRAY_CHANNEL_A;
+        app->ReceiveBuffers[2].CycleId = 1;
+        app->ReceiveBuffers[2].SlotId = 1;
     }
 
     for (fmi3UInt8 i = 0; i < NUMBER_OF_TRANSMIT_BUFFERS; i++)
@@ -400,12 +414,12 @@ void TxTask(FmuInstance* instance)
     app->TransmitBuffers[0].Data[0] = app->TxCounter;
     app->TransmitBuffers[0].DataLength = 1;
     app->TransmitBuffers[0].IsValid = true;
-    LogFmuMessage(instance, fmi3OK, "Trace", "Wrote %u to buffer 0", app->TxCounter);
+    LogFmuMessage(instance, fmi3OK, "Info", "Wrote %u to buffer 0", app->TxCounter);
 
     app->TransmitBuffers[1].Data[0] = app->TxCounter;
     app->TransmitBuffers[1].DataLength = 1;
     app->TransmitBuffers[1].IsValid = true;
-    LogFmuMessage(instance, fmi3OK, "Trace", "Wrote %u to buffer 1", app->TxCounter);
+    LogFmuMessage(instance, fmi3OK, "Info", "Wrote %u to buffer 1", app->TxCounter);
 
     app->TxCounter++;
 }
@@ -416,13 +430,13 @@ static void RxTask(FmuInstance* instance)
 
     if (app->ReceiveBuffers[0].IsValid)
     {
-        LogFmuMessage(instance, fmi3OK, "Trace", "Read %u from buffer 0", app->ReceiveBuffers[0].Data[0]);
+        LogFmuMessage(instance, fmi3OK, "Info", "Read %u from buffer 0", app->ReceiveBuffers[0].Data[0]);
         app->ReceiveBuffers[0].IsValid = false;
     }
 
     if (app->ReceiveBuffers[1].IsValid)
     {
-        LogFmuMessage(instance, fmi3OK, "Trace", "Read %u from buffer 1", app->ReceiveBuffers[1].Data[0]);
+        LogFmuMessage(instance, fmi3OK, "Info", "Read %u from buffer 1", app->ReceiveBuffers[1].Data[0]);
         app->ReceiveBuffers[1].IsValid = false;
     }
 }
@@ -474,8 +488,8 @@ static void ProcessNonDataOperations(FmuInstance* instance)
                     instance->App->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_LISTEN_WAIT_START_COMM ||
                     instance->App->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_LISTEN_PASSIVE)
                 {
-                    LogFmuMessage(instance, fmi3OK, "Trace", "Received CAS symbol");
-                    LogFmuMessage(instance, fmi3OK, "Trace", "Moving to startup phase COLDSTART_LISTEN_PASSIVE");
+                    LogFmuMessage(instance, fmi3OK, "Info", "Received CAS symbol");
+                    LogFmuMessage(instance, fmi3OK, "Info", "Moving to startup phase COLDSTART_LISTEN_PASSIVE");
 
                     instance->App->CurrentStartupPhase = STARTUP_PHASE_COLDSTART_LISTEN_PASSIVE;
                     instance->App->NextStartupTransition = 0;
@@ -501,9 +515,9 @@ static void ProcessNonDataOperations(FmuInstance* instance)
                 instance->App->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_LISTEN_WAIT_START_COMM ||
                 instance->App->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_LISTEN_PASSIVE)
             {
-                LogFmuMessage(instance, fmi3OK, "Trace", "Received StartCommunication operation with start with %llu",
+                LogFmuMessage(instance, fmi3OK, "Info", "Received StartCommunication operation with start with %llu",
                               nextReceiveOperationStartCommunication->startTime);
-                LogFmuMessage(instance, fmi3OK, "Trace", "Moving to startup phase INTEGRATION_COLDSTART_CHECK");
+                LogFmuMessage(instance, fmi3OK, "Info", "Moving to startup phase INTEGRATION_COLDSTART_CHECK");
 
                 instance->App->CurrentStartupPhase = STARTUP_PHASE_INTEGRATION_COLDSTART_CHECK;
                 instance->App->NextStartupTransition = 0;
@@ -585,7 +599,7 @@ void ProcessTxRxBuffers(AppType* app)
                 {
                     // Dequeue bus operation
                     OperationBuffer_Pop(&app->RxOperationBuffer);
-                    LogFmuMessage(app->FmuInstance, fmi3OK, "Trace",
+                    LogFmuMessage(app->FmuInstance, fmi3OK, "Debug",
                                   "Received frame in cycle %u, slot %u of with %u bytes of data",
                                   nextReceiveOperationTransmit->cycleId, nextReceiveOperationTransmit->slotId,
                                   nextReceiveOperationTransmit->dataLength);
@@ -659,14 +673,14 @@ void ProcessTxRxBuffers(AppType* app)
 
                 if (!isNullFrame)
                 {
-                    LogFmuMessage(app->FmuInstance, fmi3OK, "Trace",
+                    LogFmuMessage(app->FmuInstance, fmi3OK, "Debug",
                                   "Transmitting frame in cycle %u, slot %u of with %u bytes of data",
                                   nextTransmitBuffer->CycleId, nextTransmitBuffer->SlotId,
                                   nextTransmitBuffer->DataLength);
                 }
                 else
                 {
-                    LogFmuMessage(app->FmuInstance, fmi3OK, "Trace", "Transmitting null frame in cycle %u, slot %u",
+                    LogFmuMessage(app->FmuInstance, fmi3OK, "Debug", "Transmitting null frame in cycle %u, slot %u",
                                   nextTransmitBuffer->CycleId, nextTransmitBuffer->SlotId);
                 }
 
@@ -724,7 +738,7 @@ void ProcessTxRxBuffers(AppType* app)
             app->CyclesWithAtLeastTwoStartupFrames = 0;
         }
 
-        LogFmuMessage(app->FmuInstance, fmi3OK, "Trace",
+        LogFmuMessage(app->FmuInstance, fmi3OK, "Info",
                       "Seen %u startup frames in the last cycle. The last %u cycles had >= 1 startup frames. "
                       "The last %u cycles had >= 2 startup frames.",
                       app->StartupFramesSeenInCycle, app->CyclesWithAtLeastOneStartupFrame,
@@ -735,7 +749,7 @@ void ProcessTxRxBuffers(AppType* app)
         if (app->CurrentStartupPhase == STARTUP_PHASE_INTEGRATION_COLDSTART_CHECK &&
             app->CyclesWithAtLeastOneStartupFrame >= 4)
         {
-            LogFmuMessage(app->FmuInstance, fmi3OK, "Trace", "Moving to startup phase COLDSTART_JOIN");
+            LogFmuMessage(app->FmuInstance, fmi3OK, "Info", "Moving to startup phase COLDSTART_JOIN");
             app->CurrentStartupPhase = STARTUP_PHASE_COLDSTART_JOIN;
             UpdateCountdownClock(app->FmuInstance);
         }
@@ -745,7 +759,7 @@ void ProcessTxRxBuffers(AppType* app)
         if (app->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_COLLISION_RESOLUTION &&
             app->CyclesWithAtLeastOneStartupFrame >= 4)
         {
-            LogFmuMessage(app->FmuInstance, fmi3OK, "Trace", "Moving to startup phase COLDSTART_CONSISTENCY_CHECK");
+            LogFmuMessage(app->FmuInstance, fmi3OK, "Info", "Moving to startup phase COLDSTART_CONSISTENCY_CHECK");
             app->CurrentStartupPhase = STARTUP_PHASE_COLDSTART_CONSISTENCY_CHECK;
         }
 
@@ -754,7 +768,7 @@ void ProcessTxRxBuffers(AppType* app)
              app->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_CONSISTENCY_CHECK) &&
             app->CyclesWithAtLeastTwoStartupFrames >= 4)
         {
-            LogFmuMessage(app->FmuInstance, fmi3OK, "Trace", "FlexRay startup completed");
+            LogFmuMessage(app->FmuInstance, fmi3OK, "Info", "FlexRay startup completed");
             app->CurrentStartupPhase = STARTUP_PHASE_COMPLETE;
         }
 
@@ -780,7 +794,7 @@ bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targ
     if (instance->App->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_LISTEN_WAIT_SEND_CAS &&
         app->CurrentTimeNs >= instance->App->NextStartupTransition)
     {
-        LogFmuMessage(instance, fmi3OK, "Trace", "Sending CAS symbol");
+        LogFmuMessage(instance, fmi3OK, "Info", "Sending CAS symbol");
 
         FMI3_LS_BUS_FLEXRAY_CREATE_OP_SYMBOL(&app->TxBufferInfo, 0,
                                              FMI3_LS_BUS_FLEXRAY_CHANNEL_A | FMI3_LS_BUS_FLEXRAY_CHANNEL_B,
@@ -800,9 +814,9 @@ bool App_DoStep(FmuInstance* instance, fmi3Float64 currentTime, fmi3Float64 targ
     if (instance->App->CurrentStartupPhase == STARTUP_PHASE_COLDSTART_LISTEN_WAIT_START_COMM &&
         app->CurrentTimeNs >= instance->App->NextStartupTransition)
     {
-        LogFmuMessage(instance, fmi3OK, "Trace", "Transmitting StartCommunication operation with start time %llu",
+        LogFmuMessage(instance, fmi3OK, "Info", "Transmitting StartCommunication operation with start time %llu",
                       instance->App->NextStartupTransition);
-        LogFmuMessage(instance, fmi3OK, "Trace", "Moving to startup phase COLDSTART_COLLISION_RESOLUTION");
+        LogFmuMessage(instance, fmi3OK, "Info", "Moving to startup phase COLDSTART_COLLISION_RESOLUTION");
 
         FMI3_LS_BUS_FLEXRAY_CREATE_OP_START_COMMUNICATION(&app->TxBufferInfo, instance->App->NextStartupTransition);
 

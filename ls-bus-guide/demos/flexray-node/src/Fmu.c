@@ -8,6 +8,9 @@
 #include "Logging.h"
 
 
+#define INDEPENDENT_VARIABLE (1024)
+
+
 /**
  * Helper macros
  */
@@ -94,6 +97,7 @@ FMI3_Export fmi3Instance fmi3InstantiateCoSimulation(fmi3String instanceName,
     fmuInstance->InstanceEnvironment = instanceEnvironment;
     fmuInstance->LogMessageCallback = NULL;
     fmuInstance->State = FMU_STATE_INSTANTIATED;
+    fmuInstance->SimulationTime = 0.0;
 
     if (loggingOn)
     {
@@ -156,6 +160,7 @@ FMI3_Export fmi3Status fmi3EnterInitializationMode(fmi3Instance instance,
     LogFmuMessage(instance, fmi3OK, "Trace", "Entering initialization mode.");
     FmuInstance* fmuInstance = instance;
     fmuInstance->State = FMU_STATE_INITIALIZATION_MODE;
+    fmuInstance->SimulationTime = startTime;
 
     return fmi3OK;
 }
@@ -503,11 +508,13 @@ FMI3_Export fmi3Status fmi3DoStep(fmi3Instance instance,
                   communicationStepSize);
 
     const fmi3Float64 targetTime = currentCommunicationPoint + communicationStepSize;
-    *eventHandlingNeeded = App_DoStep(fmuInstance, currentCommunicationPoint, targetTime);
-    *lastSuccessfulTime = targetTime;
+    const bool eventHandlingNeededInternal = App_DoStep(fmuInstance, currentCommunicationPoint, targetTime);
+    fmuInstance->SimulationTime = targetTime;
 
+    *eventHandlingNeeded = eventHandlingNeededInternal ? fmi3True : fmi3False;
     *terminateSimulation = fmi3False;
     *earlyReturn = fmi3False;
+    *lastSuccessfulTime = targetTime;
 
     return fmi3OK;
 }
@@ -585,7 +592,20 @@ FMI3_Export fmi3Status fmi3GetFloat64(fmi3Instance instance,
                                       fmi3Float64 values[],
                                       size_t nValues)
 {
-    return INVALID_CALL_IF_NONZERO(nValueReferences, instance);
+    for (size_t i = 0; i < nValueReferences; i++)
+    {
+        if (valueReferences[i] == INDEPENDENT_VARIABLE)
+        {
+            values[i] = ((FmuInstance*)instance)->SimulationTime;
+        }
+        else
+        {
+            TerminateWithError(instance, "fmi3GetFloat64: Invalid call with value reference %u", valueReferences[i]);
+            return fmi3Error;
+        }
+    }
+
+    return fmi3OK;
 }
 
 FMI3_Export fmi3Status fmi3GetInt8(fmi3Instance instance,

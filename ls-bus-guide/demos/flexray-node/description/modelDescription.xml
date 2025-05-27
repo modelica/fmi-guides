@@ -52,7 +52,7 @@
         initial="exact"
         maxSize="2048"
         clocks="2"
-        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.1.0-alpha.1&quot;">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.0.0-alpha.1&quot;">
         <Dimension start="1" />
         <Start value="" />
     </Binary>
@@ -64,7 +64,7 @@
         initial="calculated"
         maxSize="2048"
         clocks="3"
-        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.1.0-alpha.1&quot;">
+        mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.0.0-alpha.1&quot;">
     </Binary>
 
     <Clock name="FlexRayChannel.Rx_Clock" valueReference="2" causality="input" intervalVariability="triggered" />

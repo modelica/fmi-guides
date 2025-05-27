@@ -35,6 +35,7 @@ typedef struct
     void* InstanceEnvironment;
     fmi3LogMessageCallback LogMessageCallback;
     FmuState State;
+    fmi3Float64 SimulationTime;
 
     AppType* App;
 } FmuInstance;
