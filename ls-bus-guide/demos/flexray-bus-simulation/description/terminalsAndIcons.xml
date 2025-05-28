@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiTerminalsAndIcons fmiVersion="3.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/modelica/fmi-standard/v3.0.1/schema/fmi3TerminalsAndIcons.xsd">
+  <Terminals>
+    <Terminal terminalKind="org.fmi-ls-bus.network-terminal"
+              matchingRule="org.fmi-ls-bus.transceiver"
+              name="FlexRayChannel.Node1"
+              description="FlexRay bus terminal definition">
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node1.Rx_Clock"
+                              memberName="Rx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node1.Rx_Data"
+                              memberName="Rx_Data" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node1.Tx_Clock"
+                              memberName="Tx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node1.Tx_Data"
+                              memberName="Tx_Data" />
+      
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node1.BusNotifications"
+                              memberName="BusNotifications" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node1.DeliveryOnBoundary"
+                              memberName="DeliveryOnBoundary" />
+    </Terminal>
+
+    
+    <Terminal terminalKind="org.fmi-ls-bus.network-terminal"
+              matchingRule="org.fmi-ls-bus.transceiver"
+              name="FlexRayChannel.Node2"
+              description="FlexRay bus terminal definition">
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node2.Rx_Clock"
+                              memberName="Rx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node2.Rx_Data"
+                              memberName="Rx_Data" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node2.Tx_Clock"
+                              memberName="Tx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node2.Tx_Data"
+                              memberName="Tx_Data" />
+      
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node2.BusNotifications"
+                              memberName="BusNotifications" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Node2.DeliveryOnBoundary"
+                              memberName="DeliveryOnBoundary" />
+    </Terminal>
+  </Terminals>
+</fmiTerminalsAndIcons>

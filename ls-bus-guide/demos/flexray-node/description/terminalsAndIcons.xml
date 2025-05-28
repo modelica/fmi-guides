@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiTerminalsAndIcons fmiVersion="3.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/modelica/fmi-standard/v3.0.1/schema/fmi3TerminalsAndIcons.xsd">
+  <Terminals>
+    <Terminal terminalKind="org.fmi-ls-bus.network-terminal"
+              matchingRule="org.fmi-ls-bus.transceiver"
+              name="FlexRayChannel"
+              description="FlexRay bus terminal definition">
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Rx_Clock"
+                              memberName="Rx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Rx_Data"
+                              memberName="Rx_Data" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Tx_Clock"
+                              memberName="Tx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.Tx_Data"
+                              memberName="Tx_Data" />
+      
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.BusNotifications"
+                              memberName="BusNotifications" />
+      <TerminalMemberVariable variableKind="signal"
+                              variableName="FlexRayChannel.DeliveryOnBoundary"
+                              memberName="DeliveryOnBoundary" />
+    </Terminal>
+  </Terminals>
+</fmiTerminalsAndIcons>
