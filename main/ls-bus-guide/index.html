@@ -586,7 +586,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI LS BUS Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-4c0658d619a1ec28386923d2da0958dae9ceaf74,</span>
+<span id="revnumber">version main-7a5122594497066f9ed6cbf4ea0b4c0da6d1eabb,</span>
 <span id="revdate">2025-05-28</span>
 </div>
 <div id="toc" class="toc2">
@@ -619,6 +619,22 @@ document.addEventListener('keydown', (event) => {
 </ul>
 </li>
 <li><a href="#low-cut-can-realization-of-can-error-handling">4.1.4. Realization of CAN Error Handling</a></li>
+</ul>
+</li>
+<li><a href="#_flexray">4.2. FlexRay</a>
+<ul class="sectlevel3">
+<li><a href="#low-cut-flexray-getting-started-with-flexray">4.2.1. Getting Started with FlexRay</a>
+<ul class="sectlevel4">
+<li><a href="#low-cut-flexray-getting-started-provided-header-files">4.2.1.1. Provided Header Files</a></li>
+<li><a href="#_general_aspects_2">4.2.1.2. General Aspects</a></li>
+<li><a href="#_buffer_handling_2">4.2.1.3. Buffer Handling</a></li>
+<li><a href="#_creating_bus_operations_2">4.2.1.4. Creating Bus Operations</a></li>
+<li><a href="#_receiving_bus_operations_2">4.2.1.5. Receiving Bus Operations</a></li>
+<li><a href="#_processing_of_bus_operations_2">4.2.1.6. Processing of Bus Operations</a></li>
+<li><a href="#low-cut-flexray-timing">4.2.1.7. Timing</a></li>
+</ul>
+</li>
+<li><a href="#low-cut-flexray-demos">4.2.2. Demos</a></li>
 </ul>
 </li>
 </ul>
@@ -741,7 +757,7 @@ For a transfer, all Bus Operations are serialized together in a <code>fmi3Binary
 This serialization can be done using the provided <a href="#low-cut-can-getting-started-provided-header-files">header files</a> or using a custom approach.
 After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized again and then processed inside the receiver.</p>
 </div>
-<div id="figure-general-aspects-overview" class="imageblock text-center">
+<div id="figure-general-aspects-overview-can" class="imageblock text-center">
 <div class="content">
 <img src="images/create_process_bus_operations.svg" alt="create process bus operations" width="60%">
 </div>
@@ -840,7 +856,7 @@ The further usage of the <code>fmi3LsBusUtilBufferInfo</code> variable is discus
 <div class="sect4">
 <h5 id="_creating_bus_operations">4.1.1.4. Creating Bus Operations</h5>
 <div class="paragraph">
-<p>The header file <a href="https://github.com/modelica/fmi-guides/blob/main/ls-bus-guide/headers/fmi3LsBusUtilCan.h">fmi3LsBusUtilCan.h</a> offers macros for all Bus Operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
+<p>The header file <a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilCan.h">fmi3LsBusUtilCan.h</a> offers macros for all Bus Operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
 The macros are always provided according to the following syntax: <code>FMI3_LS_BUS_&lt;BusType&gt;_CREATE_OP_&lt;OperationName&gt;</code>.
 Following these rule, the macro for creating a CAN Transmit operation is <code>FMI3_LS_BUS_CAN_CREATE_OP_CAN_TRANSMIT</code>.
 A macro for creating an operation also assigns it to a buffer described by an <code>fmi3LsBusUtilBufferInfo</code> instance.</p>
@@ -1368,6 +1384,445 @@ If REC was greater than 127, it shall be set to any value between 119 and 127.</
 <p>If <code>org.fmi_standard.fmi_ls_bus.Can_BusNotifications</code> is set to <code>false</code>, the <code>Confirm</code> operation cannot be directly used as indicator to set the TEC value and will be incorrect under the rules outlined above.
 Also <code>Bus Error</code> operations are not available in this scenario, i.e. the values for TEC and REC remain zero.
 In this case, it is recommended to either implement error handling in a different manner or to disable it completely within the specified Network FMU.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_flexray">4.2. FlexRay</h3>
+<div class="paragraph">
+<p>This chapter contains details on FlexRay specific topics.</p>
+</div>
+<div class="sect3">
+<h4 id="low-cut-flexray-getting-started-with-flexray">4.2.1. Getting Started with FlexRay</h4>
+<div class="paragraph">
+<p>This section shows the exemplary implementation in conjunction with the provided header files of the FMI-LS-BUS layered standard.</p>
+</div>
+<div class="sect4">
+<h5 id="low-cut-flexray-getting-started-provided-header-files">4.2.1.1. Provided Header Files</h5>
+<div class="paragraph">
+<p>Besides the textual specification for FMUs with bus support, the Layered Standard for Network Communication also provides a C API to make the creation of FMUs with bus support as easy and generalized as possible.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBus.h">fmi3LsBus.h</a> provides general macros, types and structures of common Bus Operations.
+This header file applies to all supported bus types of the layered standard.</p>
+</li>
+<li>
+<p><a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusFlexRay.h">fmi3LsBusFlexRay.h</a> provides macros, types and structures of Bus Operations explicit for FlexRay.
+Primarily, structures are included here that allow the Bus Operations specified by the layered standard to be easily created and used.</p>
+</li>
+<li>
+<p><a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtil.h">fmi3LsBusUtil.h</a> provides common utility macros and structures for all supported bus types.</p>
+</li>
+<li>
+<p><a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilFlexRay.h">fmi3LsBusUtilFlexRay.h</a> provides FlexRay explicit utility macros.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_general_aspects_2">4.2.1.2. General Aspects</h5>
+<div class="paragraph">
+<p>Bus Operations represent protocol units to be transmitted in the environment of the layered standard based on the <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-layered-standard-bus-protocol">Layered Standard Bus Protocol</a>.
+All FMI variables required for the exchange are grouped by a defined <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-bus-terminal">Bus Terminal</a>.
+Bus Operations are created and processed within an FMU.
+This can be done either in <code>Step Mode</code> or in <code>Event Mode</code>.
+For a transfer, all Bus Operations are serialized together in a <code>fmi3Binary</code> <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-tx-rx-data-variables">variable</a>.
+This serialization can be done using the provided <a href="#low-cut-flexray-getting-started-provided-header-files">header files</a> or using a custom approach.
+After the contents of the binary variables have been transferred to another FMU via an FMU importer, they are deserialized again and then processed inside the receiver.</p>
+</div>
+<div id="figure-general-aspects-overview-flexray" class="imageblock text-center">
+<div class="content">
+<img src="images/create_process_bus_operations.svg" alt="create process bus operations" width="60%">
+</div>
+<div class="title">Figure 6. Create, process and transfer Bus Operations.</div>
+</div>
+<div class="paragraph">
+<p>The point in time where Bus Operations are transferred between different FMUs is defined by the usage of <code>fmi3Clock</code> variables.
+For this reason, the exchange of Bus Operations is always carried out within the <code>Event Mode</code>.
+Details about possible entry points regarding the FMI interface will be provided later in this section.
+However, it is important to know that due to the resulting decoupling between the generation, processing and transfer of Bus Operations, the need for buffer semantics arises.
+This semantics is reflected directly in the structure and handling of the <a href="#low-cut-flexray-getting-started-provided-header-files">header files</a> provided.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_buffer_handling_2">4.2.1.3. Buffer Handling</h5>
+<div class="paragraph">
+<p>For exchanging Bus Operations between FMUs, variables of type <code>fmi3Binary</code> type are used.
+For this reason, appropriate variables must first be set up within the implementation that represent the content for this exchange.
+The buffer variable can be easily initialized in the form of an <code>fmi3UInt8</code> array of any size.
+It should be noted that the entire buffer size must of course provide enough space for all created Bus Operations during a <code>fmi3DoStep</code>.
+To simplify our example, the buffers are declared as global variables within the FMU.</p>
+</div>
+<div class="paragraph">
+<p>Since describing and reading Bus Operations from a simple array can be quite complicated, the common utility headers provide an <code>fmi3LsBusUtilBufferInfo</code> entity.
+This abstraction represents a kind of view of the underlying buffer array and allows simplified access using additionally provided functionality.</p>
+</div>
+<div class="paragraph">
+<p>The following program code shows the definition and initialization of a buffer for transmitting (Tx) and receiving (Rx) Bus Operations in the form of an array.
+In addition, an <code>fmi3LsBusUtilBufferInfo</code> is created for both buffer variables.
+Using <code>FMI3_LS_BUS_BUFFER_INFO_INIT</code>, the underlying buffer is coupled to the respective <code>fmi3LsBusUtilBufferInfo</code> instance.</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting up buffering and fmi3LsBusUtilBufferInfo instance</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">#include "fmi3PlatformTypes.h"
+#include "fmi3LsBusUtil.h"          <i class="conum" data-value="1"></i><b>(1)</b>
+
+fmi3UInt8 TxBufferFlexRay[2048];    <i class="conum" data-value="2"></i><b>(2)</b>
+fmi3UInt8 RxBufferFlexRay[2048];
+fmi3LsBusUtilBufferInfo TxBufferInfoFlexRay;    <i class="conum" data-value="3"></i><b>(3)</b>
+fmi3LsBusUtilBufferInfo RxBufferInfoFlexRay;
+
+fmi3Instance fmi3InstantiateCoSimulation(...) {
+    FMI3_LS_BUS_BUFFER_INFO_INIT(&amp;TxBufferInfoFlexRay, TxBufferFlexRay, sizeof(TxBufferFlexRay));    <i class="conum" data-value="4"></i><b>(4)</b>
+    FMI3_LS_BUS_BUFFER_INFO_INIT(&amp;RxBufferInfoFlexRay, RxBufferFlexRay, sizeof(RxBufferFlexRay));
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Necessary include of the fmi3LsBusUtil.h header file.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Definition and initialization of a <code>fmi3Binary</code> buffer variable.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Definition of <code>fmi3LsBusUtilBufferInfo</code> variable instance.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Coupling of a Buffer and a <code>fmi3LsBusUtilBufferInfo</code> variable.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The buffer is always treated by the provided header functionalities using FIFO (First In - First Out) semantics.
+The further usage of the <code>fmi3LsBusUtilBufferInfo</code> variable is discussed later.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The transfer of Bus Operations must typically be decoupled from creation and processing</p>
+</li>
+<li>
+<p>The API provides macros for buffering of Bus Operations in a FIFO manner</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_creating_bus_operations_2">4.2.1.4. Creating Bus Operations</h5>
+<div class="paragraph">
+<p>The header file <a href="https://github.com/modelica/fmi-ls-bus/blob/main/headers/fmi3LsBusUtilFlexRay.h">fmi3LsBusUtilFlexRay.h</a> offers macros for all Bus Operations specified by the layered standard, which minimize the effort required to create and serialize such an operation.
+The macros are always provided according to the following syntax: <code>FMI3_LS_BUS_&lt;BusType&gt;_CREATE_OP_&lt;OperationName&gt;</code>.
+Following these rule, the macro for creating a FlexRay Transmit operation is <code>FMI3_LS_BUS_FLEXRAY_CREATE_OP_TRANSMIT</code>.
+A macro for creating an operation also assigns it to a buffer described by an <code>fmi3LsBusUtilBufferInfo</code> instance.</p>
+</div>
+<div class="paragraph">
+<p>The following program code shows how to first define the Cycle ID, Slot ID, channel and payload that should be used in the FlexRay Transmit operation.
+Afterwards, the <code>fmi3LsBusUtilBufferInfo</code> is reset by using <code>FMI3_LS_BUS_BUFFER_INFO_RESET</code>.
+<code>FMI3_LS_BUS_BUFFER_INFO_RESET</code> sets the internal position of the <code>fmi3LsBusUtilBufferInfo</code> instance to zero, so that it is essentially emptied and written from the beginning.
+This is necessary to ensure that Bus Operations that have already been transmitted are not transmitted again.
+<code>FMI3_LS_BUS_FLEXRAY_CREATE_OP_TRANSMIT</code> now creates a new FlexRay Transmit operation with the associated parameters such as Cycle ID, Slot ID, channel and payload and adds them directly to the <code>fmi3LsBusUtilBufferInfo</code> instance.
+Querying the status of a <code>fmi3LsBusUtilBufferInfo</code> instance allows you to check whether there is still enough space in the underlying buffer.
+In the last step, <code>FMI3_LS_BUS_BUFFER_LENGTH</code> is used to check whether there are Bus Operations in the respective <code>fmi3LsBusUtilBufferInfo</code> variable that should be transmitted in <code>Event Mode</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">Creation of a FlexRay Transmit operation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">#include "Fmi3LsBusUtilFlexRay.h"
+
+fmi3Status fmi3DoStep(..., eventHandlingNeeded, ...) {
+    fmi3UInt8 msg[] = "Hey guys";   <i class="conum" data-value="1"></i><b>(1)</b>
+    fmi3LsBusFlexRayCycleId cycleId = 1;     <i class="conum" data-value="2"></i><b>(2)</b>
+    fmi3LsBusFlexRaySlotId slotId   = 1;     <i class="conum" data-value="2"></i><b>(2)</b>
+
+    /* Reset read/write positions of the BufferInfo variable */
+    FMI3_LS_BUS_BUFFER_INFO_RESET(&amp;TxBufferInfoFlexRay);    <i class="conum" data-value="3"></i><b>(3)</b>
+
+    /* Create a FlexRay Transmit operation to be send */
+    FMI3_LS_BUS_FLEXRAY_CREATE_OP_TRANSMIT(&amp;TxBufferInfoFlexRay, cycleId,
+       slotId, FMI3_LS_BUS_FLEXRAY_CHANNEL_A, &lt;options&gt;, sizeof(msg), msg);    <i class="conum" data-value="4"></i><b>(4)</b>
+
+    if(!TxBufferInfoFlexRay.status){    <i class="conum" data-value="5"></i><b>(5)</b>
+        /* Error: No free buffer space available */
+    }
+
+    ...
+
+    if(FMI3_LS_BUS_BUFFER_LENGTH(&amp;TxBufferInfoFlexRay) &gt; 0){
+        *eventHandlingNeeded = fmi3True;    <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Creation of FlexRay frame payload.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Definition of Cycle ID and Slot ID.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Resetting of <code>fmi3LsBusUtilBufferInfo</code> variable instance.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Creation of a FlexRay Transmit operation and adding it to the specified <code>fmi3LsBusUtilBufferInfo</code> variable.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Verify that free buffer space is available.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Signal that <code>Event Mode</code> is needed.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>According to the same principles, any specified operation can be created using the corresponding macro.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Bus Operations can be created by using the provided FMI3_LS_BUS_&lt;BusType&gt;_CREATE_OP_&lt;OperationName&gt; macros</p>
+</li>
+<li>
+<p>The CREATE_OP macros are creating a Bus Operation and updating the given buffer in a single step</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_receiving_bus_operations_2">4.2.1.5. Receiving Bus Operations</h5>
+<div class="paragraph">
+<p>The indication whether new operations are pending within the <code>Rx_Data</code> variable is done via the <code>Rx_Clock</code>.
+This clock ticks as soon as new data is available.
+The operation-receiving FMU gets the Bus Operations via an <code>fmi3Binary</code> variable.
+The contents of this variable may then be copied into a buffer described by an <code>fmi3LsBusUtilBufferInfo</code> instance using <code>FMI3_LS_BUS_BUFFER_WRITE</code>.</p>
+</div>
+<div class="paragraph">
+<p>The code snipped below shows its usage within the <code>fmi3SetClock</code> and <code>fmi3SetBinary</code> functions, which an FMU importer calls when setting the concrete <code>Rx_Data</code> variable.</p>
+</div>
+<div class="listingblock">
+<div class="title">Receiving Bus Operations</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">fmi3Clock RxClock;
+fmi3UInt8 RxBufferFlexRay[2048];
+fmi3LsBusUtilBufferInfo RxBufferInfoFlexRay;
+
+fmi3Status fmi3SetClock(fmi3Instance instance,
+                         const fmi3ValueReference valueReference[],
+                         size_t nValueReferences,
+                         const fmi3clock values[]) {
+    ...
+    for (size_t i = 0; i &lt; nValueReferences; i++) {
+        if (valueReferences[i] == RX_CLOCK_REFERENCE &amp;&amp; values[i] == fmi3ClockActive) { <i class="conum" data-value="1"></i><b>(1)</b>
+            /* Set an indicator that clock ticked and new Bus Operations arrived */
+            RxClock = values[i]; <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+    }
+    ...
+}
+
+fmi3Status fmi3SetBinary(fmi3Instance instance,
+                          const fmi3ValueReference valueReferences[],
+                          size_t nValueReferences,
+                          const size_t valueSize,
+                          const fmi3Binary value, ...) {
+    ...
+    for (size_t i = 0; i &lt; nValueReferences; i++) {
+        if (valueReferences[i] == RX_DATA_REFERENCE &amp;&amp; RxClock == fmi3ClockActive) {
+            FMI3_LS_BUS_BUFFER_WRITE(&amp;RxBufferInfoFlexRay, value[i], valueSize[i]); <i class="conum" data-value="3"></i><b>(3)</b>
+        }
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Check if <code>Rx_Clock</code> has ticked.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Store the information for global access within other FMI interface functions.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Create an <code>fmi3LsBusUtilBufferInfo</code> instance based on received Bus Operations.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The LS-BUS API provides macros to write received binary data into a given buffer</p>
+</li>
+<li>
+<p>The buffer is updated by the <code>FMI3_LS_BUS_BUFFER_WRITE</code> macro</p>
+</li>
+<li>
+<p>The <code>FMI3_LS_BUS_BUFFER_WRITE</code> can be called repeatedly</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_processing_of_bus_operations_2">4.2.1.6. Processing of Bus Operations</h5>
+<div class="paragraph">
+<p>The Bus Operations must now be processed on the receiving side.
+A suitable place for implementation represents <code>fmi3UpdateDiscreteStates</code>.
+In this case, the <code>FMI3_LS_BUS_READ_NEXT_OPERATION</code> macro can be used to successively deserialize all received Bus Operations into the correct operation structure.
+After this, they can be further processed.</p>
+</div>
+<div class="listingblock">
+<div class="title">Processing received Bus Operations.</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">fmi3Status fmi3UpdateDiscreteStates(...)
+{
+    fmi3LsBusOperationHeader* hdr;
+    ...
+    if (fmi3ClockActive == RxClock) {
+        /* Processing of received Bus Operations */
+        while (FMI3_LS_BUS_READ_NEXT_OPERATION(&amp;RxBufferInfoFlexRay, hdr))    <i class="conum" data-value="1"></i><b>(1)</b>
+        {
+            switch (hdr-&gt;type)                                                <i class="conum" data-value="2"></i><b>(2)</b>
+            {
+                case FMI3_LS_BUS_FLEXRAY_OP_TRANSMIT:
+                    fmi3LsBusFlexRayOperationTransmit *receivedTransmitOp     <i class="conum" data-value="3"></i><b>(3)</b>
+                        = (fmi3LsBusFlexRayOperationTransmit*) hdr;
+            ...
+            }
+        }
+
+        /* Reset clock */
+        RxClock = fmi3ClockInactive;
+
+        /* Reset read/write positions */
+        FMI3_LS_BUS_BUFFER_INFO_RESET(&amp;RxBufferInfoFlexRay);
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Read the next operation from the <code>fmi3LsBusUtilBufferInfo</code> instance.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Decide which kind of operation needs to be handled.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Cast to the specific operation structure.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Summary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Received Bus Operations can be processed by using the <code>FMI3_LS_BUS_READ_NEXT_OPERATION</code> macro</p>
+</li>
+<li>
+<p><code>FMI3_LS_BUS_BUFFER_INFO_RESET</code> allows to reset the <code>fmi3LsBusUtilBufferInfo</code> instance after processing</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="low-cut-flexray-timing">4.2.1.7. Timing</h5>
+<div class="paragraph">
+<p>Since FlexRay is a scheduled bus protocol, a time-based approach is essential.
+Within the FMI-LS-BUS, a time window has been described in detail for the <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-flexray-static-segment">static</a> and the <a href="https://modelica.github.io/fmi-ls-bus/main/#low-cut-flexray-dynamic-segment">dynamic segment</a>, indicating when a Network FMU shall provide a Transmit operation.
+This means that the Network FMU itself must ensure that a corresponding FlexRay Transmit operation is provided at the correct time.
+The function <code>FMI3_LS_BUS_FLEXRAY_GET_GLOBAL_TIME</code>, provided via FMI-LS-BUS <a href="#low-cut-flexray-getting-started-provided-header-files">header files</a>, offers assistance here.
+Using it, the currently pending cycle and macro tick can be calculated based on the current simulation time.</p>
+</div>
+<div class="paragraph">
+<p><mark>ToDo: Add a sample for countdown clocks within this chapter</mark></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="low-cut-flexray-demos">4.2.2. Demos</h4>
+<div class="paragraph">
+<p>The following list contains demos, which illustrate both the Bus Simulation as such and Network FMUs of various designs:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/flexray-bus-simulation">FlexRay Bus Simulation</a>: Represents an exemplary Bus Simulation FMU for FlexRay.
+This Bus Simulation can be used in combination with the other Network FMUs listed below.</p>
+</li>
+<li>
+<p><a href="https://github.com/modelica/fmi-guides/tree/main/ls-bus-guide/demos/flexray-node">FlexRay Countdown Clocks</a>: This demo Network FMU demonstrates startup, sending and receiving multiple Transmit operations using <code>countdown</code> clocks.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
