@@ -244,7 +244,7 @@ static void UpdateCountdownClock(const FmuInstance* instance)
 
     // The next triggering is at the current point in time -> We should use the next transmit opportunity for setting
     // the clock
-    if (nextTransmitBufferTime == instance->App->CurrentTimeNs)
+    if (nextTransmitBufferTime <= instance->App->CurrentTimeNs)
     {
         // Check whether we need to advance an iteration
         nextTransmitBufferTime = GetNextTxBufferTime(instance->App, 1);
