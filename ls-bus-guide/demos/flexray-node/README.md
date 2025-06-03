@@ -2,7 +2,7 @@
 
 This directory contains a demo FMU a FlexRay node.
 
-The CAN node periodically sends a FlexRay message in slots 1 and 3 or 2 and 4 of each cycle.
+The FlexRay node periodically sends a FlexRay message in slots 1 and 3 or 2 and 4 of each cycle.
 Which set of slots is used depends on the parameter `IsSecondNode`.
 
 The FMU requires a simulator with support for countdown clocks, triggered clocks, event mode and variable step size.
