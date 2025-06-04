@@ -590,7 +590,7 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-e4617c3c102019ecdbc2eeda807e98b3d9e285ee,</span>
+<span id="revnumber">version main-3caaa5dfbc22ebccecf4206a75ea7cd186c1f189,</span>
 <span id="revdate">2025-06-04</span>
 </div>
 <div id="toc" class="toc2">
@@ -665,6 +665,7 @@ document.addEventListener('keydown', (event) => {
 <ul class="sectlevel2">
 <li><a href="#_early_return">6.1. Early Return</a></li>
 <li><a href="#_event_handling_in_co_simulation">6.2. Event-Handling in Co-Simulation</a></li>
+<li><a href="#_clock_tick_definitions_and_clock_activations">6.3. Clock Tick Definitions and Clock Activations</a></li>
 </ul>
 </li>
 <li><a href="#_model_exchange_specific_issues">7. Model-Exchange Specific Issues</a>
@@ -1835,6 +1836,67 @@ This might require at least mitigative internal event handling by the FMU itself
 </div>
 <div class="paragraph">
 <p>For this reason it is usually recommended to use event handling support and early return capabilities together, both for exporters and importers, as this will give the best event handling control.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_clock_tick_definitions_and_clock_activations">6.3. Clock Tick Definitions and Clock Activations</h3>
+<div class="paragraph">
+<p>Remember that a clock activation means setting its activation status to <code>fmi3ClockActive</code>, and that the source of a clock activation is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>for input clocks the importer, by calling fmi3setClock() on the clock&#8217;s FMU.</p>
+</li>
+<li>
+<p>for output clocks the clock&#8217;s FMU in Event Mode.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A clock tick is the (future) time instant of a clock activation, and its cause. The importer needs to keep track of clock ticks and if necessary, doStep the clock&#8217;s FMU to the time instant of the clock tick.</p>
+</div>
+<div class="paragraph">
+<p>The source of a clock tick&#8217;s definition is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>for time-based input clocks and for triggered output clocks always the clock&#8217;s FMU. The time instant of the clock tick is reported to the importer by clock-specific means.</p>
+</li>
+<li>
+<p>for triggered input clocks not constrained by the standard, and as such one or more of</p>
+<div class="ulist">
+<ul>
+<li>
+<p>a triggered output clock activation of any FMU at the time instant of the tick.</p>
+</li>
+<li>
+<p>a tick of any time-based input clock of any FMU.</p>
+</li>
+<li>
+<p>any other source that the importer has knowledge of.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If the tick of a time-based input clock as cause of a triggered input clock&#8217;s activation seems counter-intuitive, it may help to remember that</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>inports and outports are always between importer and FMU, not FMU and FMU (the latter may only appear to be so to a user in the context of defining connections between outports and inports, e.g. in a typical GUI).</p>
+</li>
+<li>
+<p>the definition of a time-based clock&#8217;s tick by an FMU is separate from the activation of that clock by the importer.</p>
+</li>
+<li>
+<p>the time-based input clock is not 'connected' to the triggered input clock (in the sense of connecting one FMUs output port to another FMUs input port), it is the importer that keeps track of the shared tick, if necessary doSteps the FMU(s) to the time instant of the shared tick, and activates each input clock.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
