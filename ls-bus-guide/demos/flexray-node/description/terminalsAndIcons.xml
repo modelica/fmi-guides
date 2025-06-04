@@ -19,13 +19,15 @@
       <TerminalMemberVariable variableKind="signal"
                               variableName="FlexRayChannel.Tx_Data"
                               memberName="Tx_Data" />
-      
-      <TerminalMemberVariable variableKind="signal"
-                              variableName="FlexRayChannel.BusNotifications"
-                              memberName="BusNotifications" />
-      <TerminalMemberVariable variableKind="signal"
-                              variableName="FlexRayChannel.DeliveryOnBoundary"
-                              memberName="DeliveryOnBoundary" />
+
+      <Terminal terminalKind="org.fmi-ls-bus.network-terminal.configuration" matchingRule="bus" name="Configuration">
+        <TerminalMemberVariable variableKind="signal"
+                                variableName="FlexRayChannel.BusNotifications"
+                                memberName="BusNotifications" />
+        <TerminalMemberVariable variableKind="signal"
+                                variableName="FlexRayChannel.DeliveryOnBoundary"
+                                memberName="DeliveryOnBoundary" />
+      </Terminal>
     </Terminal>
   </Terminals>
 </fmiTerminalsAndIcons>

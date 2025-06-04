@@ -53,7 +53,6 @@
         maxSize="2048"
         clocks="2"
         mimeType="application/org.fmi-standard.fmi-ls-bus.flexray; version=&quot;1.0.0-alpha.1&quot;">
-        <Dimension start="1" />
         <Start value="" />
     </Binary>
 

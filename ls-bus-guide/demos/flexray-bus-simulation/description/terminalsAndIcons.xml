@@ -19,16 +19,17 @@
       <TerminalMemberVariable variableKind="signal"
                               variableName="FlexRayChannel.Node1.Tx_Data"
                               memberName="Tx_Data" />
-      
-      <TerminalMemberVariable variableKind="signal"
+
+      <Terminal terminalKind="org.fmi-ls-bus.network-terminal.configuration" matchingRule="bus" name="Configuration">
+        <TerminalMemberVariable variableKind="signal"
                               variableName="FlexRayChannel.Node1.BusNotifications"
                               memberName="BusNotifications" />
-      <TerminalMemberVariable variableKind="signal"
+        <TerminalMemberVariable variableKind="signal"
                               variableName="FlexRayChannel.Node1.DeliveryOnBoundary"
                               memberName="DeliveryOnBoundary" />
+      </Terminal>
     </Terminal>
 
-    
     <Terminal terminalKind="org.fmi-ls-bus.network-terminal"
               matchingRule="org.fmi-ls-bus.transceiver"
               name="FlexRayChannel.Node2"
@@ -45,13 +46,15 @@
       <TerminalMemberVariable variableKind="signal"
                               variableName="FlexRayChannel.Node2.Tx_Data"
                               memberName="Tx_Data" />
-      
-      <TerminalMemberVariable variableKind="signal"
-                              variableName="FlexRayChannel.Node2.BusNotifications"
-                              memberName="BusNotifications" />
-      <TerminalMemberVariable variableKind="signal"
-                              variableName="FlexRayChannel.Node2.DeliveryOnBoundary"
-                              memberName="DeliveryOnBoundary" />
+
+      <Terminal terminalKind="org.fmi-ls-bus.network-terminal.configuration" matchingRule="bus" name="Configuration">
+        <TerminalMemberVariable variableKind="signal"
+                                variableName="FlexRayChannel.Node2.BusNotifications"
+                                memberName="BusNotifications" />
+        <TerminalMemberVariable variableKind="signal"
+                                variableName="FlexRayChannel.Node2.DeliveryOnBoundary"
+                                memberName="DeliveryOnBoundary" />
+      </Terminal>
     </Terminal>
   </Terminals>
 </fmiTerminalsAndIcons>
