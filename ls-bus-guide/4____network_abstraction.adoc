@@ -163,7 +163,7 @@ fmi3Status fmi3GetClock(fmi3Instance instance,
     for (size_t i = 0; i < nValueReferences; i++) { 
         if (valueReferences[i] == TX_CLOCK_REFERENCE) {
             if(!FMI3_LS_BUS_BUFFER_IS_EMPTY(&TxBufferInfoCan)) {    // <1>
-                *values[i] = fmi3ClockActive;                       // <2>
+                values[i] = fmi3ClockActive;                        // <2>
             }
         }
     }
@@ -179,8 +179,8 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
     ...
     for (size_t i = 0; i < nValueReferences; i++) {
         if (valueReferences[i] == TX_DATA_REFERENCE) {
-            *values[i] = FMI3_LS_BUS_BUFFER_START(&TxBufferInfoCan);        // <3>
-            *valueSizes[i] = FMI3_LS_BUS_BUFFER_LENGTH(&TxBufferInfoCan);   // <4>
+            values[i] = FMI3_LS_BUS_BUFFER_START(&TxBufferInfoCan);        // <3>
+            valueSizes[i] = FMI3_LS_BUS_BUFFER_LENGTH(&TxBufferInfoCan);   // <4>
         }
     }
     ...
