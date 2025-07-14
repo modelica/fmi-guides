@@ -586,8 +586,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI LS BUS Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-3caaa5dfbc22ebccecf4206a75ea7cd186c1f189,</span>
-<span id="revdate">2025-06-04</span>
+<span id="revnumber">version main-a76f9881be54cb79469975e1d40313b0a01d6477,</span>
+<span id="revdate">2025-07-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -981,7 +981,7 @@ The value can be easily passed on to the FMI interface by using the <code>FMI3_L
     for (size_t i = 0; i &lt; nValueReferences; i++) {
         if (valueReferences[i] == TX_CLOCK_REFERENCE) {
             if(!FMI3_LS_BUS_BUFFER_IS_EMPTY(&amp;TxBufferInfoCan)) {    <i class="conum" data-value="1"></i><b>(1)</b>
-                *values[i] = fmi3ClockActive;                       <i class="conum" data-value="2"></i><b>(2)</b>
+                values[i] = fmi3ClockActive;                        <i class="conum" data-value="2"></i><b>(2)</b>
             }
         }
     }
@@ -997,8 +997,8 @@ fmi3Status fmi3GetBinary(fmi3Instance instance,
     ...
     for (size_t i = 0; i &lt; nValueReferences; i++) {
         if (valueReferences[i] == TX_DATA_REFERENCE) {
-            *values[i] = FMI3_LS_BUS_BUFFER_START(&amp;TxBufferInfoCan);        <i class="conum" data-value="3"></i><b>(3)</b>
-            *valueSizes[i] = FMI3_LS_BUS_BUFFER_LENGTH(&amp;TxBufferInfoCan);   <i class="conum" data-value="4"></i><b>(4)</b>
+            values[i] = FMI3_LS_BUS_BUFFER_START(&amp;TxBufferInfoCan);        <i class="conum" data-value="3"></i><b>(3)</b>
+            valueSizes[i] = FMI3_LS_BUS_BUFFER_LENGTH(&amp;TxBufferInfoCan);   <i class="conum" data-value="4"></i><b>(4)</b>
         }
     }
     ...
