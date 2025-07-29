@@ -16,7 +16,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3
     - name: prepare
-      run: mkdir build && mkdir build/fmi-guide && mkdir build/fmi-profiles
+      run: mkdir build && mkdir build/fmi-guide && mkdir build/fmi-profiles && mkdir build/ls-bus-guide
     - name: build implementers guide
       uses: avattathil/asciidoctor-action@master
       with:
@@ -27,6 +27,14 @@ jobs:
         program: "asciidoctor -D build/fmi-profiles --backend=html5 --attribute=revnumber=${GITHUB_REF#refs/heads/}-$GITHUB_SHA --attribute=revdate=$(date +%F) fmi-profiles/index.adoc"
     - name: copy images
       run: tar cf - fmi-guide/images fmi-profiles/images | tar xfC - build
+    - name: add redirects for old content
+      uses: ActionCloud/generate-redirects@v1
+      with:
+        target: build/ls-bus-guide
+        links: |
+          {
+            "index": "https://modelica.github.io/fmi-ls-bus-guides/main/ls-bus-guide/"
+          }
     - name: archive implementers guide
       uses: actions/upload-artifact@v4
       with:
