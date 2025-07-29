@@ -1,2 +1,0 @@
-== Common
-This chapter contains details on common topics of the FMI-LS-BUS.

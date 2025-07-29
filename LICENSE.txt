@@ -1,9 +1,9 @@
 Copyright (C) 2016-2020 prostep ivip project SmartSE,
-              2021-2023 Modelica Association Project "FMI"
+              2021-2025 Modelica Association Project "FMI"
               All rights reserved.
 
 Source code or other data, such as C-header and XML-schema files, that
-accompany the specification documents are released under the BSD 2-Clause
+accompany the guide documents are released under the BSD 2-Clause
 license:
 
 ----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ----------------------------------------------------------------------------
 
 
-The FMI specification is released under the CC-BY-SA (Creative Common
+The FMI guides are released under the CC-BY-SA (Creative Common
 Attribution ShareAlike 4.0 International):
 
 

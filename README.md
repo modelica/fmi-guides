@@ -16,21 +16,22 @@ The [FMI 3.0 Implementer's Guide][guide] is currently maintained on
 [GitHub][githubguide] and is published [here][guide]. It is based on
 the [FMI][] standard.
 
-The [FMI LS BUS Implementer's Guide][ls-bus-guide] is currently
-maintained on [GitHub][github-ls-bus-guide] and is published
-[here][ls-bus-guide]. It is based on the [FMI-LS-BUS][] layered
-standard for Network Communication.
-
 The [FMI 2.0/3.0 Profiles][profile] are currently maintained on
 [GitHub][githubprofile] and is published [here][profile].
 
 In future additional guides might be integrated into this repository.
 
+**NOTE**
+
+The [FMI LS BUS Implementer's Guide][ls-bus-guide] has moved to
+its own repository on [GitHub][github-ls-bus-guide] and is published
+[there][ls-bus-guide].
+
 [FMI]: https://fmi-standard.org/
 [FMI-LS-BUS]: https://github.com/modelica/fmi-ls-bus/
 [githubguide]: fmi-guide/index.adoc
 [guide]: https://modelica.github.io/fmi-guides/main/fmi-guide/
-[github-ls-bus-guide]: ls-bus-guide/index.adoc
-[ls-bus-guide]: https://modelica.github.io/fmi-guides/main/ls-bus-guide/
+[github-ls-bus-guide]: https://github.com/modelica/fmi-ls-bus-guides/ls-bus-guide/index.adoc
+[ls-bus-guide]: https://modelica.github.io/fmi-ls-bus-guides/main/ls-bus-guide/
 [githubprofile]: fmi-profiles/index.adoc
 [profile]: https://modelica.github.io/fmi-guides/main/fmi-profiles/
