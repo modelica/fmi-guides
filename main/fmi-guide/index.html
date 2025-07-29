@@ -590,8 +590,8 @@ document.addEventListener('keydown', (event) => {
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-a76f9881be54cb79469975e1d40313b0a01d6477,</span>
-<span id="revdate">2025-07-14</span>
+<span id="revnumber">version main-bd199d26b7d7ded8726cd38ea8741051cc254222,</span>
+<span id="revdate">2025-07-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -837,11 +837,30 @@ The goal of this document is a more straightforward agreement between tool vendo
 <div class="sect2">
 <h3 id="_testing">2.4. Testing</h3>
 <div class="paragraph">
-<p>All implementers are advised to participate widely in the FMI Cross-Checking Initiative to test compatibility with current implementations of other tools.
+<p>All implementers are advised to test compatibility with current implementations of other tools and provide the result as "Compatibility information" on the FMI tools page <a href="https://fmi-standard.org/tools/" class="bare">https://fmi-standard.org/tools/</a>, see <a href="https://github.com/modelica/fmi-standard.org/blob/main/CONTRIBUTING.md#compatibility-information" class="bare">https://github.com/modelica/fmi-standard.org/blob/main/CONTRIBUTING.md#compatibility-information</a> how to provide this.
 Robust participation, including testing with a relevant selection of available releases, is recommended.</p>
 </div>
 <div class="paragraph">
-<p>FMU exporting implementations should also use the FMU Compliance Checker <a href="#FMUCC">[FMUCC]</a> and VDMCheck <a href="#VDMCheck">[VDMCheck]</a> to do basic validation of generated FMUs.</p>
+<p><em>[Please note that the FMI Cross-Checking repository <a href="https://github.com/modelica/fmi-cross-check" class="bare">https://github.com/modelica/fmi-cross-check</a> is archived and not longer used. This has been replaced by the compatibility information described above.]</em></p>
+</div>
+<div class="paragraph">
+<p>FMU exporting implementations should also use the checkers and validation tools listed on <a href="https://fmi-standard.org/validation/" class="bare">https://fmi-standard.org/validation/</a>. It is recommended to use several of these, as they test different aspects:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the FMU-Check (<a href="https://fmu-check.herokuapp.com/" class="bare">https://fmu-check.herokuapp.com/</a>) does a static check only.</p>
+</li>
+<li>
+<p>fmpy (<a href="https://github.com/CATIA-Systems/FMPy" class="bare">https://github.com/CATIA-Systems/FMPy</a>) and fmusim (from the Refernce FMUS, <a href="https://github.com/modelica/reference-fmus" class="bare">https://github.com/modelica/reference-fmus</a>) can be used to simulate and validate FMUs.</p>
+</li>
+<li>
+<p><a href="#VDMcheck">[VDMcheck]</a> [<a id="VDMCheck"></a>] validates FMUs against a formal model of the FMI specification</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><em>[Please note that the FMU Compliance Checker <a href="#FMUCC">[FMUCC]</a> is archived and no longer maintained.]</em></p>
 </div>
 <div class="paragraph">
 <p>FMU importing implementations should make use of the Reference FMUs <a href="#RefFMUs">[RefFMUs]</a> to do basic validation of FMU import.</p>
