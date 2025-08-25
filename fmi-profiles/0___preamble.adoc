@@ -1,7 +1,7 @@
-The FMI 2.0/3.0 Profiles are a free resource intended to give non-normative recommendations and guidance to implementers and users of the Functional Mock-up Interface standard versions 2.0 and 3.0.
-All guidance is based on FMI 2.0 and FMI 3.0 unless otherwise noted or applicable.
+The FMI 3.0 Profiles are a free resource intended to give non-normative recommendations and guidance to implementers and users of the Functional Mock-up Interface standard versions 3.0.
+All guidance is based on FMI 3.0 unless otherwise noted or applicable.
 This is a development version of the FMI Profiles that has not been reviewed or finalized in any way.
-All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI 2.0 or 3.0 standards.
+All of the content is to be considered non-normative and shall not be considered to supplant any normative statement in the FMI  3.0 standards.
 https://github.com/modelica/fmi-guides/releases[Releases] and https://github.com/modelica/fmi-guides/issues[issues] can be found on https://github.com/modelica/fmi-guides[github.com/modelica/fmi-guides].
 
 {empty} +
