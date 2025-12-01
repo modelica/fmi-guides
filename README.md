@@ -28,10 +28,9 @@ its own repository on [GitHub][github-ls-bus-guide] and is published
 [there][ls-bus-guide].
 
 [FMI]: https://fmi-standard.org/
-[FMI-LS-BUS]: https://github.com/modelica/fmi-ls-bus/
 [githubguide]: fmi-guide/index.adoc
 [guide]: https://modelica.github.io/fmi-guides/main/fmi-guide/
-[github-ls-bus-guide]: https://github.com/modelica/fmi-ls-bus-guides/ls-bus-guide/index.adoc
+[github-ls-bus-guide]: https://github.com/modelica/fmi-ls-bus-guides/
 [ls-bus-guide]: https://modelica.github.io/fmi-ls-bus-guides/main/ls-bus-guide/
 [githubprofile]: fmi-profiles/index.adoc
 [profile]: https://modelica.github.io/fmi-guides/main/fmi-profiles/
