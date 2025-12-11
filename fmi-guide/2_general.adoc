@@ -57,9 +57,9 @@ NOTE: Please note that the FMI Cross-Checking repository https://github.com/mode
 
 FMU exporting implementations should also use the checkers and validation tools listed on https://fmi-standard.org/validation/. It is recommended to use several of these, as they test different aspects:
 
-- the FMU-Check (https://fmu-check.herokuapp.com/) does a static check only.
-- fmpy (https://github.com/CATIA-Systems/FMPy) and fmusim (from the Refernce FMUS, https://github.com/modelica/reference-fmus) can be used to simulate and validate FMUs.
-- <<VDMCheck>> validates FMUs against a formal model of the FMI specification
+* the FMU-Check (https://fmu-check.herokuapp.com/) does a static check only.
+* fmpy (https://github.com/CATIA-Systems/FMPy) and fmusim (from the Refernce FMUS, https://github.com/modelica/reference-fmus) can be used to simulate and validate FMUs.
+* <<VDMCheck>> validates FMUs against a formal model of the FMI specification
 
 NOTE: Please note that the FMU Compliance Checker <<FMUCC>> is archived and no longer maintained.
 

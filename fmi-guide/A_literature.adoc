@@ -1,28 +1,28 @@
 [bibliography]
 == References
 
-- [[[ISO8601-1]]] International Organization for Standardization: **ISO 8601-1:2019: Date and time -- Representation for information interchange -- Part 1: Basic rules**. February 2019. https://www.iso.org/standard/70907.html
+* [[[ISO8601-1]]] International Organization for Standardization: **ISO 8601-1:2019: Date and time -* Representation for information interchange -* Part 1: Basic rules**. February 2019. https://www.iso.org/standard/70907.html
 
-- [[[RFC2119]]] Bradner, S.: **Key words for use in RFCs to Indicate Requirement Levels**. RFC 2119, March 1997. https://www.ietf.org/rfc/rfc2119.txt
+* [[[RFC2119]]] Bradner, S.: **Key words for use in RFCs to Indicate Requirement Levels**. RFC 2119, March 1997. https://www.ietf.org/rfc/rfc2119.txt
 
-- [[[RFC5322]]] Resnick, P., Ed.: **Internet Message Format**. RFC 5322, October 2008. https://www.ietf.org/rfc/rfc5322.txt
+* [[[RFC5322]]] Resnick, P., Ed.: **Internet Message Format**. RFC 5322, October 2008. https://www.ietf.org/rfc/rfc5322.txt
 
-- [[[SEMVER200]]] Preston-Werner, T.: **Semantic Versioning 2.0.0**. https://semver.org/spec/v2.0.0.html
+* [[[SEMVER200]]] Preston-Werner, T.: **Semantic Versioning 2.0.0**. https://semver.org/spec/v2.0.0.html
 
-- [[[SSP10]]] Modelica Association: **System Structure and Parameterization 1.0**. March 2019. https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf
+* [[[SSP10]]] Modelica Association: **System Structure and Parameterization 1.0**. March 2019. https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf
 
-- [[[CVODE570]]]  Hindmarsh A., Serban R., Balos C., Gardner D., Reynolds D., Woodward C.: *User Documentation for CVODE v5.7.0*. February 2021, p. 85ff. https://computing.llnl.gov/sites/default/files/cv_guide-5.7.0.pdf
+* [[[CVODE570]]]  Hindmarsh A., Serban R., Balos C., Gardner D., Reynolds D., Woodward C.: *User Documentation for CVODE v5.7.0*. February 2021, p. 85ff. https://computing.llnl.gov/sites/default/files/cv_guide-5.7.0.pdf
 
-- [[[ABL12]]] &#197;kesson J., Braun W., Lindholm P., and Bachmann B. (2012): **Generation of Sparse Jacobians for the Functional Mockup Interface 2.0**. 9th International Modelica Conference, Munich, 2012. http://www.ep.liu.se/ecp/076/018/ecp12076018.pdf
+* [[[ABL12]]] &#197;kesson J., Braun W., Lindholm P., and Bachmann B. (2012): **Generation of Sparse Jacobians for the Functional Mockup Interface 2.0**. 9th International Modelica Conference, Munich, 2012. http://www.ep.liu.se/ecp/076/018/ecp12076018.pdf
 
-- [[[BPRS15]]] Atilim Gunes Baydin, Barak A. Pearlmutter, Alexey Andreyevich Radul, Jeffrey Mark Siskind (2015): *Automatic differentiation in machine learning: a survey*. https://www.jmlr.org/papers/volume18/17-468/17-468.pdf
+* [[[BPRS15]]] Atilim Gunes Baydin, Barak A. Pearlmutter, Alexey Andreyevich Radul, Jeffrey Mark Siskind (2015): *Automatic differentiation in machine learning: a survey*. https://www.jmlr.org/papers/volume18/17-468/17-468.pdf
 
-- [[[BKF17]]] Braun W., Kulshreshtha K., Franke R., Walther A., Bachmann B. (2017): *Towards Adjoint and Directional Derivatives in FMI utilizing ADOL-C within OpenModelica*. 12th International Modelica Conference, Prague, 2017. https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf
+* [[[BKF17]]] Braun W., Kulshreshtha K., Franke R., Walther A., Bachmann B. (2017): *Towards Adjoint and Directional Derivatives in FMI utilizing ADOL-C within OpenModelica*. 12th International Modelica Conference, Prague, 2017. https://2017.international.conference.modelica.org/proceedings/html/submissions/ecp17132363_BraunKulshreshthaFrankeBachmannWalther.pdf
 
-- [[[SMARTSEV3]]] prostep ivip: **SmartSE Recommendation 2022 PSI 11 V3.0**. December 2022. https://www.prostep.org/fileadmin/downloads/PSI_11_V3_SmartSE_Rec_and_Part_A-I.zip
+* [[[SMARTSEV3]]] prostep ivip: **SmartSE Recommendation 2022 PSI 11 V3.0**. December 2022. https://www.prostep.org/fileadmin/downloads/PSI_11_V3_SmartSE_Rec_and_Part_A-I.zip
 
-- [[[FMUCC]]] Modelica Association: **FMU Compliance Checker**. https://www.fmi-standard.org/downloads
+* [[[FMUCC]]] Modelica Association: **FMU Compliance Checker**. https://www.fmi-standard.org/downloads
 
-- [[[RefFMUs]]] Modelica Association: **Reference FMUs**. https://github.com/modelica/Reference-FMUs/
+* [[[RefFMUs]]] Modelica Association: **Reference FMUs**. https://github.com/modelica/Reference-FMUs/
 
-- [[[VDMCheck]]] INTO-CPS Association: **FMI-VDM-Model**. https://github.com/INTO-CPS-Association/FMI-VDM-Model
+* [[[VDMCheck]]] INTO-CPS Association: **FMI-VDM-Model**. https://github.com/INTO-CPS-Association/FMI-VDM-Model
