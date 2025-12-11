@@ -1,8 +1,0 @@
-[bibliography]
-== References
-
-- [[[RFC2119]]] Bradner, S.: **Key words for use in RFCs to Indicate Requirement Levels**. RFC 2119, March 1997. https://www.ietf.org/rfc/rfc2119.txt
-
-- [[[SEMVER200]]] Preston-Werner, T.: **Semantic Versioning 2.0.0**. https://semver.org/spec/v2.0.0.html
-
-- [[[SSP10]]] Modelica Association: **System Structure and Parameterization 1.0**. March 2019. https://ssp-standard.org/publications/SSP10/SystemStructureAndParameterization10.pdf

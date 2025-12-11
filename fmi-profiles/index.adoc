@@ -1,25 +1,29 @@
 = FMI 2.0/3.0 Feature Profiles
-:doctype: book
-:imagesdir: images
 :sectnums:
 :sectnumlevels: 5
 :toc: left
 :toc-title: Contents
 :toclevels: 5
+:idprefix:
+:idseparator: -
 :xrefstyle: short
 :docinfo: shared
-:stylesheet: fmi-guide.css
+:docinfodir: theme/docinfo
 :stem: latexmath
 :source-highlighter: highlightjs
+:highlightjs-theme: github
 :nofooter:
 :icons: font
+:website-url: https://fmi-standard.org/
+:repo-url: https://github.com/modelica/fmi-guides
+:logo: FMI
 
-include::0___preamble.adoc[]
+include::0_preamble.adoc[]
 
-include::1___introduction.adoc[]
+include::1_introduction.adoc[]
 
-include::2___features.adoc[]
+include::2_features.adoc[]
 
-include::3___profiles.adoc[]
+include::3_profiles.adoc[]
 
-include::A___literature.adoc[]
+include::A_literature.adoc[]
