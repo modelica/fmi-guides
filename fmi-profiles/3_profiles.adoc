@@ -78,7 +78,7 @@ Required Features::
 
 === Dynamics Profile
 
-This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
+This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model exchange approaches.
 
 Required Features::
   * Tunable Parameters
@@ -129,7 +129,7 @@ Required Features::
   * Restartable Early Return in Hybrid Co-Simulation
   * Intermediate Output Values in Co-Simulation
   * Co-Simulation with Clock Information
-  * Clocked Model-Exchange
+  * Clocked Model Exchange
   * Binary FMUs for Desktop Platforms
 
 Recommended Features::
@@ -139,7 +139,7 @@ Recommended Features::
 === Optimization Profile
 
 This is a profile that caters to different but overlapping optimization use cases:
--	Model-predictive control (with the model as an FMU)
+-	Model predictive control (with the model as an FMU)
 -	Parameter identification of a model via optimization
 -	Training of ML models (e.g. neural networks) (need for adjoint derivatives, for Backpropagation)
 
@@ -197,7 +197,7 @@ In the table below, the placement of an `X` indicates a required feature, and a 
 | |Intermediate Output Values in Co-Simulation|3.0|||||X|X|X
 | |Co-Simulation with Clock Information|3.0||||X|X|X|
 | |Scheduled Execution Interface|3.0|||X|X|||
-| |Clocked Model-Exchange|3.0||||||X|
+| |Clocked Model Exchange|3.0||||||X|
 2+|Execution Targets||||||||
 | |Source Code FMUs|1.0|*|*|X|X|||
 | |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X|X|X

@@ -1,4 +1,4 @@
-== Model-Exchange Specific Issues
+== Model Exchange Specific Issues
 
 === Completed Integrator Step Function
 

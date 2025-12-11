@@ -70,7 +70,7 @@ This can mean, for example, that even in a fixed-step simulation the individual 
 
 === Support for Solvers
 
-Importing implementations should support a wide variety of solver algorithms, in order to support Model-Exchange FMUs as fully as possible.
+Importing implementations should support a wide variety of solver algorithms, in order to support Model Exchange FMUs as fully as possible.
 Ideally this should include support for attaching external solvers through specified APIs, so that experienced users can extend the supported solver base for specific new domains where appropriate.
 Supporting the use of several different solvers in one model that integrates a number of FMUs, so that e.g. different Model Exchange FMUs can be solved through different solvers than other parts of the model -- without resorting to Co-Simulation FMUs -- can be beneficial in terms of performance and usability.
 
