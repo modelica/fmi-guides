@@ -1,37 +1,41 @@
 = FMI 3.0 Implementers' Guide
-:doctype: book
-:imagesdir: images
 :sectnums:
 :sectnumlevels: 5
 :toc: left
 :toc-title: Contents
 :toclevels: 5
+:idprefix:
+:idseparator: -
 :xrefstyle: short
 :docinfo: shared
-:stylesheet: fmi-guide.css
+:docinfodir: theme/docinfo
 :stem: latexmath
 :source-highlighter: highlightjs
+:highlightjs-theme: github
 :nofooter:
 :icons: font
+:website-url: https://fmi-standard.org/
+:repo-url: https://github.com/modelica/fmi-guides
+:logo: FMI
 
-include::0___preamble.adoc[]
+include::0_preamble.adoc[]
 
-include::1___introduction.adoc[]
+include::1_introduction.adoc[]
 
-include::2___general.adoc[]
+include::2_general.adoc[]
 
-include::3___packaging.adoc[]
+include::3_packaging.adoc[]
 
-include::4___variables.adoc[]
+include::4_variables.adoc[]
 
-include::5___simulation.adoc[]
+include::5_simulation.adoc[]
 
-include::6___co-simulation.adoc[]
+include::6_co-simulation.adoc[]
 
-include::7___model-exchange.adoc[]
+include::7_model-exchange.adoc[]
 
-include::8___scheduled-execution.adoc[]
+include::8_scheduled-execution.adoc[]
 
-include::9___advanced.adoc[]
+include::9_advanced.adoc[]
 
-include::A___literature.adoc[]
+include::A_literature.adoc[]

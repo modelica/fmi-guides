@@ -1,0 +1,3 @@
+[submodule "fmi-guide/theme"]
+	path = fmi-guide/theme
+	url = git@github.com:modelica/ma-asciidoctor-theme.git
