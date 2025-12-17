@@ -9,15 +9,15 @@ They are described in detail in the following sections.
 This is a basic profile for Co-Simulation, intended mainly for desktop simulation uses, which have no additional specific requirements and can perform well with fixed communication step sizes.
 
 Required Features::
-  - Tunable Parameters
-  - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Binary FMUs for Desktop Platforms
+  * Tunable Parameters
+  * Fixed-size Input/Output Arrays
+  * Resizable Input/Output Arrays
+  * Fixed-size Parameter Arrays
+  * Resizable Parameter Arrays
+  * Binary FMUs for Desktop Platforms
 
 Recommended Features::
-  - Source Code FMUs
+  * Source Code FMUs
 
 
 === Sensor Profile
@@ -26,14 +26,14 @@ This is a basic sensor simulation profile, supporting complex input and output u
 Also suitable for non-sensor simulations with those characteristics.
 
 Required Features::
-  - Tunable Parameters
-  - Binary Data Type Input/Output
-  - Binary Data Type Parameters
-  - Variable Co-Simulation Communication Step Size
-  - Binary FMUs for Desktop Platforms
+  * Tunable Parameters
+  * Binary Data Type Input/Output
+  * Binary Data Type Parameters
+  * Variable Co-Simulation Communication Step Size
+  * Binary FMUs for Desktop Platforms
 
 Recommended Features::
-  - Source Code FMUs
+  * Source Code FMUs
 
 
 === Basic HiL & Sensor HiL Profile
@@ -42,16 +42,16 @@ This is a basic profile supporting HiL use, including mechatronics and sensor si
 This profile assumes fixed cycle times, where dynamic internal cycle times are managed inside the FMUs.
 
 Required Features::
-  - Tunable Parameters
-  - Binary Data Type Input/Output
-  - Binary Data Type Parameters
-  - New Integer Types
-  - Fixed-size Input/Output Arrays
-  - Fixed-size Parameter Arrays
-  - Scheduled Execution Interface
-  - Source Code FMUs
-  - Binary FMUs for Desktop Platforms
-  - Binary FMUs for non-Desktop Platforms (e.g. HiL)
+  * Tunable Parameters
+  * Binary Data Type Input/Output
+  * Binary Data Type Parameters
+  * New Integer Types
+  * Fixed-size Input/Output Arrays
+  * Fixed-size Parameter Arrays
+  * Scheduled Execution Interface
+  * Source Code FMUs
+  * Binary FMUs for Desktop Platforms
+  * Binary FMUs for non-Desktop Platforms (e.g. HiL)
 
 
 === SIL ECU Profile
@@ -59,50 +59,50 @@ Required Features::
 This is a profile supporting advanced SiL simulation of ECU and other clocked models, allowing for more efficient integration of multi-ECU networks.
 
 Required Features::
-  - Tunable Parameters
-  - Store/Restore FMU State
-  - Binary Data Type Input/Output
-  - Binary Data Type Parameters
-  - New Integer Types
-  - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Variable Co-Simulation Communication Step Size
-  - Co-Simulation with Clock Information
-  - Scheduled Execution Interface
-  - Source Code FMUs
-  - Binary FMUs for Desktop Platforms
-  - Binary FMUs for non-Desktop Platforms (e.g. HiL)
+  * Tunable Parameters
+  * Store/Restore FMU State
+  * Binary Data Type Input/Output
+  * Binary Data Type Parameters
+  * New Integer Types
+  * Fixed-size Input/Output Arrays
+  * Resizable Input/Output Arrays
+  * Fixed-size Parameter Arrays
+  * Resizable Parameter Arrays
+  * Variable Co-Simulation Communication Step Size
+  * Co-Simulation with Clock Information
+  * Scheduled Execution Interface
+  * Source Code FMUs
+  * Binary FMUs for Desktop Platforms
+  * Binary FMUs for non-Desktop Platforms (e.g. HiL)
 
 
 === Dynamics Profile
 
-This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model-exchange approaches.
+This is a profile for high dynamics mechatronic simulation, including variable cycle times, model exchange for allowing efficient handling of tightly coupled sub-systems, and the use of advanced co-simulation and model exchange approaches.
 
 Required Features::
-  - Tunable Parameters
-  - Store/Restore FMU State
-  - Serialize/Deserialize FMU State
-  - String Inputs/Outputs
-  - Binary Data Type Input/Output
-  - New Integer Types
-  - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Resizable Input/Output Arrays with Size-Dependencies
-  - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Resizable Parameter Arrays with Size-Dependencies
-  - Variable Co-Simulation Communication Step Size
-  - State and Output Dependencies
-  - Output Derivatives in Co-Simulation
-  - Restartable Early Return in Hybrid Co-Simulation
-  - Intermediate Output Values in Co-Simulation
-  - Co-Simulation with Clock Information
-  - Binary FMUs for Desktop Platforms
+  * Tunable Parameters
+  * Store/Restore FMU State
+  * Serialize/Deserialize FMU State
+  * String Inputs/Outputs
+  * Binary Data Type Input/Output
+  * New Integer Types
+  * Fixed-size Input/Output Arrays
+  * Resizable Input/Output Arrays
+  * Resizable Input/Output Arrays with Size-Dependencies
+  * Fixed-size Parameter Arrays
+  * Resizable Parameter Arrays
+  * Resizable Parameter Arrays with Size-Dependencies
+  * Variable Co-Simulation Communication Step Size
+  * State and Output Dependencies
+  * Output Derivatives in Co-Simulation
+  * Restartable Early Return in Hybrid Co-Simulation
+  * Intermediate Output Values in Co-Simulation
+  * Co-Simulation with Clock Information
+  * Binary FMUs for Desktop Platforms
 
 Recommended Features::
-  - Directional Derivatives
+  * Directional Derivatives
 
 
 === Dynamics Controller Profile
@@ -111,53 +111,53 @@ This is a profile for high dynamics mechatronic simulation that includes discret
 This profile extends the dynamics profile to include model exchange with clocks to allow for efficient handling of tightly coupled sub-systems with reliable support for coupling discrete controller time partitions across FMUs.
 
 Required Features::
-  - Tunable Parameters
-  - Store/Restore FMU State
-  - Serialize/Deserialize FMU State
-  - String Inputs/Outputs
-  - Binary Data Type Input/Output
-  - New Integer Types
-  - Fixed-size Input/Output Arrays
-  - Resizable Input/Output Arrays
-  - Resizable Input/Output Arrays with Size-Dependencies
-  - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Resizable Parameter Arrays with Size-Dependencies
-  - Variable Co-Simulation Communication Step Size
-  - State and Output Dependencies
-  - Output Derivatives in Co-Simulation
-  - Restartable Early Return in Hybrid Co-Simulation
-  - Intermediate Output Values in Co-Simulation
-  - Co-Simulation with Clock Information
-  - Clocked Model-Exchange
-  - Binary FMUs for Desktop Platforms
+  * Tunable Parameters
+  * Store/Restore FMU State
+  * Serialize/Deserialize FMU State
+  * String Inputs/Outputs
+  * Binary Data Type Input/Output
+  * New Integer Types
+  * Fixed-size Input/Output Arrays
+  * Resizable Input/Output Arrays
+  * Resizable Input/Output Arrays with Size-Dependencies
+  * Fixed-size Parameter Arrays
+  * Resizable Parameter Arrays
+  * Resizable Parameter Arrays with Size-Dependencies
+  * Variable Co-Simulation Communication Step Size
+  * State and Output Dependencies
+  * Output Derivatives in Co-Simulation
+  * Restartable Early Return in Hybrid Co-Simulation
+  * Intermediate Output Values in Co-Simulation
+  * Co-Simulation with Clock Information
+  * Clocked Model Exchange
+  * Binary FMUs for Desktop Platforms
 
 Recommended Features::
-  - Directional Derivatives
+  * Directional Derivatives
 
 
 === Optimization Profile
 
 This is a profile that caters to different but overlapping optimization use cases:
--	Model-predictive control (with the model as an FMU)
+-	Model predictive control (with the model as an FMU)
 -	Parameter identification of a model via optimization
 -	Training of ML models (e.g. neural networks) (need for adjoint derivatives, for Backpropagation)
 
 Required Features::
-  - Tunable Parameters
-  - Store/Restore FMU State
-  - Serialize/Deserialize FMU State
-  - New Integer Types
-  - Fixed-size Input/Output Arrays
-  - Fixed-size Parameter Arrays
-  - Resizable Parameter Arrays
-  - Variable Co-Simulation Communication Step Size
-  - State and Output Dependencies
-  - Output Derivatives in Co-Simulation
-  - Directional Derivatives
-  - Adjoint Derivatives
-  - Intermediate Output Values in Co-Simulation
-  - Binary FMUs for Desktop Platforms
+  * Tunable Parameters
+  * Store/Restore FMU State
+  * Serialize/Deserialize FMU State
+  * New Integer Types
+  * Fixed-size Input/Output Arrays
+  * Fixed-size Parameter Arrays
+  * Resizable Parameter Arrays
+  * Variable Co-Simulation Communication Step Size
+  * State and Output Dependencies
+  * Output Derivatives in Co-Simulation
+  * Directional Derivatives
+  * Adjoint Derivatives
+  * Intermediate Output Values in Co-Simulation
+  * Binary FMUs for Desktop Platforms
 
 
 === Feature Overview
@@ -197,7 +197,7 @@ In the table below, the placement of an `X` indicates a required feature, and a 
 | |Intermediate Output Values in Co-Simulation|3.0|||||X|X|X
 | |Co-Simulation with Clock Information|3.0||||X|X|X|
 | |Scheduled Execution Interface|3.0|||X|X|||
-| |Clocked Model-Exchange|3.0||||||X|
+| |Clocked Model Exchange|3.0||||||X|
 2+|Execution Targets||||||||
 | |Source Code FMUs|1.0|*|*|X|X|||
 | |Binary FMUs for Desktop Platforms|1.0|X|X|X|X|X|X|X

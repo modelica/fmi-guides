@@ -1,4 +1,4 @@
-== Scheduled-Execution Specific Issues
+== Scheduled Execution Specific Issues
 
 === Use-cases for Scheduled Execution
 

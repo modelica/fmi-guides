@@ -146,7 +146,7 @@ This interface type makes it possible for importers to interleave calculations o
 Note that this interface is different from the co-simulation interface.
 It is recommended that FMUs providing a Scheduled Execution interface also provide a Co-Simulation interface for use in systems that do not require the execution control of Scheduled Execution.
 
-Clocked Model-Exchange (FMI 3.0)::
+Clocked Model Exchange (FMI 3.0)::
 FMI 3.0 will support clocked model exchange, where signals are only considered active when their related clocks tick.
 This allows for more precise support for discrete/continuous hybrid systems or systems with multiple non-least-common-denominator clocks/rates.
 

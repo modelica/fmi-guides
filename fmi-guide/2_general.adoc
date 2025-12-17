@@ -53,15 +53,15 @@ This document can be found on the FMI standard homepage at https://fmi-standard.
 All implementers are advised to test compatibility with current implementations of other tools and provide the result as "Compatibility information" on the FMI tools page https://fmi-standard.org/tools/, see https://github.com/modelica/fmi-standard.org/blob/main/CONTRIBUTING.md#compatibility-information how to provide this.
 Robust participation, including testing with a relevant selection of available releases, is recommended.
 
-_[Please note that the FMI Cross-Checking repository https://github.com/modelica/fmi-cross-check is archived and not longer used. This has been replaced by the compatibility information described above.]_
+NOTE: Please note that the FMI Cross-Checking repository https://github.com/modelica/fmi-cross-check is archived and not longer used. This has been replaced by the compatibility information described above.
 
 FMU exporting implementations should also use the checkers and validation tools listed on https://fmi-standard.org/validation/. It is recommended to use several of these, as they test different aspects:
 
-- the FMU-Check (https://fmu-check.herokuapp.com/) does a static check only.
-- fmpy (https://github.com/CATIA-Systems/FMPy) and fmusim (from the Refernce FMUS, https://github.com/modelica/reference-fmus) can be used to simulate and validate FMUs.
-- <<VDMcheck>> [[[VDMCheck]]] validates FMUs against a formal model of the FMI specification
+* the FMU-Check (https://fmu-check.herokuapp.com/) does a static check only.
+* FMPy (https://github.com/CATIA-Systems/FMPy) and fmusim (from the Reference FMUs, https://github.com/modelica/reference-fmus) can be used to simulate and validate FMUs.
+* <<VDMCheck>> validates FMUs against a formal model of the FMI specification
 
-_[Please note that the FMU Compliance Checker <<FMUCC>> is archived and no longer maintained.]_
+NOTE: Please note that the FMU Compliance Checker <<FMUCC>> is archived and no longer maintained.
 
 FMU importing implementations should make use of the Reference FMUs <<RefFMUs>> to do basic validation of FMU import.
 

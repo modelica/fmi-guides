@@ -12,9 +12,9 @@ Partial derivatives can be used:
 
 To avoid expensive numeric approximations of these derivatives, FMI offers dedicated functions to retrieve partial derivatives for variables of an FMU:
 
-- `fmi3GetDirectionalDerivative` to compute the directional derivatives latexmath:[\mathbf{v}_{\mathit{sensitivity}} = \mathbf{J} \cdot \mathbf{v}_{\mathit{seed}}], and
+* `fmi3GetDirectionalDerivative` to compute the directional derivatives latexmath:[\mathbf{v}_{\mathit{sensitivity}} = \mathbf{J} \cdot \mathbf{v}_{\mathit{seed}}], and
 
-- `fmi3GetAdjointDerivative` to calculate the adjoint derivatives latexmath:[\mathbf{\bar{v}}_{\mathit{sensitivity}}^T = \mathbf{\bar{v}}_{\mathit{seed}}^T \cdot \mathbf{J}]
+* `fmi3GetAdjointDerivative` to calculate the adjoint derivatives latexmath:[\mathbf{\bar{v}}_{\mathit{sensitivity}}^T = \mathbf{\bar{v}}_{\mathit{seed}}^T \cdot \mathbf{J}]
 
 with the Jacobian
 
@@ -45,17 +45,17 @@ The function `fmi3GetDirectionalDerivative` computes the directional derivative
 
 One can either retrieve the latexmath:[\mathit{i}]-th column of the Jacobian by specifying the latexmath:[\mathit{i}]-th unit vector latexmath:[\mathbf{e}_{\mathit{i}}] as the seed vector latexmath:[\mathbf{v}_{\mathit{seed}}], or compute a Jacobian-vector product latexmath:[\mathbf{Jv}] by using latexmath:[\mathbf{v}] as the seed vector latexmath:[\mathbf{v}_{\mathit{seed}}]. Therefore, the function can be utilized for the following purposes, among others:
 
-- Solving algebraic loops with a nonlinear solver requires matrix latexmath:[{\frac{\partial \mathbf{g}}{\partial \mathbf{u}}}].
+* Solving algebraic loops with a nonlinear solver requires matrix latexmath:[{\frac{\partial \mathbf{g}}{\partial \mathbf{u}}}].
 
-- Numerical integrators of stiff methods need matrix latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}].
+* Numerical integrators of stiff methods need matrix latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}].
 
-- If the FMU is connected with other FMUs, the partial derivatives of the state derivatives and outputs with respect to the continuous states and the inputs are needed in order to compute the Jacobian for the system of the connected FMUs.
+* If the FMU is connected with other FMUs, the partial derivatives of the state derivatives and outputs with respect to the continuous states and the inputs are needed in order to compute the Jacobian for the system of the connected FMUs.
 
-- If the FMU shall be linearized, the same derivatives as in the previous item are needed.
+* If the FMU shall be linearized, the same derivatives as in the previous item are needed.
 
-- If the FMU is used as the model for an extended Kalman filter, latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}] and latexmath:[{\frac{\partial \mathbf{g}}{\partial \mathbf{x}}}] are needed.
+* If the FMU is used as the model for an extended Kalman filter, latexmath:[{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}}] and latexmath:[{\frac{\partial \mathbf{g}}{\partial \mathbf{x}}}] are needed.
 
-- If matrix-free linear solvers shall be used, Jacobian-vector products latexmath:[{\mathbf{Jv}}] are needed (e.g. as a user-supplied routine in CVODE <<CVODE570>>).
+* If matrix-free linear solvers shall be used, Jacobian-vector products latexmath:[{\mathbf{Jv}}] are needed (e.g. as a user-supplied routine in CVODE <<CVODE570>>).
 
 [[example-directional-derivatives]]
 Example 1: +
@@ -117,11 +117,11 @@ For example, constructing the system Jacobian latexmath:[{\mathbf{A} = \frac{\pa
 
 If the sparsity of a matrix shall be taken into account, then the matrix can be constructed in the following way:
 
-- The incidence information of the matrix (whether an element is zero or not zero) is extracted from the XML file from element `ModelStructure`.
+* The incidence information of the matrix (whether an element is zero or not zero) is extracted from the XML file from element `ModelStructure`.
 
-- A so called graph coloring algorithm is employed to determine the columns of the matrix that can be computed by one call of `fmi3GetDirectionalDerivative`.
+* A so called graph coloring algorithm is employed to determine the columns of the matrix that can be computed by one call of `fmi3GetDirectionalDerivative`.
 
-- For the columns determined in (2), one call to `fmi3GetDirectionalDerivative` is made.
+* For the columns determined in (2), one call to `fmi3GetDirectionalDerivative` is made.
 After each such call, the elements of the resulting directional derivative vector are copied into their correct locations of the partial derivative matrix.
 
 More details and implementational notes are available from <<ABL12>>.

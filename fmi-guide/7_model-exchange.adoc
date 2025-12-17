@@ -1,4 +1,4 @@
-== Model-Exchange Specific Issues
+== Model Exchange Specific Issues
 
 === Completed Integrator Step Function
 
@@ -6,11 +6,11 @@ Since the initial release, the FMI API provides a function of the FMU that the i
 
 However the exact semantics, capability flags, and rules when to call this function vary between all major releases of FMI:
 
-- In FMI 1.0 the function is called `fmiCompletedIntegratorStep` and the function must be called by the environment after every completed step of the integrator.
+* In FMI 1.0 the function is called `fmiCompletedIntegratorStep` and the function must be called by the environment after every completed step of the integrator.
 
-- In FMI 2.0 the function is called `fmi2CompletedIntegratorStep` and it must be called at every completed step of an integrator -- provided the capability flag `completedIntegratorStepNotNeeded` is not provided or false.
+* In FMI 2.0 the function is called `fmi2CompletedIntegratorStep` and it must be called at every completed step of an integrator -- provided the capability flag `completedIntegratorStepNotNeeded` is not provided or false.
 
-- In FMI 3.0 the function is called `fmi3CompletedIntegratorStep` and it must be called after every completed step of the integrator -- provided the capability flag `needsCompletedIntegratorStep` is true.
+* In FMI 3.0 the function is called `fmi3CompletedIntegratorStep` and it must be called after every completed step of the integrator -- provided the capability flag `needsCompletedIntegratorStep` is true.
 
 Note especially that the name and logic of the capability flag controlling whether an importing implementation needs to call the function is changed between 2.0 and 3.0:
 Whereas in 1.0 the function must be called unconditionally, in 2.0 the function must be called unless the FMU actively disables this through the `completedIntegratorStepNotNeeded` capability flag, and in 3.0 the function must only be called if the FMU actively requests this through the `needsCompletedIntegratorStep` capability flag.

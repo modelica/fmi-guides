@@ -43,24 +43,30 @@ Whenever possible, more detailed information should be provided using the ports 
 
 Exporting implementations should make use of the standard meta data attributes FMI provides in the root element of the `modelDescription.xml`:
 
-- `description` +
+`description`::
 A user-readable description of the FMU/model at a suitable level of detail for a short overview.
 Note that additional information can be provided in the <<Documentation>>.
-- `author` +
+
+`author`::
 Author information should ideally include organization and contact information, e.g. in the <<RFC5322>> `name-addr` format: +
 `Example User <user@example.com>` +
 Note that privacy regulations might necessitate the use of author information that is not personally identifiable, e.g. company or department names and addresses instead of individual users.
-- `version` +
+
+`version`::
 This field provides a version for the FMU/model, which is not to be confused with the FMI version field `fmiVersion`.
-- `copyright` +
+
+`copyright`::
 Copyright information in a suitably short form.
 Note that additional information can be provided in the <<Documentation>>.
-- `license` +
+
+`license`::
 License information in a suitably short form.
 Note that additional information can be provided in the <<Documentation>>.
-- `generationTool` +
+
+`generationTool`::
 Description, including version number, on the tool generating the FMU.
-- `generationDateAndTime` +
+
+`generationDateAndTime`::
 Date and time when the FMU was generated.
 Note the specific <<ISO8601-1>>-derived format required here, and the prescribed use of UTC (Zulu time zone): +
 `2009-12-08T14:33:22Z`
@@ -81,8 +87,8 @@ Exporting implementations should allow the user to easily author/add documentati
 
 Exporting implementations should also include any additional documentation needed to effectively run the FMU in the documentation:
 
-- Implementations which export FMUs that are not considered stand-alone, i.e., specifying `needsExecutionTool=true` in their model description, should provide sufficient information inside the documentation so that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.
-- Implementations which export FMUs that require runtime licenses should provide information on what kind of license is needed and how to provide this license so the FMU can use it.
+* Implementations which export FMUs that are not considered stand-alone, i.e., specifying `needsExecutionTool=true` in their model description, should provide sufficient information inside the documentation so that the recipient of the FMU will know what tools, licenses, and other dependencies are needed to run the FMU.
+* Implementations which export FMUs that require runtime licenses should provide information on what kind of license is needed and how to provide this license so the FMU can use it.
 
 In many instances, for example, when open-source licenses are employed, license information and other additional information is needed to be shipped with an FMU for distribution.
 In these cases, exporting implementations should allow the user to easily add information items, like licenses, to the documentation shipped with an FMU.
@@ -119,24 +125,57 @@ Exporting implementations should document supported compilers, their versions, a
 For FMI 3.0, the languages, compilers and required compiler flags and settings should be placed in the `buildDescription.xml` file of the FMU to allow automated building from source as far as possible.
 The following are lists of commonly agreed upon names for languages and compilers, that should be used if no other values are more appropriate:
 
-Languages::
-  C90::: ISO/IEC 9899:1990, which is technically identical to ANSI X3.159-1989 (sometimes termed C89)
-  C95::: ISO/IEC 9899:1990/AMD1:1995, i.e. ISO/IEC 9899:1990 as ammended by Ammendment 1, including wide characters, digraphs, and standard macro `__STDC_VERSION__`
-  C99::: ISO/IEC 9899:1999
-  C11::: ISO/IEC 9899:2011
-  C17::: ISO/IEC 9899:2018
-  
-  C++98::: ISO/IEC 14882:1998
-  C++03::: ISO/IEC 14882:2003
-  C++11::: ISO/IEC 14882:2011
-  C++14::: ISO/IEC 14882:2014
-  C++17::: ISO/IEC 14882:2017
-  C++20::: ISO/IEC 14882:2020
+[cols="1,7"]
+|====
+|Language |Description
 
-Compilers::
-  VisualC::: Microsoft Visual Studio C/C++ compiler
-  gcc::: GNU Compiler Collection (gcc) C/C++ compiler
-  clang::: CLANG LLVM-based C/C++ compiler
+|C90 
+|ISO/IEC 9899:1990, which is technically identical to ANSI X3.159-1989 (sometimes termed C89)
+
+|C95 
+|ISO/IEC 9899:1990/AMD1:1995, i.e. ISO/IEC 9899:1990 as ammended by Ammendment 1, including wide characters, digraphs, and standard macro `__STDC_VERSION__`
+
+|C99 
+|ISO/IEC 9899:1999
+
+|C11 
+|ISO/IEC 9899:2011
+
+|C17 
+|ISO/IEC 9899:2018
+
+|C++98
+|ISO/IEC 14882:1998
+
+|C++03
+|ISO/IEC 14882:2003
+
+|C++11
+|ISO/IEC 14882:2011
+
+|C++14
+|ISO/IEC 14882:2014
+
+|C++17
+|ISO/IEC 14882:2017
+
+|C++20
+|ISO/IEC 14882:2020
+|====
+
+[cols="1,7"]
+|====
+|Compiler |Description
+
+|VisualC
+|Microsoft Visual Studio C/C++ compiler
+
+|gcc 
+|GNU Compiler Collection (gcc) C/C++ compiler
+
+|clang
+|CLANG LLVM-based C/C++ compiler
+|====
 
 When generating binary FMUs directly, the supported and used compilers, compiler flags, and settings should also be documented.
 This allows users to troubleshoot integration issues when integrating binary FMUs into other environments.

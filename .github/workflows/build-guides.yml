@@ -13,21 +13,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: checkout
-      uses: actions/checkout@v3
-    - name: prepare
-      run: mkdir build && mkdir build/fmi-guide && mkdir build/fmi-profiles && mkdir build/ls-bus-guide
-    - name: build implementers guide
+    - name: Checkout
+      uses: actions/checkout@v4.1.7
+      with:
+        submodules: recursive
+
+    - name: Prepare
+      run: |
+        mkdir -p build
+        mkdir -p build/fmi-guide
+        mkdir -p build/fmi-guide/images/schema
+        mkdir -p build/fmi-guide/theme/css
+        mkdir -p build/fmi-guide/theme/images
+        mkdir -p build/fmi-guide/theme/js
+        mkdir -p build/fmi-profiles
+        mkdir -p build/fmi-profiles/images/schema
+        mkdir -p build/fmi-profiles/theme/css
+        mkdir -p build/fmi-profiles/theme/images
+        mkdir -p build/fmi-profiles/theme/js
+        mkdir -p build/ls-bus-guide
+
+    - name: Build Implementers Guide
       uses: avattathil/asciidoctor-action@master
       with:
         program: "asciidoctor -D build/fmi-guide --backend=html5 --attribute=revnumber=${GITHUB_REF#refs/heads/}-$GITHUB_SHA --attribute=revdate=$(date +%F) fmi-guide/index.adoc"
-    - name: build FMI profiles
+
+    - name: Build FMI Profiles
       uses: avattathil/asciidoctor-action@master
       with:
         program: "asciidoctor -D build/fmi-profiles --backend=html5 --attribute=revnumber=${GITHUB_REF#refs/heads/}-$GITHUB_SHA --attribute=revdate=$(date +%F) fmi-profiles/index.adoc"
-    - name: copy images
-      run: tar cf - fmi-guide/images fmi-profiles/images | tar xfC - build
-    - name: add redirects for old content
+
+    - name: Add redirects for old content
       uses: ActionCloud/generate-redirects@v1
       with:
         target: build/ls-bus-guide
@@ -35,23 +51,38 @@ jobs:
           {
             "index": "https://modelica.github.io/fmi-ls-bus-guides/main/ls-bus-guide/"
           }
-    - name: archive implementers guide
+
+    - name: Copy resources
+      run: |
+        cp LICENSE.txt build/fmi-guide
+        cp fmi-guide/theme/css/*.css build/fmi-guide/theme/css
+        cp fmi-guide/theme/images/*.svg build/fmi-guide/theme/images
+        cp fmi-guide/theme/js/*.js build/fmi-guide/theme/js
+        cp LICENSE.txt build/fmi-profiles
+        cp fmi-profiles/theme/css/*.css build/fmi-profiles/theme/css
+        cp fmi-profiles/theme/images/*.svg build/fmi-profiles/theme/images
+        cp fmi-profiles/theme/js/*.js build/fmi-profiles/theme/js
+
+    - name: Archive Implementers Guide
       uses: actions/upload-artifact@v4
       with:
         name: FMI-Guide
         path: build/fmi-guide/*
         if-no-files-found: error
-    - name: archive FMI profiles
+
+    - name: Archive FMI Profiles
       uses: actions/upload-artifact@v4
       with:
         name: FMI-Profiles
         path: build/fmi-profiles/*
         if-no-files-found: error
-    - name: extract branch name
+
+    - name: Extract branch name
       id: extract_branch
       shell: bash
       run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
-    - name: deploy
+
+    - name: eploy
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: peaceiris/actions-gh-pages@v3.9.3
       with:
