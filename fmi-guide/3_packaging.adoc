@@ -144,6 +144,9 @@ The following are lists of commonly agreed upon names for languages and compiler
 |C17 
 |ISO/IEC 9899:2018
 
+|C23
+|ISO/IEC 9899:2024
+
 |C++98
 |ISO/IEC 14882:1998
 
@@ -161,6 +164,9 @@ The following are lists of commonly agreed upon names for languages and compiler
 
 |C++20
 |ISO/IEC 14882:2020
+
+|C++23
+|ISO/IEC 14882:2024
 |====
 
 [cols="1,7"]
