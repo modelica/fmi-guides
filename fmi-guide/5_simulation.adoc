@@ -274,3 +274,409 @@ The definition of the model structure is then:
   <InitialUnknown valueReference="2" dependencies="3"/>
 </ModelStructure>
 ----
+
+=== Event handling
+
+Originally Event Mode was restricted to FMI for Model Exchange, and the semantics are similar to how it is done in Modelica. See for example the pseudo code for event handling in https://specification.modelica.org/maint/3.6/modelica-dae-representation.html:
+
+```
+ known  variables: x, t, p
+unknown variables: dx/dt, y, z, m, pre(z), pre(m), c
+// pre(z) = value of z before event occured
+// pre(m) = value of m before event occured
+loop
+  solve (1) for the unknowns, with pre(z) and pre(m) fixed
+  if z == pre(z) and m == pre(m) then break
+  pre(z) := z
+  pre(m) := m
+end loop 
+```
+
+In FMI 2.0 this was formalized with the notion of super dense time. The main motivation to expose these event semantics is especially for the case of FMUs coupled with algebraic loops.
+
+Since the initial release, the FMI API provides the importer a function to evaluate all discrete time equations, and to commit changes to the discrete variables. The general idea in FMI 3.0 (and the other major releases) is that the importer of the FMU must perform a `do while` loop, and keep iterating until the FMU reports `discreteStatesNeedUpdate = fmi3False`. Comparing it to the pseudo-code above from the Modelica specification, this corresponds to the line `if z == pre(z) and m == pre(m) then break`. 
+
+In FMI 3.0, an example with pseudo code is available showing how the API is used in principle. See https://fmi-standard.org/docs/3.0/#_event_mode. However the exact semantics when and how to call this function vary between all major releases of FMI:
+
+* In FMI 1.0 the function is called `fmiEventUpdate` and the function must be called after a time, state, or step event occured. If the argument `intermediateResults = fmiTrue`, then the function will return for every event iteration that is performed internally (i.e., it will commit the the previous value of the discrete variable to its new value, by setting latexmath:[^\bullet\mathbf{x}_d := \mathbf{x}_d]). If `intermediateResults = fmiFalse`, it will perform its iteration to completeness, basically wrapping the call with `intermediateResults = fmiTrue` in a internal `do while` loop.
+
+* In FMI 2.0 the option for `intermediateResults` is removed and function is named `fmi2NewDiscreteStates`, it increments the super dense time and reports `fmi2EventInfo.newDiscreteStatesNeeded`. 
+
+* In FMI 3.0 the function is called `fmi3UpdateDiscreteStates` and the argument `discreteStatesNeedUpdate` signals to the importer if another super dense time instant is needed. Event Mode is also available for Co-Simulation.
+
+An FMU 3.0 for Co-Simulation or Model Exchange might enter Event Mode for many different reasons, but the event handling is always the same. 
+
+==== Example
+
+This is an example using two Modelica models, each exported as FMUs and coupled together in some importing environment. The notation `pre(x_d)` means the latexmath:[^\bullet\mathbf{x}_d], which means the value of `x_d` at the previous super dense time instant. 
+
+Assume capability flag `providesEvaluateDiscreteStates` is false and disregard clocks for now. The call to `fmi3UpdateDiscreteStates` does particularly the following
+    
+    - Evaluates variables (like `fmi3Get` does), based on `pre` of the discrete states.
+    - Sets `discreteStatesNeedUpdate = not (pre(var) == var for each internal discrete variable var);`
+    - for each discrete variable `var`, set `pre(var) = var;`
+    - conclude super dense time instant
+
+Here are two Modelica models which contain only discrete time variables (booleans). Assume each of them are generated as FMUs with FMI 3.0 (ME or CS doesn't matter)
+
+```
+model M1
+  input Boolean reply(start = false);
+  output Boolean message(start = false);
+  output Boolean done(start = false);
+equation
+  when time >= 1 then // TIME EVENT, will be signaled by fmi3UpdateDiscreteStates after exitInitializationMode
+    message = true;
+  end when;
+  when reply then
+    done = true;
+  end when;
+end M1;
+```
+
+```
+model M2
+  input  Boolean message(start = false);
+  output Boolean reply(start = false);
+  Boolean pending(start = false);
+equation
+  when message then
+    pending = true;
+  end when;
+  when pre(pending) then
+    reply = true;
+  end when;
+end M2;
+
+```
+
+Assume `M1` and `M2` are connected in an algebraic loop like in https://fmi-standard.org/docs/3.0.2/#algebraic-loops for the "real" algebraic loop case on the right side of the diagram, and leave the output `done` unconnected. Since the output `message` in `M1` does not depend on the input (which e.g. could be seen from the `ModelStructure` element), the algebraic loop is quite simple to solve. Just alternate get/set between the two FMUs, like so:
+
+```
+   // If isCoSimulation, assume the FMUs have the capability flag hasEventMode set to true
+    FMU *M1, *M2;
+    fmi3Boolean MESSAGE = fmi3False, REPLY = fmi3False, DONE = fmi3False;
+
+    // DO: instantiate, initialize
+   
+    M1->fmi3ExitInitializationMode(M1->instance);
+    M2->fmi3ExitInitializationMode(M2->instance);
+
+    // now they are in Event mode (https://fmi-standard.org/docs/3.0.2/#fmi3ExitInitializationMode)
+    // hence a super dense time instant has started, and must be concluded with fmi3UpdateDiscreteStates
+
+    // DO: updateDiscretStates on FMUs
+    // M1 will signal nextEventTime = 1 s
+
+    fmi3ValueReference vr_M1_reply, vr_M1_message, vr_M1_done;
+    fmi3ValueReference vr_M2_message, vr_M2_reply;
+
+    // DO: integrate/doStep until time == nextEventTime (1 s)
+
+    // super-dense time, from https://fmi-standard.org/docs/3.0.2/#mathematical-definitions
+    // remember notation: (t_R, t_I), t_R = 1 s, t_I \in {0,1,2,3,...}
+   
+    // Now enter super-dense time
+    // (t_R, t_I) = (1, 0)
+    M1->fmi3EnterEventMode(M1->instance);
+    M2->fmi3EnterEventMode(M2->instance);
+
+    do {
+
+        M1->fmi3GetBoolean(M1->instance, &vr_M1_message,  1, &MESSAGE, 1);
+        M2->fmi3SetBoolean(M2->instance, &vr_M2_message,  1, &MESSAGE, 1);
+        M2->fmi3GetBoolean(M2->instance, &vr_M2_reply,    1, &REPLY,   1);
+        M1->fmi3SetBoolean(M1->instance, &vr_M1_reply,    1, &REPLY,   1);
+        M1->fmi3GetBoolean(M1->instance, &vr_M1_done,     1, &DONE,    1);
+
+        M1->fmi3UpdateDiscreteStates(M1->instance, &M1_DStatesNeedUpdate, p2, p3, p4, p5, p6);
+        M2->fmi3UpdateDiscreteStates(M2->instance, &M2_DStatesNeedUpdate, p2, p3, p4, p5, p6);
+
+    } while (M1_DStatesNeedUpdate || M2_DStatesNeedUpdate);
+
+    if (isCoSimulation) {
+        M1->fmi3EnterStepMode(M1->instance);
+        M2->fmi3EnterStepMode(M2->instance);
+    } else {
+        M1->fmi3EnterContinuousTimeMode(M1->instance);
+        M2->fmi3EnterContinuousTimeMode(M2->instance);
+    }
+```
+
+Then we have the following super dense time instants:
+
+**Super dense time (1,0)**
+
+Solve "algebraic loop":
+
+[cols="1,1,2,1,5",options="header"]
+|===
+|FMU |Operation |Variable (internal) |Value |Reason
+
+|M1
+|Get
+|message
+|true
+|time >= 1, so `when time >= 1 then message = true;` in M1 kicks in
+
+|M2
+|Set
+|message
+|true
+|from M1
+
+|M2
+|Get
+|reply
+|false
+|`pre(pending)` is not yet `true`
+
+|M1
+|Set
+|reply
+|false
+|from `fmi3Get` from M2
+
+|M1
+|Get
+|done
+|false
+|`reply` is not yet `true`
+|===
+
+This is the current status of the variables:
+
+[cols="1,2,1,1",options="header"]
+|===
+|FMU | Variable |Pre |New
+
+|M1
+|`reply`
+|false
+|false
+
+|M1
+|`message`
+|false
+|true
+
+|M1
+|`done`
+|false
+|false
+
+|M2
+|`message`
+|false
+|true
+
+|M2
+|`reply`
+|false
+|false
+
+|M2
+|`pending`
+|false
+|true
+|===
+
+Call fmi3UpdateDiscreteStates:
+
+[cols="1,1,5,3",options="header"]
+|===
+|FMU |discreteStatesNeedUpdate |Reason |Commit
+
+|M1
+|true
+|the internal variable representing `message` is true, because of the equation `when time >= 1 then ...`, but `pre(message)` is `false`, so `pre(message) != message`
+|`pre(message) := message`
+
+|M2
+|true
+|`pre(message, pending) != message,pending`
+|`pre(message) := message`, `pre(pending) := pending`
+|===
+
+**Super dense time (1,1)**
+
+Solve algebraic loop:
+
+[cols="1,1,2,1,5",options="header"]
+|===
+|FMU |Operation |Variable (internal) |Value |Reason
+
+|M1
+|Get
+|message
+|true
+|same as last super dense time
+
+|M2
+|Set
+|message
+|true
+|same as last super dense time
+
+|M2
+|Get
+|reply
+|true
+|`pre(pending)` is now `true` thanks to the commit `pre(pending) := pending` from `fmi3UpdateDiscreteStates` in the previous super dense time.
+
+|M1
+|Set
+|reply
+|true
+|from `fmi3Get` from M2
+
+|M1
+|Get
+|done
+|true
+|`reply` is now `true`
+|===
+
+This is the current status of the variables:
+
+[cols="1,2,1,1",options="header"]
+|===
+|FMU | Variable |Pre |New
+
+|M1
+|`reply`
+|false
+|true
+
+|M1
+|`message`
+|true
+|true
+
+|M1
+|`done`
+|false
+|true
+
+|M2
+|`message`
+|true
+|true
+
+|M2
+|`reply`
+|false
+|true
+
+|M2
+|`pending`
+|true
+|true
+|===
+
+Call fmi3UpdateDiscreteStates:
+
+[cols="1,1,5,3",options="header"]
+|===
+|FMU |discreteStatesNeedUpdate |Reason |Commit
+
+|M1
+|true
+|`pre(reply, done) != reply, done`
+|`pre(reply) := reply`, `pre(done) := done`
+
+|M2
+|true
+|`pre(reply) != reply`
+|`pre(reply) := reply`
+|===
+
+**Super dense time (1,2)**
+
+Solve algebraic loop:
+
+[cols="1,1,2,1,5",options="header"]
+|===
+|FMU |Operation |Variable (internal) |Value |Reason
+
+|M1
+|Get
+|message
+|true
+|same as last super dense time
+
+|M2
+|Set
+|message
+|true
+|same as last super dense time
+
+|M2
+|Get
+|reply
+|true
+|same as last super dense time
+
+|M1
+|Set
+|reply
+|true
+|same as last super dense time
+
+|M1
+|Get
+|done
+|true
+|same as last super dense time
+|===
+
+This is the current status of the variables:
+
+[cols="1,2,1,1",options="header"]
+|===
+|FMU | Variable |Pre |New
+
+|M1
+|`reply`
+|true
+|true
+
+|M1
+|`message`
+|true
+|true
+
+|M1
+|`done`
+|true
+|true
+
+|M2
+|`message`
+|true
+|true
+
+|M2
+|`reply`
+|true
+|true
+
+|M2
+|`pending`
+|true
+|true
+|===
+
+Call fmi3UpdateDiscreteStates:
+
+[cols="2,2,3,1",options="header"]
+|===
+|FMU |discreteStatesNeedUpdate |Reason |Commit
+
+|Both M1 & M2
+|false
+|`pre(var) == var` for each discrete variable `var`
+|-
+|===
+
+If the FMUs performed their event iteration internally, then the final result would differ such that `M1` never sets `done` to `true`, since it never sees that `reply` became `true` during the event iteration.
