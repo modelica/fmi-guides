@@ -478,8 +478,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>FMI 3.0 Implementers' Guide</h1>
 <div class="details">
-<span id="revnumber">version main-2e01f0f8fff372671c224bac724ed65bb864e024,</span>
-<span id="revdate">2026-02-25</span>
+<span id="revnumber">version main-2b6a5dcfca231e900f906bd99570e07048ba4fa6,</span>
+<span id="revdate">2026-10-06</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -551,6 +551,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#example-2">5.8.2. Example 2</a></li>
 <li><a href="#example-3">5.8.3. Example 3</a></li>
 <li><a href="#example-4">5.8.4. Example 4</a></li>
+</ul>
+</li>
+<li><a href="#event-handling">5.9. Event handling</a>
+<ul class="sectlevel3">
+<li><a href="#example">5.9.1. Example</a></li>
 </ul>
 </li>
 </ul>
@@ -1723,6 +1728,619 @@ Therefore <code>dependenciesKind</code> = <code>dependent</code> because it is n
   &lt;InitialUnknown valueReference="2" dependencies="3"/&gt;
 &lt;/ModelStructure&gt;</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="event-handling">5.9. Event handling</h3>
+<div class="paragraph">
+<p>Originally Event Mode was restricted to FMI for Model Exchange, and the semantics are similar to how it is done in Modelica. See for example the pseudo code for event handling in <a href="https://specification.modelica.org/maint/3.6/modelica-dae-representation.html" class="bare">https://specification.modelica.org/maint/3.6/modelica-dae-representation.html</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"> known  variables: x, t, p
+unknown variables: dx/dt, y, z, m, pre(z), pre(m), c
+// pre(z) = value of z before event occured
+// pre(m) = value of m before event occured
+loop
+  solve (1) for the unknowns, with pre(z) and pre(m) fixed
+  if z == pre(z) and m == pre(m) then break
+  pre(z) := z
+  pre(m) := m
+end loop</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In FMI 2.0 this was formalized with the notion of super dense time. The main motivation to expose these event semantics is especially for the case of FMUs coupled with algebraic loops.</p>
+</div>
+<div class="paragraph">
+<p>Since the initial release, the FMI API provides the importer a function to evaluate all discrete time equations, and to commit changes to the discrete variables. The general idea in FMI 3.0 (and the other major releases) is that the importer of the FMU must perform a <code>do while</code> loop, and keep iterating until the FMU reports <code>discreteStatesNeedUpdate = fmi3False</code>. Comparing it to the pseudo-code above from the Modelica specification, this corresponds to the line <code>if z == pre(z) and m == pre(m) then break</code>.</p>
+</div>
+<div class="paragraph">
+<p>In FMI 3.0, an example with pseudo code is available showing how the API is used in principle. See <a href="https://fmi-standard.org/docs/3.0/#_event_mode" class="bare">https://fmi-standard.org/docs/3.0/#_event_mode</a>. However the exact semantics when and how to call this function vary between all major releases of FMI:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In FMI 1.0 the function is called <code>fmiEventUpdate</code> and the function must be called after a time, state, or step event occured. If the argument <code>intermediateResults = fmiTrue</code>, then the function will return for every event iteration that is performed internally (i.e., it will commit the the previous value of the discrete variable to its new value, by setting \(^\bullet\mathbf{x}_d := \mathbf{x}_d\)). If <code>intermediateResults = fmiFalse</code>, it will perform its iteration to completeness, basically wrapping the call with <code>intermediateResults = fmiTrue</code> in a internal <code>do while</code> loop.</p>
+</li>
+<li>
+<p>In FMI 2.0 the option for <code>intermediateResults</code> is removed and function is named <code>fmi2NewDiscreteStates</code>, it increments the super dense time and reports <code>fmi2EventInfo.newDiscreteStatesNeeded</code>.</p>
+</li>
+<li>
+<p>In FMI 3.0 the function is called <code>fmi3UpdateDiscreteStates</code> and the argument <code>discreteStatesNeedUpdate</code> signals to the importer if another super dense time instant is needed. Event Mode is also available for Co-Simulation.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>An FMU 3.0 for Co-Simulation or Model Exchange might enter Event Mode for many different reasons, but the event handling is always the same.</p>
+</div>
+<div class="sect3">
+<h4 id="example">5.9.1. Example</h4>
+<div class="paragraph">
+<p>This is an example using two Modelica models, each exported as FMUs and coupled together in some importing environment. The notation <code>pre(x_d)</code> means the \(^\bullet\mathbf{x}_d\), which means the value of <code>x_d</code> at the previous super dense time instant.</p>
+</div>
+<div class="paragraph">
+<p>Assume capability flag <code>providesEvaluateDiscreteStates</code> is false and disregard clocks for now. The call to <code>fmi3UpdateDiscreteStates</code> does particularly the following</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Evaluates variables (like <code>fmi3Get</code> does), based on <code>pre</code> of the discrete states.</p>
+</li>
+<li>
+<p>Sets <code>discreteStatesNeedUpdate = not (pre(var) == var for each internal discrete variable var);</code></p>
+</li>
+<li>
+<p>for each discrete variable <code>var</code>, set <code>pre(var) = var;</code></p>
+</li>
+<li>
+<p>conclude super dense time instant</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here are two Modelica models which contain only discrete time variables (booleans). Assume each of them are generated as FMUs with FMI 3.0 (ME or CS doesn&#8217;t matter)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">model M1
+  input Boolean reply(start = false);
+  output Boolean message(start = false);
+  output Boolean done(start = false);
+equation
+  when time &gt;= 1 then // TIME EVENT, will be signaled by fmi3UpdateDiscreteStates after exitInitializationMode
+    message = true;
+  end when;
+  when reply then
+    done = true;
+  end when;
+end M1;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">model M2
+  input  Boolean message(start = false);
+  output Boolean reply(start = false);
+  Boolean pending(start = false);
+equation
+  when message then
+    pending = true;
+  end when;
+  when pre(pending) then
+    reply = true;
+  end when;
+end M2;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Assume <code>M1</code> and <code>M2</code> are connected in an algebraic loop like in <a href="https://fmi-standard.org/docs/3.0.2/#algebraic-loops" class="bare">https://fmi-standard.org/docs/3.0.2/#algebraic-loops</a> for the "real" algebraic loop case on the right side of the diagram, and leave the output <code>done</code> unconnected. Since the output <code>message</code> in <code>M1</code> does not depend on the input (which e.g. could be seen from the <code>ModelStructure</code> element), the algebraic loop is quite simple to solve. Just alternate get/set between the two FMUs, like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">   // If isCoSimulation, assume the FMUs have the capability flag hasEventMode set to true
+    FMU *M1, *M2;
+    fmi3Boolean MESSAGE = fmi3False, REPLY = fmi3False, DONE = fmi3False;
+
+    // DO: instantiate, initialize
+
+    M1-&gt;fmi3ExitInitializationMode(M1-&gt;instance);
+    M2-&gt;fmi3ExitInitializationMode(M2-&gt;instance);
+
+    // now they are in Event mode (https://fmi-standard.org/docs/3.0.2/#fmi3ExitInitializationMode)
+    // hence a super dense time instant has started, and must be concluded with fmi3UpdateDiscreteStates
+
+    // DO: updateDiscretStates on FMUs
+    // M1 will signal nextEventTime = 1 s
+
+    fmi3ValueReference vr_M1_reply, vr_M1_message, vr_M1_done;
+    fmi3ValueReference vr_M2_message, vr_M2_reply;
+
+    // DO: integrate/doStep until time == nextEventTime (1 s)
+
+    // super-dense time, from https://fmi-standard.org/docs/3.0.2/#mathematical-definitions
+    // remember notation: (t_R, t_I), t_R = 1 s, t_I \in {0,1,2,3,...}
+
+    // Now enter super-dense time
+    // (t_R, t_I) = (1, 0)
+    M1-&gt;fmi3EnterEventMode(M1-&gt;instance);
+    M2-&gt;fmi3EnterEventMode(M2-&gt;instance);
+
+    do {
+
+        M1-&gt;fmi3GetBoolean(M1-&gt;instance, &amp;vr_M1_message,  1, &amp;MESSAGE, 1);
+        M2-&gt;fmi3SetBoolean(M2-&gt;instance, &amp;vr_M2_message,  1, &amp;MESSAGE, 1);
+        M2-&gt;fmi3GetBoolean(M2-&gt;instance, &amp;vr_M2_reply,    1, &amp;REPLY,   1);
+        M1-&gt;fmi3SetBoolean(M1-&gt;instance, &amp;vr_M1_reply,    1, &amp;REPLY,   1);
+        M1-&gt;fmi3GetBoolean(M1-&gt;instance, &amp;vr_M1_done,     1, &amp;DONE,    1);
+
+        M1-&gt;fmi3UpdateDiscreteStates(M1-&gt;instance, &amp;M1_DStatesNeedUpdate, p2, p3, p4, p5, p6);
+        M2-&gt;fmi3UpdateDiscreteStates(M2-&gt;instance, &amp;M2_DStatesNeedUpdate, p2, p3, p4, p5, p6);
+
+    } while (M1_DStatesNeedUpdate || M2_DStatesNeedUpdate);
+
+    if (isCoSimulation) {
+        M1-&gt;fmi3EnterStepMode(M1-&gt;instance);
+        M2-&gt;fmi3EnterStepMode(M2-&gt;instance);
+    } else {
+        M1-&gt;fmi3EnterContinuousTimeMode(M1-&gt;instance);
+        M2-&gt;fmi3EnterContinuousTimeMode(M2-&gt;instance);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then we have the following super dense time instants:</p>
+</div>
+<div class="paragraph">
+<p><strong>Super dense time (1,0)</strong></p>
+</div>
+<div class="paragraph">
+<p>Solve "algebraic loop":</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">Operation</th>
+<th class="tableblock halign-left valign-top">Variable (internal)</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time &gt;= 1, so <code>when time &gt;= 1 then message = true;</code> in M1 kicks in</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">from M1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reply</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(pending)</code> is not yet <code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reply</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">from <code>fmi3Get</code> from M2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">done</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code> is not yet <code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This is the current status of the variables:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">Variable</th>
+<th class="tableblock halign-left valign-top">Pre</th>
+<th class="tableblock halign-left valign-top">New</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>done</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pending</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Call fmi3UpdateDiscreteStates:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 50%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">discreteStatesNeedUpdate</th>
+<th class="tableblock halign-left valign-top">Reason</th>
+<th class="tableblock halign-left valign-top">Commit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the internal variable representing <code>message</code> is true, because of the equation <code>when time &gt;= 1 then &#8230;&#8203;</code>, but <code>pre(message)</code> is <code>false</code>, so <code>pre(message) != message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(message) := message</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(message, pending) != message,pending</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(message) := message</code>, <code>pre(pending) := pending</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Super dense time (1,1)</strong></p>
+</div>
+<div class="paragraph">
+<p>Solve algebraic loop:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">Operation</th>
+<th class="tableblock halign-left valign-top">Variable (internal)</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">same as last super dense time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">same as last super dense time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reply</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(pending)</code> is now <code>true</code> thanks to the commit <code>pre(pending) := pending</code> from <code>fmi3UpdateDiscreteStates</code> in the previous super dense time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reply</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">from <code>fmi3Get</code> from M2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">done</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code> is now <code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This is the current status of the variables:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">Variable</th>
+<th class="tableblock halign-left valign-top">Pre</th>
+<th class="tableblock halign-left valign-top">New</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>done</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pending</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Call fmi3UpdateDiscreteStates:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 50%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">discreteStatesNeedUpdate</th>
+<th class="tableblock halign-left valign-top">Reason</th>
+<th class="tableblock halign-left valign-top">Commit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(reply, done) != reply, done</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(reply) := reply</code>, <code>pre(done) := done</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(reply) != reply</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(reply) := reply</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Super dense time (1,2)</strong></p>
+</div>
+<div class="paragraph">
+<p>Solve algebraic loop:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">Operation</th>
+<th class="tableblock halign-left valign-top">Variable (internal)</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">same as last super dense time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">same as last super dense time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reply</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">same as last super dense time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reply</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">same as last super dense time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">done</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">same as last super dense time</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This is the current status of the variables:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">Variable</th>
+<th class="tableblock halign-left valign-top">Pre</th>
+<th class="tableblock halign-left valign-top">New</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>done</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reply</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pending</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Call fmi3UpdateDiscreteStates:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FMU</th>
+<th class="tableblock halign-left valign-top">discreteStatesNeedUpdate</th>
+<th class="tableblock halign-left valign-top">Reason</th>
+<th class="tableblock halign-left valign-top">Commit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Both M1 &amp; M2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pre(var) == var</code> for each discrete variable <code>var</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>If the FMUs performed their event iteration internally, then the final result would differ such that <code>M1</code> never sets <code>done</code> to <code>true</code>, since it never sees that <code>reply</code> became <code>true</code> during the event iteration.</p>
 </div>
 </div>
 </div>
